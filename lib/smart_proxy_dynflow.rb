@@ -11,9 +11,9 @@ class Proxy::Dynflow
     @world = create_world
   end
 
-  def create_world(options = {})
-    options = default_world_options.merge(options)
-    ::Dynflow::SimpleWorld.new(options)
+  def create_world(&block)
+    config = default_world_config(&block)
+    ::Dynflow::World.new(config)
   end
 
   def persistence_conn_string
@@ -24,9 +24,12 @@ class Proxy::Dynflow
     ::Dynflow::PersistenceAdapters::Sequel.new persistence_conn_string
   end
 
-  def default_world_options
-    { logger_adapter: logger_adapter,
-      persistence_adapter: persistence_adapter }
+  def default_world_config
+    ::Dynflow::Config.new do |config|
+      config.logger_adapter = logger_adapter
+      config.persistence_adapter = persistence_adapter
+      yield config if block_given?
+    end
   end
 
   def logger_adapter
