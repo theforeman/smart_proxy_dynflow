@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rack-test', '~> 0')
   gem.add_development_dependency('rake', '~> 10')
 
-  gem.add_runtime_dependency('dynflow')
+  gem.add_runtime_dependency('dynflow', "~> 0.8.1")
   gem.add_runtime_dependency('sequel')
   gem.add_runtime_dependency('sqlite3')
 end
