@@ -25,7 +25,8 @@ class Proxy::Dynflow
   end
 
   def default_world_config
-    ::Dynflow::Config.new do |config|
+    ::Dynflow::Config.new.tap do |config|
+      config.auto_rescue = true
       config.logger_adapter = logger_adapter
       config.persistence_adapter = persistence_adapter
       yield config if block_given?
