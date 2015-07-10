@@ -4,6 +4,7 @@ require 'smart_proxy_dynflow/version'
 require 'smart_proxy_dynflow/plugin'
 require 'smart_proxy_dynflow/foreman_tasks_callback'
 require 'smart_proxy_dynflow/helpers'
+require 'smart_proxy_dynflow/api'
 
 class Proxy::Dynflow
 
