@@ -2,6 +2,8 @@ require 'dynflow'
 
 require 'smart_proxy_dynflow/version'
 require 'smart_proxy_dynflow/plugin'
+require 'smart_proxy_dynflow/foreman_tasks_callback'
+require 'smart_proxy_dynflow/helpers'
 
 class Proxy::Dynflow
 
@@ -34,7 +36,7 @@ class Proxy::Dynflow
   end
 
   def logger_adapter
-    ::Dynflow::LoggerAdapters::Simple.new $stderr, 1
+    ::Dynflow::LoggerAdapters::Simple.new $stderr, 0
   end
 
   def web_console
