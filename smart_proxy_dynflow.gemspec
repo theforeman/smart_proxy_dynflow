@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/theforeman/smart_proxy_dynflow"
   gem.summary       = %q{Dynflow runtime for Foreman smart proxy}
   gem.description   = <<-EOS
-    Use the Dynflow in side Foreman smart proxy
+    Use the Dynflow inside Foreman smart proxy
   EOS
 
   gem.files         = Dir['{bundler.d,lib,settings.d}/**/*', 'LICENSE', 'Gemfile']
@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "bundler", "~> 1.7"
   gem.add_development_dependency "rake", "~> 10.0"
-  gem.add_development_dependency('test-unit', '~> 2')
+  gem.add_development_dependency('minitest')
   gem.add_development_dependency('mocha', '~> 1')
   gem.add_development_dependency('webmock', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
