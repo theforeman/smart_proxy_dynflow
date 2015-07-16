@@ -8,7 +8,7 @@ require 'smart_proxy_dynflow/api'
 
 class Proxy::Dynflow
 
-  attr_reader :world
+  attr_accessor :world
 
   def initialize
     @world = create_world
