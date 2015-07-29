@@ -2,7 +2,6 @@ require 'test_helper'
 
 class Proxy::Dynflow
   class CallbackTest < MiniTest::Spec
-
     class DummyAction < Dynflow::Action
       include Callback::PlanHelper
 

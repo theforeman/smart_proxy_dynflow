@@ -5,7 +5,7 @@ module Proxy
     module Callback
       class Request < Proxy::HttpRequest::ForemanRequest
         def callback(callback, data)
-          payload = {:callback => callback, :data => data}.to_json
+          payload = { :callback => callback, :data => data }.to_json
           send_request(request_factory.create_post("/foreman_tasks/api/tasks/callback", payload))
         end
 
@@ -15,7 +15,6 @@ module Proxy
       end
 
       class Action < ::Dynflow::Action
-
         def plan(callback, data)
           plan_self(:callback => callback, :data => data)
         end

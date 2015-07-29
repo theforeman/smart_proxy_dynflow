@@ -39,7 +39,7 @@ class Proxy::Dynflow
     describe 'POST /tasks' do
       it 'triggers the action' do
         post "/tasks", { 'action_name' => 'Proxy::Dynflow::ApiTest::DummyAction',
-                         'action_input' => { 'name' => 'World' }}.to_json
+                         'action_input' => { 'name' => 'World' } }.to_json
         response = JSON.load(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])

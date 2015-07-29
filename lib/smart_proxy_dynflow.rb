@@ -7,7 +7,6 @@ require 'smart_proxy_dynflow/helpers'
 require 'smart_proxy_dynflow/api'
 
 class Proxy::Dynflow
-
   attr_accessor :world
 
   def initialize
@@ -61,6 +60,5 @@ class Proxy::Dynflow
     end
   end
 end
-
 
 Proxy::Dynflow.initialize

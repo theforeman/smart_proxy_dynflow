@@ -2,7 +2,7 @@ require 'minitest/autorun'
 
 ENV['RACK_ENV'] = 'test'
 
-$: << File.join(File.dirname(__FILE__), '..', 'lib')
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
 require "mocha/setup"
 require "rack/test"
 require 'smart_proxy_for_testing'
@@ -14,4 +14,4 @@ WORLD = Proxy::Dynflow::Testing.create_world
 Proxy::Dynflow.instance.world = WORLD
 
 logdir = File.join(File.dirname(__FILE__), '..', 'logs')
-FileUtils.mkdir_p(logdir) unless File.exists?(logdir)
+FileUtils.mkdir_p(logdir) unless File.exist?(logdir)
