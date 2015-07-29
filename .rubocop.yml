@@ -43,3 +43,30 @@ Style/GuardClause:
 
 Style/BracesAroundHashParameters:
   Enabled: false
+
+Style/SignalException:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 40
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/ClassLength:
+  Enabled: false
