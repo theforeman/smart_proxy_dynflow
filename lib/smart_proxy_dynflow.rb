@@ -40,9 +40,9 @@ class Proxy::Dynflow
   end
 
   def web_console
-    require 'dynflow/web_console'
+    require 'dynflow/web'
     world = @world
-    dynflow_console = ::Dynflow::WebConsole.setup do
+    dynflow_console = ::Dynflow::Web.setup do
       set :world, world
     end
     dynflow_console

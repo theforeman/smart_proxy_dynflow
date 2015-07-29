@@ -22,5 +22,9 @@ Or install it yourself as:
 ## Usage
 
 To configure this plugin you can use template from settings.d/dynflow.yml.example.
-You must place dynflow.yml config file (based on this template) to your 
+You must place dynflow.yml config file (based on this template) to your
 smart-proxy config/settings.d/ directory.
+
+Although, it's intended for the proxy mainly to be used by the Foreman
+server, for debugging/development purpose, the Dynflow console can be used.
+It's available under `/dynflow/console` path.
