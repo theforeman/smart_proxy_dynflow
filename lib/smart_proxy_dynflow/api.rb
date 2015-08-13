@@ -13,7 +13,7 @@ module Proxy
 
       post "/tasks/?" do
         params = parse_json_body
-        trigger_task(params['action_name'].constantize, params['action_input']).to_json
+        trigger_task(::Dynflow::Utils.constantize(params['action_name']), params['action_input']).to_json
       end
 
       post "/tasks/:task_id/cancel" do |task_id|
