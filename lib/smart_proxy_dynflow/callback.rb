@@ -6,7 +6,11 @@ module Proxy
       class Request < Proxy::HttpRequest::ForemanRequest
         def callback(callback, data)
           payload = { :callback => callback, :data => data }.to_json
-          send_request(request_factory.create_post('foreman_tasks/api/tasks/callback', payload))
+          response = send_request(request_factory.create_post('foreman_tasks/api/tasks/callback', payload))
+          if response.code != "200"
+            raise "Failed performing callback to Foreman server: #{response.code} #{response.body}"
+          end
+          response
         end
 
         def self.send_to_foreman_tasks(callback, data)
