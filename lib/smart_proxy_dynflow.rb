@@ -38,26 +38,42 @@ class Proxy::Dynflow
     ::Dynflow::LoggerAdapters::Simple.new $stderr, 0
   end
 
-  def web_console
-    require 'dynflow/web'
-    world = @world
-    dynflow_console = ::Dynflow::Web.setup do
-      set :world, world
-    end
-    dynflow_console
-  end
-
   class << self
     attr_reader :instance
 
-    def initialize
+    def ensure_initialized
+      return @instance if @instance
       @instance = Proxy::Dynflow.new
+      after_initialize_blocks.each(&:call)
+      @instance
+    end
+
+    def web_console
+      require 'dynflow/web'
+      dynflow_console = ::Dynflow::Web.setup do
+        # we can't use the proxy's after_actionvation hook, as
+        # it happens before the Daemon forks the process (including
+        # closing opened file descriptors)
+        # TODO: extend smart proxy to enable hooks that happen after
+        # the forking
+        Proxy::Dynflow.ensure_initialized
+        set :world, Proxy::Dynflow.world
+      end
+      dynflow_console
     end
 
     def world
       instance.world
     end
+
+    def after_initialize(&block)
+      after_initialize_blocks << block
+    end
+
+    private
+
+    def after_initialize_blocks
+      @after_initialize_blocks ||= []
+    end
   end
 end
-
-Proxy::Dynflow.initialize
