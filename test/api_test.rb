@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'json'
+require 'smart_proxy_dynflow/api.rb'
 
 class Proxy::Dynflow
   class ApiTest < Minitest::Spec
