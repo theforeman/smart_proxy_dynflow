@@ -4,6 +4,9 @@ module Proxy
       helpers ::Proxy::Helpers
       helpers ::Proxy::Dynflow::Helpers
 
+      authorize_with_trusted_hosts
+      authorize_with_ssl_client
+
       before do
         content_type :json
       end
