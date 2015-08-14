@@ -2,7 +2,7 @@ require 'smart_proxy_dynflow/api'
 
 map "/dynflow" do
   map '/console' do
-    run Proxy::Dynflow.instance.web_console
+    run Proxy::Dynflow.web_console
   end
 
   map '/'do
