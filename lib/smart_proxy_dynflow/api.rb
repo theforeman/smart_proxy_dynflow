@@ -19,6 +19,10 @@ module Proxy
       post "/tasks/:task_id/cancel" do |task_id|
         cancel_task(task_id).to_json
       end
+
+      get "/tasks/:task_id/status" do |task_id|
+        task_status(task_id).to_json
+      end
     end
   end
 end
