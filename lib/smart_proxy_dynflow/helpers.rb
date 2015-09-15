@@ -23,6 +23,13 @@ module Proxy
         status 404
         {}
       end
+
+      def tasks_count(state)
+        state ||= 'all'
+        filter = state != 'all' ? { :filters => { :state => [state] } } : {}
+        tasks = world.persistence.find_execution_plans(filter)
+        { :count => tasks.count, :state => state }
+      end
     end
   end
 end
