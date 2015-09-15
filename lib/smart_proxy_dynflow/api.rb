@@ -23,6 +23,10 @@ module Proxy
       get "/tasks/:task_id/status" do |task_id|
         task_status(task_id).to_json
       end
+
+      get "/tasks/count" do
+        tasks_count(params['state']).to_json
+      end
     end
   end
 end
