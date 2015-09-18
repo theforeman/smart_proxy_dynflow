@@ -62,5 +62,20 @@ class Proxy::Dynflow
         execution_plan.result.must_equal :success
       end
     end
+
+    describe 'GET /tasks/count' do
+      it 'counts the actions in state' do
+        get "/tasks/count", :state => 'stopped'
+        response = JSON.load(last_response.body)
+        old_count = response['count']
+
+        triggered = WORLD.trigger(DummyAction)
+        wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :stopped }
+
+        get "/tasks/count", :state => 'stopped'
+        response = JSON.load(last_response.body)
+        response['count'].must_equal old_count + 1
+      end
+    end
   end
 end
