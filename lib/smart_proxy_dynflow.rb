@@ -18,7 +18,16 @@ class Proxy::Dynflow
   end
 
   def persistence_conn_string
-    ENV['DYNFLOW_DB_CONN_STRING'] || 'sqlite:/'
+    db_conn_string = 'sqlite:/'
+
+    db_file = Proxy::Dynflow::Plugin.settings.database
+    if db_file.nil? || db_file.empty?
+      Proxy::Log.logger.warn "Could not open DB for dynflow at '#{db_file}', will keep data in memory. Restart will drop all dynflow data."
+    else
+      db_conn_string += "/#{db_file}"
+    end
+
+    ENV['DYNFLOW_DB_CONN_STRING'] || db_conn_string
   end
 
   def persistence_adapter
