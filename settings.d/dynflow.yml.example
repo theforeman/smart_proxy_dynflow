@@ -1,2 +1,3 @@
 ---
 :enabled: true
+:database: /var/spool/foreman-proxy/dynflow/dynflow.sqlite

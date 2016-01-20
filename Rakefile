@@ -7,6 +7,7 @@ task :default => :test
 
 desc 'Test Dynflow plugin.'
 Rake::TestTask.new(:test) do |t|
+  ENV['DYNFLOW_DB_CONN_STRING'] = 'sqlite:/'
   t.libs << '.'
   t.libs << 'lib'
   t.libs << 'test'
