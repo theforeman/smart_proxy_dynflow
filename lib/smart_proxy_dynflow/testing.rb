@@ -11,6 +11,7 @@ module Proxy
     module Testing
       class << self
         def create_world(&block)
+          Proxy::Dynflow::Plugin.settings.database = nil
           Proxy::Dynflow.ensure_initialized
           Proxy::Dynflow.instance.create_world do |config|
             config.exit_on_terminate = false
