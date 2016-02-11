@@ -5,6 +5,7 @@ class Proxy::Dynflow
 
     settings_file "dynflow.yml"
     default_settings :database => '/var/lib/foreman-proxy/dynflow/dynflow.sqlite'
+    default_settings :console_auth => true
     plugin :dynflow, Proxy::Dynflow::VERSION
   end
 end
