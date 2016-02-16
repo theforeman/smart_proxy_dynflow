@@ -1,3 +1,4 @@
 ---
 :enabled: true
 :database: /var/lib/foreman-proxy/dynflow/dynflow.sqlite
+:console_auth: true
