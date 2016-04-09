@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require 'dynflow'
+require 'rack'
+require 'smart_proxy_dynflow_core/launcher'
+require 'yaml'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.on('-c', '--config-dir CONFIG_DIR', String, 'Directory to load settings from') do |value|
+    options[:config_dir] = value
+  end
+
+  opts.on('-1', '--one-config', String, 'Do not load more than 1 config') do |value|
+    options[:one_config] = true
+  end
+
+  opts.on_tail('-h', '--help', 'Show usage help') do
+    puts opts
+    exit
+  end
+end.parse!
+
+SmartProxyDynflowCore::Launcher.launch! options

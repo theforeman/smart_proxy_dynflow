@@ -4,8 +4,7 @@ module Proxy
   class Dynflow
     module Callback
       class Request < Proxy::HttpRequest::ForemanRequest
-        def callback(callback, data)
-          payload = { :callback => callback, :data => data }.to_json
+        def callback(payload)
           response = send_request(request_factory.create_post('foreman_tasks/api/tasks/callback', payload))
           if response.code != "200"
             raise "Failed performing callback to Foreman server: #{response.code} #{response.body}"
@@ -13,28 +12,32 @@ module Proxy
           response
         end
 
-        def self.send_to_foreman_tasks(callback, data)
-          self.new.callback(callback, data)
+        def self.send_to_foreman_tasks(payload)
+          self.new.callback(payload)
         end
       end
 
-      class Action < ::Dynflow::Action
-        def plan(callback, data)
-          plan_self(:callback => callback, :data => data)
+      class Core < Proxy::HttpRequest::ForemanRequest
+        def uri
+          @uri ||= URI.parse Proxy::Dynflow::Plugin.settings.core_url
         end
 
-        def run
-          Callback::Request.send_to_foreman_tasks(input[:callback], input[:data])
+        def relay(request, from, to)
+          path = request.path.gsub(from, to)
+          Proxy::LogBuffer::Decorator.instance.debug "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
+          req = case request.env['REQUEST_METHOD']
+                  when 'GET'
+                    request_factory.create_get path, request.env['rack.request.query_hash']
+                  when 'POST'
+                    request_factory.create_post path, request.body.read
+                end
+          response = send_request req
+          Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
+          response
         end
-      end
 
-      module PlanHelper
-        def plan_with_callback(input)
-          input = input.dup
-          callback = input.delete('callback')
-
-          planned_action = plan_self(input)
-          plan_action(::Proxy::Dynflow::Callback::Action, callback, planned_action.output) if callback
+        def self.relay(request, from, to)
+          self.new.relay request, from, to
         end
       end
     end

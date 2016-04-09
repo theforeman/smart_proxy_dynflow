@@ -1,31 +1,34 @@
+require 'sinatra/base'
+require 'proxy/helpers'
+require 'sinatra/authorization'
 module Proxy
   class Dynflow
     class Api < ::Sinatra::Base
       helpers ::Proxy::Helpers
       helpers ::Proxy::Dynflow::Helpers
+      extend ::Sinatra::Authorization
 
       authorize_with_trusted_hosts
       authorize_with_ssl_client
 
       before do
+        logger = Proxy::LogBuffer::Decorator.instance
         content_type :json
       end
 
-      post "/tasks/?" do
-        params = parse_json_body
-        trigger_task(::Dynflow::Utils.constantize(params['action_name']), params['action_input']).to_json
+      post "/tasks/callback" do
+        response = Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
+        logger.info "Callback to foreman #{response.code} - #{response}"
+        status response.code
+        body response.body
       end
 
-      post "/tasks/:task_id/cancel" do |task_id|
-        cancel_task(task_id).to_json
+      post "/*" do
+        relay_request
       end
 
-      get "/tasks/:task_id/status" do |task_id|
-        task_status(task_id).to_json
-      end
-
-      get "/tasks/count" do
-        tasks_count(params['state']).to_json
+      get "/*" do
+        relay_request
       end
     end
   end

@@ -1,22 +1,22 @@
 require 'test_helper'
 require 'json'
-require 'smart_proxy_dynflow/api.rb'
+require 'smart_proxy_dynflow_core/api.rb'
 
-class Proxy::Dynflow
+module SmartProxyDynflowCore
   class ApiTest < Minitest::Spec
     include Rack::Test::Methods
 
     def app
-      Proxy::Dynflow::Api.new
+      SmartProxyDynflowCore::Api.new
     end
 
-    class DummyAction < Dynflow::Action
+    class DummyAction < ::Dynflow::Action
       def run
         output[:result] = "Hello #{input[:name]}"
       end
     end
 
-    class StuckAction < Dynflow::Action
+    class StuckAction < ::Dynflow::Action
       include ::Dynflow::Action::Cancellable
 
       def run(event = nil)
@@ -39,7 +39,7 @@ class Proxy::Dynflow
 
     describe 'POST /tasks' do
       it 'triggers the action' do
-        post "/tasks", { 'action_name' => 'Proxy::Dynflow::ApiTest::DummyAction',
+        post "/tasks", { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
                          'action_input' => { 'name' => 'World' } }.to_json
         response = JSON.load(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
