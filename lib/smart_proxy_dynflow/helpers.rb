@@ -1,34 +1,31 @@
+require 'rest-client'
 module Proxy
   class Dynflow
     module Helpers
-      def world
-        Proxy::Dynflow.world
+      def relay_request(host = Proxy::Dynflow::Plugin.settings.core_url)
+        path = request.env['REQUEST_PATH'].gsub(/^\/dynflow/, '/api')
+        result = case request.env['REQUEST_METHOD']
+        when 'GET'
+          resource[path].get
+        when 'POST'
+          resource[path].post request.body.read
+        end
+        status result.code
+        body result.body
+      rescue RestClient::Exception => e
+        status e.http_code
+        body e.http_body
       end
 
-      def trigger_task(*args)
-        triggered = world.trigger(*args)
-        { :task_id => triggered.id }
+      def headers
+        {
+          :content_type => :json,
+          :accept => :json
+        }
       end
 
-      def cancel_task(task_id)
-        execution_plan = world.persistence.load_execution_plan(task_id)
-        cancel_events = execution_plan.cancel
-        { :task_id => task_id, :canceled_steps_count => cancel_events.size }
-      end
-
-      def task_status(task_id)
-        ep = world.persistence.load_execution_plan(task_id)
-        ep.to_hash.merge(:actions => ep.actions.map(&:to_hash))
-      rescue KeyError => e
-        status 404
-        {}
-      end
-
-      def tasks_count(state)
-        state ||= 'all'
-        filter = state != 'all' ? { :filters => { :state => [state] } } : {}
-        tasks = world.persistence.find_execution_plans(filter)
-        { :count => tasks.count, :state => state }
+      def resource
+        @resource ||= RestClient::Resource.new(host, :headers => headers)
       end
     end
   end

@@ -26,8 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('webmock', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
   gem.add_development_dependency('rubocop', '0.32.1')
-
-  gem.add_runtime_dependency('dynflow', "~> 0.8.4")
-  gem.add_runtime_dependency('sequel')
-  gem.add_runtime_dependency('sqlite3')
+  gem.add_runtime_dependency('rest-client', '= 1.6.9')
 end
