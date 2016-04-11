@@ -16,7 +16,9 @@ module Proxy
       end
 
       post "/tasks/callback" do
-        Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
+        response = Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
+        status response.code
+        body response.body
       end
 
       post "/*" do
