@@ -6,9 +6,9 @@ module Proxy
         path = request.env['REQUEST_PATH'].gsub(/^\/dynflow/, '/api')
         result = case request.env['REQUEST_METHOD']
         when 'GET'
-          resource[path].get
+          resource(host)[path].get
         when 'POST'
-          resource[path].post request.body.read
+          resource(host)[path].post request.body.read
         end
         status result.code
         body result.body
@@ -24,7 +24,7 @@ module Proxy
         }
       end
 
-      def resource
+      def resource(host)
         @resource ||= RestClient::Resource.new(host, :headers => headers)
       end
     end
