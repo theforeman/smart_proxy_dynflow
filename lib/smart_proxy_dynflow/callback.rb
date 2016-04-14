@@ -22,19 +22,19 @@ module Proxy
           @uri ||= URI.parse Proxy::Dynflow::Plugin.settings.core_url
         end
 
-        def relay(request)
-          path = request.env['REQUEST_PATH'].gsub(/^\/dynflow/, '/api')
+        def relay(request, from, to)
+          path = request.env['REQUEST_PATH'].gsub(from, to)
           req = case request.env['REQUEST_METHOD']
-          when 'GET'
-            request_factory.create_get path
-          when 'POST'
-            request_factory.create_post path, request.body.read
-          end
+                  when 'GET'
+                    request_factory.create_get path, request.env['rack.request.query_hash']
+                  when 'POST'
+                    request_factory.create_post path, request.body.read
+                end
           send_request req
         end
 
-        def self.relay(request)
-          self.new.relay request
+        def self.relay(request, from, to)
+          self.new.relay request, from, to
         end
       end
     end
