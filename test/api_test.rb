@@ -10,72 +10,32 @@ class Proxy::Dynflow
       Proxy::Dynflow::Api.new
     end
 
-    class DummyAction < Dynflow::Action
-      def run
-        output[:result] = "Hello #{input[:name]}"
-      end
+    it 'relays GET requests' do
+      factory = mock()
+      factory.expects(:create_get).with('/tasks/count', {})
+      Proxy::Dynflow::Callback::Core.any_instance.expects(:request_factory).returns(factory)
+      Proxy::Dynflow::Callback::Core.any_instance
+                                    .expects(:send_request)
+                                    .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
+      get '/tasks/count'
     end
 
-    class StuckAction < Dynflow::Action
-      include ::Dynflow::Action::Cancellable
-
-      def run(event = nil)
-        if event.nil?
-          suspend
-        end
-      end
+    it 'relays POST requests' do
+      factory = mock()
+      factory.expects(:create_post).with('/tasks/12345/cancel', '')
+      Proxy::Dynflow::Callback::Core.any_instance.expects(:request_factory).returns(factory)
+      Proxy::Dynflow::Callback::Core.any_instance
+                                    .expects(:send_request)
+                                    .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
+      post '/tasks/12345/cancel', {}
     end
 
-    def wait_until(iterations = 10, interval = 0.2)
-      iterations.times do
-        break if yield
-        sleep interval
-      end
+    it 'relays callbacks' do
+      data = '{"callback": "callback", "data": "data"}'
+      Proxy::Dynflow::Callback::Request.expects(:send_to_foreman_tasks).with(data)
+                                       .returns(OpenStruct.new(:code => 200, :body => data))
+      post '/tasks/callback', data
     end
 
-    before do
-      header 'Content-Type', 'application/json'
-    end
-
-    describe 'POST /tasks' do
-      it 'triggers the action' do
-        post "/tasks", { 'action_name' => 'Proxy::Dynflow::ApiTest::DummyAction',
-                         'action_input' => { 'name' => 'World' } }.to_json
-        response = JSON.load(last_response.body)
-        wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
-        execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
-        execution_plan.state.must_equal :stopped
-        execution_plan.result.must_equal :success
-      end
-    end
-
-    describe 'POST /tasks/:task_id/cancel' do
-      it 'cancels the action' do
-        triggered = WORLD.trigger(StuckAction)
-        wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :running }
-
-        post "/tasks/#{triggered.id}/cancel"
-        triggered.finished.wait(5)
-
-        execution_plan = WORLD.persistence.load_execution_plan(triggered.id)
-        execution_plan.state.must_equal :stopped
-        execution_plan.result.must_equal :success
-      end
-    end
-
-    describe 'GET /tasks/count' do
-      it 'counts the actions in state' do
-        get "/tasks/count", :state => 'stopped'
-        response = JSON.load(last_response.body)
-        old_count = response['count']
-
-        triggered = WORLD.trigger(DummyAction)
-        wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :stopped }
-
-        get "/tasks/count", :state => 'stopped'
-        response = JSON.load(last_response.body)
-        response['count'].must_equal old_count + 1
-      end
-    end
   end
 end
