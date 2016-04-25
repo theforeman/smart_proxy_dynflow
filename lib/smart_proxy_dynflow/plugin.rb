@@ -8,7 +8,7 @@ class Proxy::Dynflow
 
     settings_file "dynflow.yml"
     default_settings :console_auth => true
-    default_settings :core_url => 'http://localhost:8001'
+    default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
   end
 end
