@@ -23,7 +23,7 @@ module Proxy
         end
 
         def relay(request, from, to)
-          path = request.env['PATH_INFO'].gsub(from, to)
+          path = request.env['REQUEST_PATH'].gsub(from, to)
           req = case request.env['REQUEST_METHOD']
                   when 'GET'
                     request_factory.create_get path, request.env['rack.request.query_hash']
