@@ -10,6 +10,17 @@ class Proxy::Dynflow
       Proxy::Dynflow::Api.new
     end
 
+    def request_factory(kind, path)
+      body = mock()
+      body.stubs(:read).returns("")
+      env = {
+        'REQUEST_PATH' => '/dynflow' + path,
+        'REQUEST_METHOD' => kind,
+        'rack.request.query_hash' => {}
+      }
+      OpenStruct.new(:env => env, :body => body)
+    end
+
     it 'relays GET requests' do
       factory = mock()
       factory.expects(:create_get).with('/tasks/count', {})
@@ -17,6 +28,8 @@ class Proxy::Dynflow
       Proxy::Dynflow::Callback::Core.any_instance
                                     .expects(:send_request)
                                     .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
+      Sinatra::Base.any_instance.expects(:request).times(4).returns(request_factory('GET', '/tasks/count'))
+
       get '/tasks/count'
     end
 
@@ -27,6 +40,7 @@ class Proxy::Dynflow
       Proxy::Dynflow::Callback::Core.any_instance
                                     .expects(:send_request)
                                     .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
+      Sinatra::Base.any_instance.expects(:request).times(4).returns(request_factory('POST', '/tasks/12345/cancel'))
       post '/tasks/12345/cancel', {}
     end
 
