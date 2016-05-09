@@ -46,28 +46,38 @@ gem 'smart_proxy_remote_execution_ssh', :path => '../smart_proxy_remote_executio
 END
 ```
 
+Install smart proxy gems and start it
+```shell
+bundle install
+bundle exec bin/smart-proxy
+```
+
+Following commands are started from smart_proxy_dynflow_core folder
+
 Symlink smart_proxy_remote_execuiton_ssh's config from smart-proxy to smart_proxy_dynflow_core
 ```shell
-ln -s config/settings.d/remote_execution_ssh.yml ../smart-proxy-dynflow-core/config/settings.d/smart_proxy_remote_execution_ssh_core.yml
+mkdir config/settings.d
+ln -s ../../../smart-proxy/config/settings.d/remote_execution_ssh.yml config/settings.d/smart_proxy_remote_execution_ssh_core.yml
 ```
 
 Copy smart_proxy_dynflow_core example config and optionally edit it manually
 ```shell
-cp ../smart_proxy_dynflow_core/config/settings.yml{.example,}
+cp config/settings.yml{.example,}
+```
+
+Add the smart_proxy_remote_execution_ssh gem to `Gemfile.local.rb`
+```shell
+echo "gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_execution_ssh_core'" >> Gemfile.local.rb
 ```
 
 Install smart proxy dynflow core's gems and start it
 ```shell
 cd ../smart_proxy_dynflow_core
 bundle install
-budnle exec bin/smart_proxy_dynflow_core
+bundle exec bin/smart_proxy_dynflow_core
 ```
 
-Install smart proxy gems and start it
-```shell
-bundle install
-bundle exec bin/smart-proxy
-```
+
 
 
 
