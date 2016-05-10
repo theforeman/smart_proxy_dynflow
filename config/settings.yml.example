@@ -1,0 +1,10 @@
+---
+:database:
+:callback_url: 'https://localhost:8443'
+:Host: 127.0.0.1
+:Port: 8001
+
+# :use_https: false
+# :ssl_ca_file: ssl/ca.pem
+# :ssl_private_key: ssl/localhost.pem
+# :ssl_certificate: ssl/certs/localhost.pem
