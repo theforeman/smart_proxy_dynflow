@@ -58,8 +58,8 @@ module SmartProxyDynflowCore
     def base_settings
       {
         :app => app,
-        :Host => Settings.instance.Host,
-        :Port => Settings.instance.Port,
+        :Host => Settings.instance.listen,
+        :Port => Settings.instance.port,
         :daemonize => false
       }
     end
