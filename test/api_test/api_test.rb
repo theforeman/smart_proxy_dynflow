@@ -14,11 +14,10 @@ class Proxy::Dynflow
       body = mock()
       body.stubs(:read).returns("")
       env = {
-        'REQUEST_PATH' => '/dynflow' + path,
         'REQUEST_METHOD' => kind,
         'rack.request.query_hash' => {}
       }
-      OpenStruct.new(:env => env, :body => body)
+      OpenStruct.new(:env => env, :body => body, :path => '/dynflow' + path)
     end
 
     it 'relays GET requests' do

@@ -28,7 +28,7 @@ module SmartProxyDynflowCore
 
     def self.load_global_settings(path)
       if File.exists? File.join(path)
-        YAML.load(File.read(path)).each do |key, value|
+        YAML.load_file(path).each do |key, value|
           SETTINGS[key] = value
         end
       end
@@ -46,12 +46,27 @@ module SmartProxyDynflowCore
     end
 
     def self.load_plugin_settings(path)
-      settings = YAML.load(File.read(path))
+      settings = YAML.load_file(path)
       name = File.basename(path).gsub(/\.yml$/, '')
       if SETTINGS.plugins.key? name
         settings = SETTINGS.plugins[name].to_h.merge(settings)
       end
       SETTINGS.plugins[name] = OpenStruct.new settings
+    end
+
+    # Implement hash-like access for 1.9.3 and older
+    if RUBY_VERSION.split('.').first.to_i < 2
+      def [](key)
+        self.send key
+      end
+
+      def []=(key, value)
+        self.send "#{key}=", value
+      end
+
+      def to_h
+        marshal_dump
+      end
     end
   end
 end

@@ -23,14 +23,19 @@ module Proxy
         end
 
         def relay(request, from, to)
-          path = request.env['REQUEST_PATH'].gsub(from, to)
+          path = request.path.gsub(from, to)
+          # TODO: Use a logger (debug)
+          puts "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
           req = case request.env['REQUEST_METHOD']
                   when 'GET'
                     request_factory.create_get path, request.env['rack.request.query_hash']
                   when 'POST'
                     request_factory.create_post path, request.body.read
                 end
-          send_request req
+          response = send_request req
+          # TODO: Use a logger (debug)
+          puts "Proxy request status #{response.code} - #{response}"
+          response
         end
 
         def self.relay(request, from, to)

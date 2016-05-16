@@ -2,4 +2,4 @@
 :enabled: true
 :database: /var/lib/foreman-proxy/dynflow/dynflow.sqlite
 :console_auth: true
-:core_url: 'http://127.0.0.1:8001'
+:core_url: 'http://127.0.0.1:8008'

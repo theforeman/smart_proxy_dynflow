@@ -17,6 +17,8 @@ module Proxy
 
       post "/tasks/callback" do
         response = Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
+        # TODO: Use a logger
+        puts "Callback to foreman #{response.code} - #{response}"
         status response.code
         body response.body
       end

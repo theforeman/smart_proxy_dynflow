@@ -4,24 +4,29 @@ require 'smart_proxy_dynflow_core/settings'
 module SmartProxyDynflowCore
   class Launcher
 
-    def self.launch!
-      self.new.start
+    def self.launch!(options)
+      self.new.start options
     end
 
-    def start
-      load_settings!
+    def start(options)
+      load_settings!(options[:config_dir], options[:one_config])
       Settings.instance.standalone = true
       Core.ensure_initialized
       Rack::Server.new(rack_settings).start
     end
 
-    def load_settings!
-      config_dir = File.join(File.dirname(__FILE__), '..', '..', 'config')
-      Settings.load_global_settings(File.join(config_dir, 'settings.yml'))
-
+    def load_settings!(config_dir = nil, one_config = false)
+      possible_config_dirs = [
+        '/etc/smart_proxy_dynflow_core',
+        File.expand_path('~/.config/smart_proxy_dynflow_core'),
+        File.join(File.dirname(__FILE__), '..', '..', 'config'),
+      ]
+      possible_config_dirs << config_dir if config_dir
       BundlerHelper.require_groups(:default)
-
-      Dir[File.join(config_dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
+      possible_config_dirs.reverse! if one_config
+      possible_config_dirs.select { |config_dir| File.directory? config_dir }.each do |config_dir|
+        break if load_config_dir(config_dir) && one_config
+      end
     end
 
     def self.route_mapping(rack_builder)
@@ -102,6 +107,17 @@ module SmartProxyDynflowCore
       STDERR.puts "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       # logger.error "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
+    end
+
+    def load_config_dir(dir)
+      settings_yml = File.join(dir, 'settings.yml')
+      if File.exist? settings_yml
+        # TODO: Use a logger
+        puts "Loading settings from #{dir}"
+        Settings.load_global_settings settings_yml
+        Dir[File.join(dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
+        true
+      end
     end
   end
 end
