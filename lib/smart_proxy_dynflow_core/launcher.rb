@@ -27,6 +27,7 @@ module SmartProxyDynflowCore
       possible_config_dirs.select { |config_dir| File.directory? config_dir }.each do |config_dir|
         break if load_config_dir(config_dir) && one_config
       end
+      Settings.loaded!
     end
 
     def self.route_mapping(rack_builder)
@@ -43,12 +44,10 @@ module SmartProxyDynflowCore
 
     def rack_settings
       settings = if https_enabled?
-                   # TODO: Use a logger
-                   puts "Using HTTPS"
+                   Log.instance.debug "Using HTTPS"
                    https_app
                  else
-                   # TODO: Use a logger
-                   puts "Using HTTP"
+                   Log.instance.debug "Using HTTP"
                    {}
                  end
       settings.merge(base_settings)
@@ -65,7 +64,9 @@ module SmartProxyDynflowCore
         :app => app,
         :Host => Settings.instance.listen,
         :Port => Settings.instance.port,
-        :daemonize => false
+        :daemonize => false,
+        :AccessLog => [[Settings.instance.log_file, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
+        :Logger => Log.instance
       }
     end
 
@@ -94,26 +95,21 @@ module SmartProxyDynflowCore
     def ssl_private_key
       OpenSSL::PKey::RSA.new(File.read(Settings.instance.ssl_private_key))
     rescue Exception => e
-      # TODO: Use a logger
-      STDERR.puts "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
-      # logger.error "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
     def ssl_certificate
       OpenSSL::X509::Certificate.new(File.read(Settings.instance.ssl_certificate))
     rescue Exception => e
-      # TODO: Use a logger
-      STDERR.puts "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
-      # logger.error "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
     def load_config_dir(dir)
       settings_yml = File.join(dir, 'settings.yml')
       if File.exist? settings_yml
-        # TODO: Use a logger
-        puts "Loading settings from #{dir}"
+        Log.instance.debug "Loading settings from #{dir}"
         Settings.load_global_settings settings_yml
         Dir[File.join(dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
         true

@@ -12,13 +12,13 @@ module Proxy
       authorize_with_ssl_client
 
       before do
+        logger = Proxy::LogBuffer::Decorator.instance
         content_type :json
       end
 
       post "/tasks/callback" do
         response = Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
-        # TODO: Use a logger
-        puts "Callback to foreman #{response.code} - #{response}"
+        logger.info "Callback to foreman #{response.code} - #{response}"
         status response.code
         body response.body
       end

@@ -8,14 +8,11 @@ module SmartProxyDynflowCore
       if %w(yes on 1).include? request.env['HTTPS'].to_s
         if request.env['SSL_CLIENT_CERT'].to_s.empty?
           status 403
-          # TODO: Use a logger
-          STDERR.puts "No client SSL certificate supplied"
+          Log.instance.error "No client SSL certificate supplied"
           halt MultiJson.dump(:error => "No client SSL certificate supplied")
         end
       else
-        # TODO: Use a logger
-        # logger.debug('require_ssl_client_verification: skipping, non-HTTPS request')
-        puts 'require_ssl_client_verification: skipping, non-HTTPS request'
+        Log.instance.debug 'require_ssl_client_verification: skipping, non-HTTPS request'
       end
     end
 

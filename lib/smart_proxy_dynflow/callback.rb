@@ -24,8 +24,7 @@ module Proxy
 
         def relay(request, from, to)
           path = request.path.gsub(from, to)
-          # TODO: Use a logger (debug)
-          puts "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
+          Proxy::LogBuffer::Decorator.instance.debug "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
           req = case request.env['REQUEST_METHOD']
                   when 'GET'
                     request_factory.create_get path, request.env['rack.request.query_hash']
@@ -33,8 +32,7 @@ module Proxy
                     request_factory.create_post path, request.body.read
                 end
           response = send_request req
-          # TODO: Use a logger (debug)
-          puts "Proxy request status #{response.code} - #{response}"
+          Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
           response
         end
 

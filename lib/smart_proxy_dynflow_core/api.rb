@@ -7,6 +7,7 @@ module SmartProxyDynflowCore
     helpers Helpers
 
     before do
+      logger = Log.instance
       authorize_with_ssl_client
       content_type :json
     end

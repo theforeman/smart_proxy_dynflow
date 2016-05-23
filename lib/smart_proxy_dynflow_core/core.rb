@@ -18,8 +18,7 @@ module SmartProxyDynflowCore
 
       db_file = Settings.instance.database
       if db_file.nil? || db_file.empty?
-        # TODO: Use some kind of logger
-        STDERR.puts "Could not open DB for dynflow at '#{db_file}', will keep data in memory. Restart will drop all dynflow data."
+        Log.instance.warn "Could not open DB for dynflow at '#{db_file}', will keep data in memory. Restart will drop all dynflow data."
       else
         db_conn_string += "/#{db_file}"
       end
@@ -41,7 +40,7 @@ module SmartProxyDynflowCore
     end
 
     def logger_adapter
-      ::Dynflow::LoggerAdapters::Simple.new $stderr, 0
+      ::Dynflow::LoggerAdapters::Simple.new Settings.instance.log_file, 0
     end
 
     class << self

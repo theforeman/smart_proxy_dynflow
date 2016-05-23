@@ -15,7 +15,9 @@ module SmartProxyDynflowCore
         :ssl_private_key => nil,
         :ssl_certificate => nil,
         :standalone => false,
-        :plugins => {}
+        :log_file => '/var/log/foreman-proxy/smart_proxy_dynflow_core.log',
+        :plugins => {},
+        :loaded => false
     }
 
     def initialize(settings = {})
@@ -34,8 +36,14 @@ module SmartProxyDynflowCore
       end
     end
 
+    def self.loaded!
+      Settings.instance.loaded = true
+      Log.instance.info 'Settings loaded, reloading logger'
+      Log.reload!
+    end
+
     def self.load_from_proxy(plugin)
-      [:ssl_certificate, :ssl_ca_file, :ssl_private_key, :foreman_url].each do |key|
+      [:ssl_certificate, :ssl_ca_file, :ssl_private_key, :foreman_url, :log_file].each do |key|
         SETTINGS[key] = Proxy::SETTINGS[key]
       end
       SETTINGS.callback_url = SETTINGS.foreman_url
@@ -43,6 +51,7 @@ module SmartProxyDynflowCore
         SETTINGS[key] = plugin.settings[key]
       end
       SETTINGS.plugins.values.each { |plugin| plugin.load_settings_from_proxy }
+      Settings.loaded!
     end
 
     def self.load_plugin_settings(path)
