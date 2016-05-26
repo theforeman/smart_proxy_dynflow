@@ -8,12 +8,8 @@ module SmartProxyDynflowCore
     class << self
       def instance
         if @logger.nil?
-          destination = if Settings.instance.loaded && Settings.instance.log_file
-                          Settings.instance.log_file
-                        else
-                          $stdout
-                        end
-          @logger = Logger.new destination
+          @logger = Logger.new log_file
+          @logger.level = log_level
         end
         @logger
       end
@@ -25,6 +21,24 @@ module SmartProxyDynflowCore
       def reload!
         @logger = nil
         instance
+      end
+
+      private
+
+      def log_level
+        if Settings.instance.loaded && Settings.instance.log_level
+          ::Logger.const_get(Settings.instance.log_level.upcase)
+        else
+          Logger::WARN
+        end
+      end
+
+      def log_file
+        if Settings.instance.loaded && Settings.instance.log_file
+          Settings.instance.log_file
+        else
+          $stdout
+        end
       end
     end
   end
