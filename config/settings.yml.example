@@ -16,3 +16,5 @@
 # :ssl_ca_file: ssl/ca.pem
 # :ssl_private_key: ssl/localhost.pem
 # :ssl_certificate: ssl/certs/localhost.pem
+
+# :log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
