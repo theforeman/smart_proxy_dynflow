@@ -40,7 +40,11 @@ module SmartProxyDynflowCore
     end
 
     def logger_adapter
-      ::Dynflow::LoggerAdapters::Simple.new Settings.instance.log_file, Log.instance.level
+      if Settings.instance.standalone
+        Log::ProxyAdapter.new(Log.instance, Log.instance.level)
+      else
+        Log::ProxyAdapter.new(Proxy::LogBuffer::Decorator.instance, Log.instance.level)
+      end
     end
 
     class << self
