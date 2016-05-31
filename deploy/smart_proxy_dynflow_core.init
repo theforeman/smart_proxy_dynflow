@@ -1,0 +1,95 @@
+#!/bin/bash
+#
+# Init script for foreman smart proxy dynflow core service
+#
+# chkconfig: - 85 15
+# description: Init script for foreman proxy dynflow core service
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+prog=smart_proxy_dynflow_core
+RETVAL=0
+SMART_PROXY_DYNFLOW_SCL_ROOT=/opt/theforeman/tfm/root
+SMART_PROXY_DYNFLOW_CORE_PID=${SMART_PROXY_DYNFLOW_SCL_ROOT}/var/run/$prog/$prog.pid
+SMART_PROXY_DYNFLOW_CORE_USER=${SMART_PROXY_DYNFLOW_CORE_USER:-foreman-proxy}
+
+. /opt/theforeman/tfm/service-environment
+. scl_source enable $TFM_SCLS_ENABLED
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon --user ${SMART_PROXY_DYNFLOW_CORE_USER} ${SMART_PROXY_DYNFLOW_SCL_ROOT}/usr/bin/smart_proxy_dynflow_core > /dev/null
+    RETVAL=$?
+    if [ $RETVAL = 0 ]
+    then
+        echo_success
+    else
+        echo_failure
+    fi
+
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    if [ -f ${SMART_PROXY_DYNFLOW_CORE_PID} ]; then
+        killproc -p ${SMART_PROXY_DYNFLOW_CORE_PID}
+        RETVAL=$?
+    else
+        echo -n $"$prog was not running.";
+        failure $"$prog was not running.";
+        echo
+        return 1
+    fi
+    echo
+    [ $RETVAL -eq 0 ] && rm -f ${SMART_PROXY_DYNFLOW_CORE_PID}
+    return $RETVAL
+}
+
+logrotate() {
+    echo -n $"Rotating logs for $prog: "
+    if [ -f ${SMART_PROXY_DYNFLOW_CORE_PID} ]; then
+        killproc -p ${SMART_PROXY_DYNFLOW_CORE_PID} $prog -USR1
+        RETVAL=$?
+        echo
+    else
+        echo -n $"$prog was not running.";
+        failure $"$prog was not running.";
+        echo
+        return 1
+    fi
+    return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    status)
+        echo -n "$prog"
+        status -p $SMART_PROXY_DYNFLOW_CORE_PID
+        RETVAL=$?
+    ;;
+    restart)
+        stop
+        start
+    ;;
+    condrestart)
+        stop
+        [ $? -eq 0 ] && start
+    ;;
+    logrotate)
+        logrotate
+    ;;
+    *)
+        echo $"Usage: $prog {start|stop|restart|condrestart|logrotate}"
+        exit 1
+esac
+
+exit $RETVAL

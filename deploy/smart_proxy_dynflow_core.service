@@ -1,0 +1,14 @@
+[Unit]
+Description=Foreman smart proxy dynflow core service
+Documentation=https://github.com/theforeman/smart_proxy_dynflow
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=foreman-proxy
+PIDFile=/opt/theforeman/tfm/root/var/run/smart_proxy_dynflow_core/smart_proxy_dynflow_core.pid
+EnvironmentFile=/opt/theforeman/tfm/service-environment
+ExecStart=/usr/bin/scl enable $TFM_SCLS_ENABLED -- /opt/theforeman/tfm/root/usr/bin/smart_proxy_dynflow_core
+
+[Install]
+WantedBy=multi-user.target
