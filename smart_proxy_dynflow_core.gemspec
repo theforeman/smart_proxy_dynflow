@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'smart_proxy_dynflow/version'
+require 'smart_proxy_dynflow_core/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "smart_proxy_dynflow"
-  gem.version       = Proxy::Dynflow::VERSION
+  gem.name          = "smart_proxy_dynflow_core"
+  gem.version       = SmartProxyDynflowCore::VERSION
   gem.authors       = ['Ivan Nečas']
   gem.email         = ['inecas@redhat.com']
   gem.homepage      = "https://github.com/theforeman/smart_proxy_dynflow"
@@ -14,8 +14,9 @@ Gem::Specification.new do |gem|
     Use the Dynflow inside Foreman smart proxy
   EOS
 
-  gem.files         = Dir['lib/smart_proxy_dynflow.rb', '{bundler.d,lib/smart_proxy_dynflow,settings.d}/**/*',
-                          'LICENSE', 'Gemfile']
+  gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'config/settings.yml.example',
+                          'bundler.d/*', 'lib/smart_proxy_dynflow_core/*', 'LICENSE', 'Gemfile',
+                          'bin/smart_proxy_dynflow_core', 'deploy/*']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.license = 'GPLv3'
@@ -27,4 +28,11 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('webmock', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
   gem.add_development_dependency('rubocop', '0.32.1')
+
+  gem.add_runtime_dependency('dynflow', "~> 0.8.4")
+  gem.add_runtime_dependency('sequel')
+  gem.add_runtime_dependency('sqlite3')
+  gem.add_runtime_dependency('sinatra', '~> 1.4')
+  gem.add_runtime_dependency('rack')
+  gem.add_runtime_dependency('rest-client')
 end

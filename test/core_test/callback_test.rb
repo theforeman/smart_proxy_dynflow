@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Proxy::Dynflow
+module SmartProxyDynflowCore
   class CallbackTest < MiniTest::Spec
-    class DummyAction < Dynflow::Action
+    class DummyAction < ::Dynflow::Action
       include Callback::PlanHelper
 
       def plan
@@ -16,8 +16,9 @@ class Proxy::Dynflow
 
     describe Callback::Action do
       it 'sends the data to the Foreman using the callback API' do
-        Callback::Request.expects(:send_to_foreman_tasks).with({ 'task_id' => '123', 'step_id' => 123 },
-                                                               { 'result' => 'Hello World' })
+        data = { :callback => {'task_id' => '123', 'step_id' => 123}, :data => {'result' => 'Hello World'} }.to_json
+        Settings.instance.stubs(:standalone).returns(true)
+        Callback::Request.any_instance.expects(:callback).with(data)
         triggered = WORLD.trigger(DummyAction)
         triggered.finished.wait
       end

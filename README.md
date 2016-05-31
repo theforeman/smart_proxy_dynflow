@@ -1,30 +1,81 @@
-# Smart-proxy Dynflow plugin 
+Clone smart-proxy
+```shell
+git clone https://github.com/theforeman/smart-proxy
+```
+Configure smart proxy
 
-This a plugin for foreman smart-proxy allowing using dynflow for the
-[remote execution](http://theforeman.github.io/foreman_remote_execution/)
+Clone all the repositories
+```shell
+for repo in smart_proxy_dynflow smart_proxy_remote_execution_ssh; do
+  git clone https://github.com/adamruzicka/$repo ${repo}
+  cd ${repo}
+  git checkout api
+  cd -
+done
+```
+Configure `smart_proxy_dynflow` and `smart_proxy_remote_execution_ssh` as usually
 
-## Installation
-
-Add this line to your smart proxy bundler.d/dynflow.rb gemfile:
-
-```ruby
-gem 'smart_proxy_dynflow
+### All-in-one solution
+Add all the gems to smart-proxy's bundler.d from local checkouts.
+All comands are started from the smart-proxy's directory
+```shell
+cat <<-END > bundler.d/dynflow.local.rb
+gem 'smart_proxy_dynflow', :path => '../smart_proxy_dynflow'
+gem 'smart_proxy_dynflow_core', :path => '../smart_proxy_dynflow'
+gem 'smart_proxy_remote_execution_ssh', :path => '../smart_proxy_remote_execution_ssh'
+gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_execution_ssh'
+END
 ```
 
-And then execute:
+Install the gems and start smart proxy
+```shell
+bundle install
+bundle exec bin/smart-proxy
+```
 
-    $ bundle
+Your smart proxy should now be usable
 
-Or install it yourself as:
+### The separate dynflow way
+All comands are started from the smart-proxy's directory
+```shell
+cat <<-END > bundler.d/dynflow.local.rb
+gem 'smart_proxy_dynflow', :path => '../smart_proxy_dynflow'
+gem 'smart_proxy_remote_execution_ssh', :path => '../smart_proxy_remote_execution_ssh'
+END
+```
 
-    $ gem install smart_proxy_dynflow
+Install smart proxy gems and start it
+```shell
+bundle install
+bundle exec bin/smart-proxy
+```
 
-## Usage
+Following commands are started from smart_proxy_dynflow_core folder
 
-To configure this plugin you can use template from settings.d/dynflow.yml.example.
-You must place dynflow.yml config file (based on this template) to your
-smart-proxy config/settings.d/ directory.
+Symlink smart_proxy_remote_execuiton_ssh's config from smart-proxy to smart_proxy_dynflow_core
+```shell
+mkdir config/settings.d
+ln -s ../../../smart-proxy/config/settings.d/remote_execution_ssh.yml config/settings.d/smart_proxy_remote_execution_ssh_core.yml
+```
 
-Although, it's intended for the proxy mainly to be used by the Foreman
-server, for debugging/development purpose, the Dynflow console can be used.
-It's available under `/dynflow/console` path.
+Copy smart_proxy_dynflow_core example config and optionally edit it manually
+```shell
+cp config/settings.yml{.example,}
+```
+
+Add the smart_proxy_remote_execution_ssh gem to `Gemfile.local.rb`
+```shell
+echo "gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_execution_ssh'" >> Gemfile.local.rb
+```
+
+Install smart proxy dynflow core's gems and start it
+```shell
+bundle install
+bundle exec bin/smart_proxy_dynflow_core.rb
+```
+
+
+
+
+
+

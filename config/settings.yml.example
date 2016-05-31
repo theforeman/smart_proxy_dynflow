@@ -1,0 +1,20 @@
+---
+# Path to dynflow database, leave blank for in-memory non-persistent database
+:database:
+
+# URL of the smart proxy, used for reporting back
+:callback_url: 'https://localhost:8443'
+
+# Listen on address
+:listen: 127.0.0.1
+
+# Listen on port
+:port: 8008
+
+# SSL settings for client authentication against smart proxy.
+# :use_https: false
+# :ssl_ca_file: ssl/ca.pem
+# :ssl_private_key: ssl/localhost.pem
+# :ssl_certificate: ssl/certs/localhost.pem
+
+# :log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
