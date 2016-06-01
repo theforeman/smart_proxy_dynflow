@@ -7,10 +7,7 @@ Configure smart proxy
 Clone all the repositories
 ```shell
 for repo in smart_proxy_dynflow smart_proxy_remote_execution_ssh; do
-  git clone https://github.com/adamruzicka/$repo ${repo}
-  cd ${repo}
-  git checkout api
-  cd -
+  git clone https://github.com/theforeman/$repo ${repo}
 done
 ```
 Configure `smart_proxy_dynflow` and `smart_proxy_remote_execution_ssh` as usually
