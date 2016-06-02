@@ -1,5 +1,22 @@
 require 'ostruct'
 
+# Implement hash-like access for 1.9.3 and older
+if RUBY_VERSION.split('.').first.to_i < 2
+  class OpenStruct
+    def [](key)
+      self.send key
+    end
+
+    def []=(key, value)
+      self.send "#{key}=", value
+    end
+
+    def to_h
+      marshal_dump
+    end
+  end
+end
+
 module SmartProxyDynflowCore
   class Settings < OpenStruct
 
@@ -66,21 +83,6 @@ module SmartProxyDynflowCore
         settings = SETTINGS.plugins[name].to_h.merge(settings)
       end
       SETTINGS.plugins[name] = OpenStruct.new settings
-    end
-
-    # Implement hash-like access for 1.9.3 and older
-    if RUBY_VERSION.split('.').first.to_i < 2
-      def [](key)
-        self.send key
-      end
-
-      def []=(key, value)
-        self.send "#{key}=", value
-      end
-
-      def to_h
-        marshal_dump
-      end
     end
   end
 end
