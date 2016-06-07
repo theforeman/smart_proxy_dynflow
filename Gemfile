@@ -11,6 +11,11 @@ group :test do
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
 end
 
+# load bundler.d
+Dir["#{File.dirname(__FILE__)}/bundler.d/*.rb"].each do |bundle|
+  self.instance_eval(Bundler.read_file(bundle))
+end
+
 # load local gemfile
 local_gemfile = File.join(File.dirname(__FILE__), 'Gemfile.local.rb')
 self.instance_eval(Bundler.read_file(local_gemfile)) if File.exist?(local_gemfile)
