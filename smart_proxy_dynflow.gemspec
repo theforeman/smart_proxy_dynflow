@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
     Use the Dynflow inside Foreman smart proxy
   EOS
 
-  gem.files         = Dir['lib/smart_proxy_dynflow.rb', '{bundler.d,lib/smart_proxy_dynflow,settings.d}/**/*',
+  gem.files         = Dir['lib/smart_proxy_dynflow.rb', '{bundler.plugins.d,lib/smart_proxy_dynflow,settings.d}/**/*',
                           'LICENSE', 'Gemfile']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
