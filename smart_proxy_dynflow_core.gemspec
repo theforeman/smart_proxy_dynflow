@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
     Use the Dynflow inside Foreman smart proxy
   EOS
 
+  gem.executables   = ['smart_proxy_dynflow_core']
   gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'config/settings.yml.example',
                           'lib/smart_proxy_dynflow_core/*', 'LICENSE', 'Gemfile',
                           'bin/smart_proxy_dynflow_core', 'deploy/*', 'smart_proxy_dynflow_core.gemspec']
