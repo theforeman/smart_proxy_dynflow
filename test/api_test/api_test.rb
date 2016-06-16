@@ -43,12 +43,5 @@ class Proxy::Dynflow
       post '/tasks/12345/cancel', {}
     end
 
-    it 'relays callbacks' do
-      data = '{"callback": "callback", "data": "data"}'
-      Proxy::Dynflow::Callback::Request.expects(:send_to_foreman_tasks).with(data)
-                                       .returns(OpenStruct.new(:code => 200, :body => data))
-      post '/tasks/callback', data
-    end
-
   end
 end

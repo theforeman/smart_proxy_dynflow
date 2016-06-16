@@ -1,10 +1,17 @@
 module SmartProxyDynflowCore
   class Core
 
-    attr_accessor :world
+    attr_accessor :world, :accepted_cert_serial
 
     def initialize
       @world = create_world
+      cert_file = Settings.instance.foreman_ssl_cert || Settings.instance.ssl_certificate
+      if cert_file
+        client_cert = File.read(cert_file)
+        # we trust only requests using the same certificate as we are
+        # (in other words the local proxy only)
+        @accepted_cert_serial = OpenSSL::X509::Certificate.new(client_cert).serial
+      end
     end
 
     def create_world(&block)
@@ -68,7 +75,7 @@ module SmartProxyDynflowCore
           helpers Helpers
 
           before do
-            authorize_with_ssl_client
+            authorize_with_ssl_client if Settings.instance.console_auth
           end
 
           Core.ensure_initialized
