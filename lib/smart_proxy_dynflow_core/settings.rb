@@ -35,6 +35,8 @@ module SmartProxyDynflowCore
         :log_file => '/var/log/foreman-proxy/smart_proxy_dynflow_core.log',
         :log_level => :ERROR,
         :plugins => {},
+        :pid_file => '/var/run/foreman-proxy/smart_proxy_dynflow_core.pid',
+        :daemonize => false,
         :loaded => false
     }
 

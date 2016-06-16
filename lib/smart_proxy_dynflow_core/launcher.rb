@@ -9,13 +9,14 @@ module SmartProxyDynflowCore
     end
 
     def start(options)
-      load_settings!(options[:config_dir], options[:one_config])
+      load_settings!(options)
       Settings.instance.standalone = true
       Core.ensure_initialized
       Rack::Server.new(rack_settings).start
     end
 
-    def load_settings!(config_dir = nil, one_config = false)
+    def load_settings!(options = {})
+      config_dir, one_config = options.values_at(:config_dir, :one_config)
       possible_config_dirs = [
         '/etc/smart_proxy_dynflow_core',
         File.expand_path('~/.config/smart_proxy_dynflow_core'),
@@ -27,6 +28,8 @@ module SmartProxyDynflowCore
       possible_config_dirs.select { |config_dir| File.directory? config_dir }.each do |config_dir|
         break if load_config_dir(config_dir) && one_config
       end
+      Settings.instance.daemonize = options[:daemonize] if options.key?(:daemonize)
+      Settings.instance.pid_file = options[:pid_file] if options.key?(:pid_file)
       Settings.loaded!
     end
 
@@ -64,9 +67,10 @@ module SmartProxyDynflowCore
         :app => app,
         :Host => Settings.instance.listen,
         :Port => Settings.instance.port,
-        :daemonize => false,
         :AccessLog => [[Log.log_file, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
-        :Logger => Log.instance
+        :Logger => Log.instance,
+        :daemonize => Settings.instance.daemonize,
+        :pid => Settings.instance.pid_file
       }
     end
 

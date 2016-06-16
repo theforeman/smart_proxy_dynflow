@@ -5,6 +5,10 @@
 # URL of the smart proxy, used for reporting back
 :callback_url: 'https://localhost:8443'
 
+# Set to true to make the core fork to background after start
+# :daemonize: false
+# :pid_file: /var/run/foreman-proxy/smart_proxy_dynflow_core.pid
+
 # Listen on address
 :listen: 127.0.0.1
 
@@ -17,4 +21,9 @@
 # :ssl_private_key: ssl/localhost.pem
 # :ssl_certificate: ssl/certs/localhost.pem
 
+# File to log to, leave empty for logging to STDOUT
 # :log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
+
+# Log level, one of UNKNOWN, FATAL, ERROR, WARN, INFO, DEBUG
+# :log_level: ERROR
+

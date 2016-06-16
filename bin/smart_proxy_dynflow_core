@@ -11,8 +11,16 @@ OptionParser.new do |opts|
     options[:config_dir] = value
   end
 
-  opts.on('-1', '--one-config', String, 'Do not load more than 1 config') do |value|
+  opts.on('-1', '--one-config', 'Do not load more than 1 config') do |value|
     options[:one_config] = true
+  end
+
+  opts.on('-d', '--[no-]daemonize', 'Fork to background after start') do |value|
+    options[:daemonize] = value
+  end
+
+  opts.on('-p', '--pid-file PID_FILE', String, 'Write pid to this file') do |value|
+    options[:pid_file] = value
   end
 
   opts.on_tail('-h', '--help', 'Show usage help') do
