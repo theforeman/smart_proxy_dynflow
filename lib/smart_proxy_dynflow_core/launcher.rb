@@ -11,7 +11,6 @@ module SmartProxyDynflowCore
     def start(options)
       load_settings!(options)
       Settings.instance.standalone = true
-      Core.ensure_initialized
       Rack::Server.new(rack_settings).start
     end
 
