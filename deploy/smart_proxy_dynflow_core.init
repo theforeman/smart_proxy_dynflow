@@ -11,7 +11,7 @@
 prog=smart_proxy_dynflow_core
 RETVAL=0
 SMART_PROXY_DYNFLOW_SCL_ROOT=/opt/theforeman/tfm/root
-SMART_PROXY_DYNFLOW_CORE_PID=${SMART_PROXY_DYNFLOW_SCL_ROOT}/var/run/$prog/$prog.pid
+SMART_PROXY_DYNFLOW_CORE_PID=/var/run/foreman-proxy/$prog.pid
 SMART_PROXY_DYNFLOW_CORE_USER=${SMART_PROXY_DYNFLOW_CORE_USER:-foreman-proxy}
 
 . /opt/theforeman/tfm/service-environment
@@ -19,7 +19,7 @@ SMART_PROXY_DYNFLOW_CORE_USER=${SMART_PROXY_DYNFLOW_CORE_USER:-foreman-proxy}
 
 start() {
     echo -n $"Starting $prog: "
-    daemon --user ${SMART_PROXY_DYNFLOW_CORE_USER} ${SMART_PROXY_DYNFLOW_SCL_ROOT}/usr/bin/smart_proxy_dynflow_core > /dev/null
+    daemon --user ${SMART_PROXY_DYNFLOW_CORE_USER} ${SMART_PROXY_DYNFLOW_SCL_ROOT}/usr/bin/smart_proxy_dynflow_core -d -p $SMART_PROXY_DYNFLOW_CORE_PID > /dev/null
     RETVAL=$?
     if [ $RETVAL = 0 ]
     then
