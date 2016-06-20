@@ -7,8 +7,7 @@ After=network.target remote-fs.target nss-lookup.target
 Type=forking
 User=foreman-proxy
 PIDFile=/var/run/foreman-proxy/smart_proxy_dynflow_core.pid
-EnvironmentFile=/opt/theforeman/tfm/service-environment
-ExecStart=/usr/bin/scl enable $TFM_SCLS_ENABLED -- /opt/theforeman/tfm/root/usr/bin/smart_proxy_dynflow_core -d -p /var/run/foreman-proxy/smart_proxy_dynflow_core.pid
+ExecStart=/usr/bin/smart_proxy_dynflow_core -d -p /var/run/foreman-proxy/smart_proxy_dynflow_core.pid
 
 [Install]
 WantedBy=multi-user.target
