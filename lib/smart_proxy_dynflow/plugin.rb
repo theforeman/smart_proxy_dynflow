@@ -14,7 +14,6 @@ class Proxy::Dynflow
     https_rackup_path File.expand_path(rackup_path, File.expand_path("../", __FILE__))
 
     settings_file "dynflow.yml"
-    default_settings :console_auth => true
     default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
   end

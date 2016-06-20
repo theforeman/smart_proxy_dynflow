@@ -10,15 +10,15 @@ module SmartProxyDynflowCore
   module Callback
     class Request
       def callback(payload)
-        response = callback_resource.post payload
-        if response.code != 200
-          raise "Failed performing callback to smart proxy: #{response.code} #{response.body}"
+        response = callback_resource.post(payload, :content_type => :json)
+        if response.code.to_s != "200"
+          raise "Failed performing callback to Foreman server: #{response.code} #{response.body}"
         end
         response
       end
 
-      def self.callback(callback, data)
-        self.new.callback(self.prepare_payload(callback, data))
+      def self.send_to_foreman_tasks(callback_info, data)
+        self.new.callback(self.prepare_payload(callback_info, data))
       end
 
       private
@@ -28,20 +28,31 @@ module SmartProxyDynflowCore
       end
 
       def callback_resource
-        @resource ||= RestClient::Resource.new Settings.instance.callback_url + '/dynflow/tasks/callback',
-                                               ssl_options
+        @resource ||= RestClient::Resource.new(Settings.instance.foreman_url + '/foreman_tasks/api/tasks/callback',
+                                               self.class.ssl_options)
       end
 
-      def ssl_options
-        return {} unless Settings.instance.use_https
-        client_key = File.read  Settings.instance.ssl_private_key
-        client_cert = File.read Settings.instance.ssl_certificate
-        {
-          :ssl_client_cert => OpenSSL::X509::Certificate.new(client_cert),
-          :ssl_client_key  => OpenSSL::PKey::RSA.new(client_key),
-          :ssl_ca_file     => Settings.instance.ssl_ca_file,
-          :verify_ssl      => OpenSSL::SSL::VERIFY_PEER
-        }
+      def self.ssl_options
+        return @ssl_options if defined? @ssl_options
+        @ssl_options = {}
+        settings = Settings.instance
+        return @ssl_options unless URI.parse(settings.foreman_url).scheme == 'https'
+
+        @ssl_options[:verify_ssl] = OpenSSL::SSL::VERIFY_PEER
+
+        private_key_file = settings.foreman_ssl_key || settings.ssl_private_key
+        if private_key_file
+          private_key = File.read(private_key_file)
+          @ssl_options[:ssl_client_key] = OpenSSL::PKey::RSA.new(private_key)
+        end
+        certificate_file = settings.foreman_ssl_cert || settings.ssl_certificate
+        if certificate_file
+          certificate = File.read(certificate_file)
+          @ssl_options[:ssl_client_cert] = OpenSSL::X509::Certificate.new(certificate)
+        end
+        ca_file = settings.foreman_ssl_ca || settings.ssl_ca_file
+        @ssl_options[:ssl_ca_file] = ca_file if ca_file
+        @ssl_options
       end
     end
 
@@ -51,8 +62,7 @@ module SmartProxyDynflowCore
       end
 
       def run
-        callback = (Settings.instance.standalone ? Callback::Request : Proxy::Dynflow::Callback::Request).new
-        callback.callback(SmartProxyDynflowCore::Callback::Request.prepare_payload(input[:callback], input[:data]))
+        Callback::Request.send_to_foreman_tasks(input[:callback], input[:data])
       end
     end
 

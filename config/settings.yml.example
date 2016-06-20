@@ -2,8 +2,15 @@
 # Path to dynflow database, leave blank for in-memory non-persistent database
 :database:
 
-# URL of the smart proxy, used for reporting back
-:callback_url: 'https://localhost:8443'
+# URL of the foreman, used for reporting back
+:foreman_url: 'http://localhost:3000'
+
+# SSL settings for client authentication against Foreman
+# :foreman_ssl_ca: ssl/foreman_ca.pem
+# :foreman_ssl_key: ssl/foreman_key.pem
+# :foreman_ssl_cert: ssl/foreman_cert.pem
+
+:console_auth: false
 
 # Set to true to make the core fork to background after start
 # :daemonize: false
@@ -15,7 +22,7 @@
 # Listen on port
 :port: 8008
 
-# SSL settings for client authentication against smart proxy.
+# SSL settings for running core as https service
 # :use_https: false
 # :ssl_ca_file: ssl/ca.pem
 # :ssl_private_key: ssl/localhost.pem
@@ -26,4 +33,3 @@
 
 # Log level, one of UNKNOWN, FATAL, ERROR, WARN, INFO, DEBUG
 # :log_level: ERROR
-

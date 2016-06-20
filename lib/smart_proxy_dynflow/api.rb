@@ -16,13 +16,6 @@ module Proxy
         content_type :json
       end
 
-      post "/tasks/callback" do
-        response = Proxy::Dynflow::Callback::Request.send_to_foreman_tasks(request.body.read)
-        logger.info "Callback to foreman #{response.code} - #{response}"
-        status response.code
-        body response.body
-      end
-
       post "/*" do
         relay_request
       end
