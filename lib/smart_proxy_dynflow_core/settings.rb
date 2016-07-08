@@ -69,12 +69,12 @@ module SmartProxyDynflowCore
       Log.reload!
     end
 
-    def self.load_from_proxy(plugin)
+    def self.load_from_proxy(settings)
       PROXY_SETTINGS.each do |key|
         SETTINGS[key] = Proxy::SETTINGS[key]
       end
       PLUGIN_SETTINGS.each do |key|
-        SETTINGS[key] = plugin.settings[key]
+        SETTINGS[key] = settings[key]
       end
       SETTINGS.plugins.values.each { |plugin| plugin.load_settings_from_proxy }
       Settings.loaded!

@@ -11,6 +11,12 @@ group :test do
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
 end
 
+if RUBY_VERSION < "2.0"
+  gem 'json', '< 2.0.0'
+  gem 'rest-client', '< 1.7'
+  gem 'mime-types', '~> 1.0'
+end
+
 # load bundler.d
 Dir["#{File.dirname(__FILE__)}/bundler.d/*.rb"].each do |bundle|
   self.instance_eval(Bundler.read_file(bundle))
