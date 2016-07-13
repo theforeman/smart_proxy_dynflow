@@ -32,11 +32,6 @@ cat > config/settings.d/remote_execution_ssh.yml <<EOF
 EOF
 ```
 
-**In foreman directory**
-
-Add a line that contains `:restrict_registered_smart_proxies: false` to file `config/settings.yaml`
-
-
 
 ### All-in-one solution
 Add all the gems to smart-proxy's bundler.d from local checkouts.
