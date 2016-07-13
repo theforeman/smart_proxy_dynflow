@@ -4,6 +4,25 @@ git clone https://github.com/theforeman/smart-proxy
 ```
 Configure smart proxy
 
+
+In smart-proxy directory 
+```shell
+mkdir smart-proxy/logs
+```
+Create two new files in smart-proxy/config/settings.d --> First one named `dynflow.yml` and second one `remote_execution_ssh.yml` and add lines  to both of them 
+```
+---
+:enabled: true
+``` 
+Then add a line that contains `:log_file: logs/proxy.log` to file `smart-proxy/config/settings.yml`
+
+In foreman directory add a line that contains `:restrict_registered_smart_proxies: false` to file `foreman/config/settings.yaml`
+
+Then create a file `Gemfile.local.rb`in directory `foreman/bundler.d/Gemfile.local.rb` and add line 
+```
+gem  "foreman_remote_execution", :path => "../foreman_remote_execution"
+```
+
 Clone all the repositories
 ```shell
 for repo in smart_proxy_dynflow smart_proxy_remote_execution_ssh; do
@@ -23,6 +42,11 @@ gem 'smart_proxy_remote_execution_ssh', :path => '../smart_proxy_remote_executio
 gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_execution_ssh'
 END
 ```
+Rerun forman and seed database
+```
+bundle exec rake db:seed
+```
+
 
 Install the gems and start smart proxy
 ```shell
