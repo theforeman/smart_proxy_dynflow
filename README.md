@@ -54,6 +54,7 @@ bundle exec bin/smart-proxy
 
 Your smart proxy should now be usable
 
+
 ### The separate dynflow way
 All comands are started from the smart-proxy's directory
 ```shell
