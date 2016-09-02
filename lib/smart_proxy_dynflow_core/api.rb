@@ -1,6 +1,5 @@
 require 'sinatra/base'
 require 'multi_json'
-require 'dynflow'
 
 module SmartProxyDynflowCore
   class Api < ::Sinatra::Base

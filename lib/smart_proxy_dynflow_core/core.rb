@@ -60,7 +60,7 @@ module SmartProxyDynflowCore
       def ensure_initialized
         return @instance if @instance
         @instance = Core.new
-        after_initialize_blocks.each(&:call)
+        after_initialize_blocks.each { |block| block.call(@instance) }
         @instance
       end
 
