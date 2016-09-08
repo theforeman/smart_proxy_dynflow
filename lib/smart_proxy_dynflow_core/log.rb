@@ -1,5 +1,4 @@
 require 'logger'
-require 'dynflow'
 
 module SmartProxyDynflowCore
   class Log < ::Logger
