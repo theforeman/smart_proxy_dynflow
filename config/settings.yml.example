@@ -28,6 +28,12 @@
 # :ssl_private_key: ssl/localhost.pem
 # :ssl_certificate: ssl/certs/localhost.pem
 
+# Use this option only if you need to disable certain cipher suites.
+# Note: we use the OpenSSL suite name, take a look at:
+# https://www.openssl.org/docs/manmaster/apps/ciphers.html#CIPHER-SUITE-NAMES
+# for more information.
+#:ssl_disabled_ciphers: [CIPHER-SUITE-1, CIPHER-SUITE-2]
+
 # File to log to, leave empty for logging to STDOUT
 # :log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
 

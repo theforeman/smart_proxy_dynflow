@@ -30,6 +30,7 @@ module SmartProxyDynflowCore
         :ssl_ca_file => nil,
         :ssl_private_key => nil,
         :ssl_certificate => nil,
+        :ssl_disabled_ciphers => [],
         :foreman_ssl_ca => nil,
         :foreman_ssl_key => nil,
         :foreman_ssl_cert => nil,
@@ -44,7 +45,7 @@ module SmartProxyDynflowCore
 
     PROXY_SETTINGS = [:ssl_ca_file, :ssl_certificate, :ssl_private_key, :foreman_url,
                       :foreman_ssl_ca, :foreman_ssl_cert, :foreman_ssl_key,
-                      :log_file, :log_level]
+                      :log_file, :log_level, :ssl_disabled_ciphers]
     PLUGIN_SETTINGS = [:database, :core_url, :console_auth]
 
     def initialize(settings = {})

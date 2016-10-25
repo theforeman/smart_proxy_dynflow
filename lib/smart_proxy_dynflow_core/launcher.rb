@@ -1,6 +1,7 @@
 require 'webrick/https'
 require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
+require 'smart_proxy_dynflow_core/webrick-patch'
 module SmartProxyDynflowCore
   class Launcher
 
@@ -69,7 +70,8 @@ module SmartProxyDynflowCore
         :AccessLog => [[Log.log_file, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
         :Logger => Log.instance,
         :daemonize => Settings.instance.daemonize,
-        :pid => Settings.instance.pid_file
+        :pid => Settings.instance.pid_file,
+        :server => :webrick
       }
     end
 
