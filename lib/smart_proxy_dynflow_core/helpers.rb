@@ -4,39 +4,6 @@ module SmartProxyDynflowCore
       SmartProxyDynflowCore::Core.world
     end
 
-    def authorize_with_token
-      if request.env.key? 'HTTP_AUTHORIZATION'
-        if defined?(::ForemanTasksCore)
-          auth = request.env['HTTP_AUTHORIZATION']
-          basic_prefix = /\ABasic /
-          if !auth.to_s.empty? && auth =~ basic_prefix &&
-              ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
-            Log.instance.debug('authorized with token')
-            return true
-          end
-        end
-        halt 403, MultiJson.dump(:error => 'Invalid username or password supplied')
-      end
-      false
-    end
-
-    def authorize_with_ssl_client
-      if %w(yes on 1).include? request.env['HTTPS'].to_s
-        if request.env['SSL_CLIENT_CERT'].to_s.empty?
-          Log.instance.error "No client SSL certificate supplied"
-          halt 403, MultiJson.dump(:error => "No client SSL certificate supplied")
-        else
-          client_cert = OpenSSL::X509::Certificate.new(request.env['SSL_CLIENT_CERT'])
-          unless SmartProxyDynflowCore::Core.instance.accepted_cert_serial == client_cert.serial
-            Log.instance.error "SSL certificate with unexpected serial supplied"
-            halt 403, MultiJson.dump(:error => "SSL certificate with unexpected serial supplied")
-          end
-        end
-      else
-        Log.instance.debug 'require_ssl_client_verification: skipping, non-HTTPS request'
-      end
-    end
-
     def trigger_task(*args)
       triggered = world.trigger(*args)
       { :task_id => triggered.id }

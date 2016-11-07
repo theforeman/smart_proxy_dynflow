@@ -4,11 +4,23 @@ require 'multi_json'
 module SmartProxyDynflowCore
   class Api < ::Sinatra::Base
     helpers Helpers
+    include AuthorizationHelper
 
     before do
       logger = Log.instance
-      authorize_with_token || authorize_with_ssl_client
+      authorize_with_token
       content_type :json
+    end
+
+    if defined?(::Proxy::Launcher)
+      require 'sinatra/authorization'
+      extend Sinatra::Authorization
+      authorize_with_trusted_hosts
+      authorize_with_ssl_client
+    else
+      before do
+        authorize_with_proxy_ssl_client
+      end
     end
 
     post "/tasks/?" do
