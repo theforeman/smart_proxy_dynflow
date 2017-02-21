@@ -1,16 +1,37 @@
-Clone smart-proxy
+**Clone smart-proxy**
 ```shell
 git clone https://github.com/theforeman/smart-proxy
 ```
 Configure smart proxy
 
-Clone all the repositories
+**Clone all the repositories**
 ```shell
 for repo in smart_proxy_dynflow smart_proxy_remote_execution_ssh; do
   git clone https://github.com/theforeman/$repo ${repo}
 done
 ```
+
+
+**In smart-proxy directory**
+```shell
+mkdir logs
+```
+
+Then add a line that contains `:log_file: logs/proxy.log` to file `config/settings.yml`
+
 Configure `smart_proxy_dynflow` and `smart_proxy_remote_execution_ssh` as usually
+```bash
+cat > config/settings.d/dynflow.yml <<EOF
+---
+:enabled: true
+EOF
+
+cat > config/settings.d/remote_execution_ssh.yml <<EOF
+---
+:enabled: true
+EOF
+```
+
 
 ### All-in-one solution
 Add all the gems to smart-proxy's bundler.d from local checkouts.
@@ -24,6 +45,7 @@ gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_exe
 END
 ```
 
+
 Install the gems and start smart proxy
 ```shell
 bundle install
@@ -31,6 +53,7 @@ bundle exec bin/smart-proxy
 ```
 
 Your smart proxy should now be usable
+
 
 ### The separate dynflow way
 All comands are started from the smart-proxy's directory
