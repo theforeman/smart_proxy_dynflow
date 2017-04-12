@@ -15,6 +15,7 @@ SMART_PROXY_DYNFLOW_CORE_USER=${SMART_PROXY_DYNFLOW_CORE_USER:-foreman-proxy}
 
 start() {
     echo -n $"Starting $prog: "
+    ulimit -n 65536
     daemon --user ${SMART_PROXY_DYNFLOW_CORE_USER} /usr/bin/smart_proxy_dynflow_core -d -p $SMART_PROXY_DYNFLOW_CORE_PID > /dev/null
     RETVAL=$?
     if [ $RETVAL = 0 ]
