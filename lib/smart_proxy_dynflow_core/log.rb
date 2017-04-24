@@ -40,6 +40,11 @@ module SmartProxyDynflowCore
       end
     end
 
+    def initialize(file, *rest)
+      @fd = file.kind_of?(IO) ? file : File.open(file, 'a')
+      super(@fd, rest)
+    end
+
     def add(*args)
       handle_log_rolling if @roll_log
       super(*args)
@@ -51,7 +56,7 @@ module SmartProxyDynflowCore
 
     def handle_log_rolling
       @roll_log = false
-      self.reopen
+      @fd.reopen unless log_file.kind_of? IO
     end
 
     class ProxyAdapter < ::Dynflow::LoggerAdapters::Simple
