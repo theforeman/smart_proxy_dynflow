@@ -41,7 +41,9 @@ module SmartProxyDynflowCore
     end
 
     def initialize(file, *rest)
-      @fd = file.kind_of?(IO) ? file : File.open(file, 'a')
+      @file = file
+      @fd = @file.kind_of?(IO) ? @file : File.open(@file, 'a')
+      @fd.sync = true
       super(@fd, rest)
     end
 
@@ -56,7 +58,10 @@ module SmartProxyDynflowCore
 
     def handle_log_rolling
       @roll_log = false
-      @fd.reopen unless log_file.kind_of? IO
+      unless @file.kind_of? IO
+        @fd.reopen @file, 'a'
+        @fd.sync = true
+      end
     end
 
     class ProxyAdapter < ::Dynflow::LoggerAdapters::Simple
