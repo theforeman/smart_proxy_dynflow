@@ -67,7 +67,7 @@ module SmartProxyDynflowCore
         :app => app,
         :Host => Settings.instance.listen,
         :Port => Settings.instance.port,
-        :AccessLog => [[Log.log_file, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
+        :AccessLog => [[Log.instance, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
         :Logger => Log.instance,
         :daemonize => Settings.instance.daemonize,
         :pid => Settings.instance.pid_file,
