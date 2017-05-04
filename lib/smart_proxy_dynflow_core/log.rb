@@ -8,7 +8,7 @@ module SmartProxyDynflowCore
     class << self
       def instance
         if @logger.nil?
-          @logger = Logger.new log_file
+          @logger = self.new log_file
           @logger.level = log_level
         end
         @logger
@@ -37,6 +37,30 @@ module SmartProxyDynflowCore
         else
           $stdout
         end
+      end
+    end
+
+    def initialize(file, *rest)
+      @file = file
+      @fd = @file.kind_of?(IO) ? @file : File.open(@file, 'a')
+      @fd.sync = true
+      super(@fd, rest)
+    end
+
+    def add(*args)
+      handle_log_rolling if @roll_log
+      super(*args)
+    end
+
+    def roll_log
+      @roll_log = true
+    end
+
+    def handle_log_rolling
+      @roll_log = false
+      unless @file.kind_of? IO
+        @fd.reopen @file, 'a'
+        @fd.sync = true
       end
     end
 

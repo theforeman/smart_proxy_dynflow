@@ -12,6 +12,7 @@ module SmartProxyDynflowCore
     def start(options)
       load_settings!(options)
       Settings.instance.standalone = true
+      install_usr1_trap
       Rack::Server.new(rack_settings).start
     end
 
@@ -40,6 +41,12 @@ module SmartProxyDynflowCore
 
       rack_builder.map '/' do
         run Api
+      end
+    end
+
+    def install_usr1_trap
+      trap(:USR1) do
+        Log.instance.roll_log
       end
     end
 
