@@ -6,6 +6,7 @@ require 'smart_proxy_dynflow_core/core'
 require 'smart_proxy_dynflow_core/helpers'
 require 'smart_proxy_dynflow_core/callback'
 require 'smart_proxy_dynflow_core/api'
+require 'smart_proxy_dynflow_core/otp_manager'
 
 SmartProxyDynflowCore::Core.after_initialize do |dynflow_core|
   ForemanTasksCore.dynflow_setup(dynflow_core.world)

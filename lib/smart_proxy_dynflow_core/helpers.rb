@@ -4,6 +4,16 @@ module SmartProxyDynflowCore
       SmartProxyDynflowCore::Core.world
     end
 
+    def authorize_with_token
+      auth = request.env['HTTP_AUTHORIZATION']
+      basic_prefix = /\ABasic /
+      if !auth.to_s.empty? && auth =~ basic_prefix && Settings.instance.tokens.delete(auth.gsub(basic_prefix, ''))
+        Log.instance.debug('authorized with token')
+        return true
+      end
+      false
+    end
+
     def authorize_with_ssl_client
       if %w(yes on 1).include? request.env['HTTPS'].to_s
         if request.env['SSL_CLIENT_CERT'].to_s.empty?
@@ -45,6 +55,12 @@ module SmartProxyDynflowCore
       filter = state != 'all' ? { :filters => { :state => [state] } } : {}
       tasks = world.persistence.find_execution_plans(filter)
       { :count => tasks.count, :state => state }
+    end
+
+    def complete_task(task_id, params)
+      world.event(task_id,
+                  params['step_id'].to_i,
+                  ::ForemanTasksCore::Runner::ExternalEvent.new(params))
     end
   end
 end

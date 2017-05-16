@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'multi_json'
+require 'base64'
 
 module SmartProxyDynflowCore
   class Api < ::Sinatra::Base
@@ -7,13 +8,14 @@ module SmartProxyDynflowCore
 
     before do
       logger = Log.instance
-      authorize_with_ssl_client
+      authorize_with_token || authorize_with_ssl_client
       content_type :json
     end
 
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
-      trigger_task(::Dynflow::Utils.constantize(params['action_name']), params['action_input']).to_json
+      trigger_task(::Dynflow::Utils.constantize(params['action_name']),
+                   params['action_input'].merge(:callback_host => request.env['HTTP_HOST'])).to_json
     end
 
     post "/tasks/:task_id/cancel" do |task_id|
@@ -26,6 +28,12 @@ module SmartProxyDynflowCore
 
     get "/tasks/count" do
       tasks_count(params['state']).to_json
+    end
+
+    post "/tasks/:task_id/done" do |task_id|
+      data = MultiJson.load(request.body.read)
+      data['output'] = Base64.decode64(data['output'])
+      complete_task(task_id, data)
     end
   end
 end
