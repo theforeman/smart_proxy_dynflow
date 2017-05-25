@@ -71,7 +71,7 @@ module SmartProxyDynflowCore
     end
 
     def self.load_from_proxy(plugin)
-      settings = plugin[:class].settings.to_h
+      settings = plugin.settings.to_h
       PROXY_SETTINGS.each do |key|
         SETTINGS[key] = Proxy::SETTINGS[key]
       end
