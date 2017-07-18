@@ -32,7 +32,6 @@ module SmartProxyDynflowCore
 
     post "/tasks/:task_id/done" do |task_id|
       data = MultiJson.load(request.body.read)
-      data['output'] = Base64.decode64(data['output'])
       complete_task(task_id, data)
     end
   end
