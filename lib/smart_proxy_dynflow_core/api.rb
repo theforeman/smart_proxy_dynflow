@@ -14,7 +14,7 @@ module SmartProxyDynflowCore
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
       trigger_task(::Dynflow::Utils.constantize(params['action_name']),
-                   params['action_input'].merge(:callback_host => request.env['HTTP_HOST'])).to_json
+                   params['action_input'].merge(:callback_host => request.env['HTTP_X_FORWARDED_FOR'])).to_json
     end
 
     post "/tasks/:task_id/cancel" do |task_id|
