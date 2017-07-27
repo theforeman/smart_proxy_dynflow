@@ -1,6 +1,7 @@
 require 'test_helper'
 require 'json'
 require 'smart_proxy_dynflow_core/api.rb'
+require 'foreman_tasks_core/runner/update'
 
 module SmartProxyDynflowCore
   class ApiTest < Minitest::Spec
@@ -37,15 +38,22 @@ module SmartProxyDynflowCore
       header 'Content-Type', 'application/json'
     end
 
+    let(:hostname) { 'somehost.somedomain.org:9000' }
+    let(:request_headers) { { 'HTTP_X_FORWARDED_FOR' => hostname } }
+
     describe 'POST /tasks' do
       it 'triggers the action' do
-        post "/tasks", { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
-                         'action_input' => { 'name' => 'World' } }.to_json
+        post "/tasks",
+             { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
+              'action_input' => { 'name' => 'World' } }.to_json,
+             request_headers
+
         response = JSON.load(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
         execution_plan.state.must_equal :stopped
         execution_plan.result.must_equal :success
+        execution_plan.entry_action.input[:callback_host].must_equal hostname
       end
     end
 
@@ -63,9 +71,23 @@ module SmartProxyDynflowCore
       end
     end
 
+    describe 'POST /tasks/:task_id/done' do
+      it 'passes the external event' do
+        task_id = '12345'
+        step_id = 15
+        params = { 'step_id' => step_id }
+        WORLD.expects(:event).with do |task, step, update|
+          task_id == task &&
+            step_id == step &&
+            update.data == params
+        end
+        post "/tasks/#{task_id}/done", params.to_json, request_headers
+      end
+    end
+
     describe 'GET /tasks/count' do
       it 'counts the actions in state' do
-        get "/tasks/count", :state => 'stopped'
+        get "/tasks/count", { :state => 'stopped' }, request_headers
         response = JSON.load(last_response.body)
         old_count = response['count']
 
