@@ -25,7 +25,7 @@ class Proxy::Dynflow
       OpenStruct.new(:env => env, :body => body, :path => '/dynflow' + path)
     end
 
-    let(:new_request) { OpenStruct.new(:env => {}) }
+    let(:new_request) { Net::HTTP::Get.new 'example.org' }
 
     it 'relays GET requests' do
       factory = mock()
@@ -36,7 +36,7 @@ class Proxy::Dynflow
                                     .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
       Sinatra::Base.any_instance.expects(:request).times(4).returns(request_factory('GET', '/tasks/count'))
       get '/tasks/count'
-      new_request.env['X-Forwarded-For'].must_equal hostname
+      new_request['X-Forwarded-For'].must_equal hostname
     end
 
     it 'relays POST requests' do
@@ -48,7 +48,7 @@ class Proxy::Dynflow
                                     .returns(OpenStruct.new(:code => 200, :body => {'count' => 0}))
       Sinatra::Base.any_instance.expects(:request).times(4).returns(request_factory('POST', '/tasks/12345/cancel'))
       post '/tasks/12345/cancel', {}
-      new_request.env['X-Forwarded-For'].must_equal hostname
+      new_request['X-Forwarded-For'].must_equal hostname
     end
   end
 end
