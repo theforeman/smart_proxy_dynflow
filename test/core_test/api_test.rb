@@ -39,15 +39,29 @@ module SmartProxyDynflowCore
     end
 
     let(:hostname) { 'somehost.somedomain.org:9000' }
-    let(:request_headers) { { 'HTTP_X_FORWARDED_FOR' => hostname } }
+    let(:forwarded) { "forwarded.#{hostname}" }
+    let(:request_headers) { { 'HTTP_X_FORWARDED_FOR' => forwarded, 'HTTP_HOST' => hostname } }
 
     describe 'POST /tasks' do
       it 'triggers the action' do
         post "/tasks",
              { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
-              'action_input' => { 'name' => 'World' } }.to_json,
+               'action_input' => { 'name' => 'World' } }.to_json,
              request_headers
 
+        response = JSON.load(last_response.body)
+        wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
+        execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
+        execution_plan.state.must_equal :stopped
+        execution_plan.result.must_equal :success
+        execution_plan.entry_action.input[:callback_host].must_equal forwarded
+      end
+
+      it 'fallbacks to HTTP_HOST if X-Forwarded-For is not set as callback host' do
+        post "/tasks",
+             { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
+               'action_input' => { 'name' => 'World' } }.to_json,
+             request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' }
         response = JSON.load(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])

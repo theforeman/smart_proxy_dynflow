@@ -14,7 +14,7 @@ module SmartProxyDynflowCore
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
       trigger_task(::Dynflow::Utils.constantize(params['action_name']),
-                   params['action_input'].merge(:callback_host => request.env['HTTP_X_FORWARDED_FOR'])).to_json
+                   params['action_input'].merge(:callback_host => callback_host(request))).to_json
     end
 
     post "/tasks/:task_id/cancel" do |task_id|
@@ -32,6 +32,12 @@ module SmartProxyDynflowCore
     post "/tasks/:task_id/done" do |task_id|
       data = MultiJson.load(request.body.read)
       complete_task(task_id, data)
+    end
+
+    private
+
+    def callback_host(request)
+      request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
     end
   end
 end
