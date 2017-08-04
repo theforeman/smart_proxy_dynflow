@@ -2,3 +2,4 @@
 :enabled: true
 :database: /var/lib/foreman-proxy/dynflow/dynflow.sqlite
 :core_url: 'http://127.0.0.1:8008'
+:cleaner_max_age: 86400 # 1 day

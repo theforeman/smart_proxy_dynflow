@@ -42,6 +42,11 @@ module SmartProxyDynflowCore
         config.auto_rescue = true
         config.logger_adapter = logger_adapter
         config.persistence_adapter = persistence_adapter
+        config.execution_plan_cleaner = proc do |world|
+          options = { :max_age => Settings.instance.cleaner_max_age }
+          ::Dynflow::Actors::ExecutionPlanCleaner.new(world, options)
+        end
+        config.backup_deleted_plans = true
         yield config if block_given?
       end
     end
