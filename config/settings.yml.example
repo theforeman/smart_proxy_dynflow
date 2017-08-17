@@ -39,3 +39,5 @@
 
 # Log level, one of UNKNOWN, FATAL, ERROR, WARN, INFO, DEBUG
 # :log_level: ERROR
+
+# :execution_plan_cleaner_age: 86400

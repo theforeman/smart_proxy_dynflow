@@ -16,6 +16,7 @@ module SmartProxyDynflowCore
             config.exit_on_terminate = false
             config.auto_terminate    = false
             config.logger_adapter    = ::Dynflow::LoggerAdapters::Simple.new $stderr, DYNFLOW_TESTING_LOG_LEVEL
+            config.execution_plan_cleaner = nil
             block.call(config) if block
           end
         end

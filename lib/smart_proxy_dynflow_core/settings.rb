@@ -40,7 +40,7 @@ module SmartProxyDynflowCore
         :plugins => {},
         :pid_file => '/var/run/foreman-proxy/smart_proxy_dynflow_core.pid',
         :daemonize => false,
-        :cleaner_max_age => 60 * 60 * 24,
+        :execution_plan_cleaner_age => 60 * 60 * 24,
         :loaded => false
     }
 
