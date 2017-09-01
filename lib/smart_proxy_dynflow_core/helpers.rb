@@ -5,14 +5,17 @@ module SmartProxyDynflowCore
     end
 
     def authorize_with_token
-      if defined?(::ForemanTasksCore)
-        auth = request.env['HTTP_AUTHORIZATION']
-        basic_prefix = /\ABasic /
-        if !auth.to_s.empty? && auth =~ basic_prefix &&
-            ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
-          Log.instance.debug('authorized with token')
-          return true
+      if request.env.key? 'HTTP_AUTHORIZATION'
+        if defined?(::ForemanTasksCore)
+          auth = request.env['HTTP_AUTHORIZATION']
+          basic_prefix = /\ABasic /
+          if !auth.to_s.empty? && auth =~ basic_prefix &&
+              ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
+            Log.instance.debug('authorized with token')
+            return true
+          end
         end
+        halt 403, MultiJson.dump(:error => 'Invalid username or password supplied')
       end
       false
     end
