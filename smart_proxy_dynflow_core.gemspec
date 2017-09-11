@@ -31,7 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rubocop', '0.32.1')
 
   gem.add_runtime_dependency('dynflow', "~> 0.8.27")
-  gem.add_runtime_dependency('foreman-tasks-core', '>= 0.2.1')
+  gem.add_runtime_dependency('foreman-tasks-core', '>= 0.1.5')
   gem.add_runtime_dependency('sequel')
   gem.add_runtime_dependency('sqlite3')
   gem.add_runtime_dependency('sinatra', '~> 1.4')
