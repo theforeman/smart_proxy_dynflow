@@ -52,8 +52,7 @@ module SmartProxyDynflowCore
     describe 'POST /tasks/:task_id/cancel' do
       it 'cancels the action' do
         triggered = WORLD.trigger(StuckAction)
-        wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :running }
-
+        wait_until { WORLD.persistence.load_execution_plan(triggered.id).cancellable? }
         post "/tasks/#{triggered.id}/cancel"
         triggered.finished.wait(5)
 
