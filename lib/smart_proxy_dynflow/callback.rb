@@ -17,6 +17,8 @@ module Proxy
                   when 'POST'
                     request_factory.create_post path, request.body.read
                 end
+          req['X-Forwarded-For'] = request.env['HTTP_HOST']
+          req['AUTHORIZATION'] = request.env['HTTP_AUTHORIZATION']
           response = send_request req
           Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
           response
