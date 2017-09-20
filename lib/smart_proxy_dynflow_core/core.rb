@@ -43,6 +43,9 @@ module SmartProxyDynflowCore
         config.logger_adapter = logger_adapter
         config.persistence_adapter = persistence_adapter
         config.execution_plan_cleaner = execution_plan_cleaner
+        # TODO: There has to be a better way
+        matchers = config.silent_dead_letter_matchers.call().concat(self.class.silencer_matchers)
+        config.silent_dead_letter_matchers = matchers
         yield config if block_given?
       end
     end
@@ -71,6 +74,14 @@ module SmartProxyDynflowCore
         @instance = Core.new
         after_initialize_blocks.each { |block| block.call(@instance) }
         @instance
+      end
+
+      def silencer_matchers
+        @matchers ||= []
+      end
+
+      def register_silencer_matchers(matchers)
+        silencer_matchers.concat matchers
       end
 
       def web_console

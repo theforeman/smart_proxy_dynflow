@@ -10,3 +10,4 @@ require 'smart_proxy_dynflow_core/api'
 SmartProxyDynflowCore::Core.after_initialize do |dynflow_core|
   ForemanTasksCore.dynflow_setup(dynflow_core.world)
 end
+SmartProxyDynflowCore::Core.register_silencer_matchers ForemanTasksCore.silent_dead_letter_matchers
