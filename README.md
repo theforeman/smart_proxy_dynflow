@@ -64,15 +64,17 @@ gem 'smart_proxy_remote_execution_ssh', :path => '../smart_proxy_remote_executio
 END
 ```
 
+Update the smart proxy config/settings.d/dynflow.yml with the url of core if it's not running on localhost:8008, this is needed if TLS is involved.
+
 Install smart proxy gems and start it
 ```shell
 bundle install
 bundle exec bin/smart-proxy
 ```
 
-Following commands are started from smart_proxy_dynflow_core folder
+Following commands are started from smart_proxy_dynflow folder
 
-Symlink smart_proxy_remote_execuiton_ssh's config from smart-proxy to smart_proxy_dynflow_core
+Symlink smart_proxy_remote_execuiton_ssh's config from smart-proxy to smart_proxy_dynflow, note the name change
 ```shell
 mkdir config/settings.d
 ln -s ../../../smart-proxy/config/settings.d/remote_execution_ssh.yml config/settings.d/smart_proxy_remote_execution_ssh_core.yml
@@ -85,16 +87,16 @@ cp config/settings.yml{.example,}
 
 Add the smart_proxy_remote_execution_ssh gem to `Gemfile.local.rb`
 ```shell
-echo "gem 'smart_proxy_remote_execution_ssh_core', :path => '../smart_proxy_remote_execution_ssh'" >> Gemfile.local.rb
+echo "gem 'foreman_remote_execution_core', :path => '../foreman_remote_execution'" >> Gemfile.local.rb
 ```
 
 Install smart proxy dynflow core's gems and start it
 ```shell
 bundle install
-bundle exec bin/smart_proxy_dynflow_core.rb
+bundle exec bin/smart_proxy_dynflow_core
 ```
 
-
+If you want to use TLS, configure certificates that smart proxy uses for communication with Foreman.
 
 
 
