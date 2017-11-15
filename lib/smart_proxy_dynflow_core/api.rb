@@ -11,6 +11,15 @@ module SmartProxyDynflowCore
       content_type :json
     end
 
+    post "/tasks/status" do
+      ids = params.fetch('task_ids', [])
+      result = world.persistence
+                    .find_execution_plans(:filters => { :uuid => ids }).reduce({}) do |acc, plan|
+        acc.update(plan.id => { 'state' => plan.state, 'result' => plan.result })
+      end
+      MultiJson.dump(result)
+    end
+
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
       trigger_task(::Dynflow::Utils.constantize(params['action_name']),
@@ -27,15 +36,6 @@ module SmartProxyDynflowCore
 
     get "/tasks/count" do
       tasks_count(params['state']).to_json
-    end
-
-    get "/tasks/status" do
-      ids = params.fetch('task_ids', [])
-      result = world.persistence
-                    .find_execution_plans(:filters => { :uuid => ids }).reduce({}) do |acc, plan|
-        acc.update(plan.id => { 'state' => plan.state, 'result' => plan.result })
-      end
-      MultiJson.dump(result)
     end
 
     post "/tasks/:task_id/done" do |task_id|
