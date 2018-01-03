@@ -9,12 +9,26 @@ end
 group :test do
   gem 'smart_proxy_dynflow', :path => '.'
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
+
+  if RUBY_VERSION < '2.1'
+    gem 'public_suffix', '< 3'
+  else
+    gem 'public_suffix'
+  end
+
+  if RUBY_VERSION < '2.2'
+    gem 'rack-test', '< 0.8'
+  else
+    gem 'rack-test'
+  end
 end
 
-if RUBY_VERSION < "2.0"
-  gem 'json', '< 2.0.0'
-  gem 'rest-client', '< 1.7'
-  gem 'mime-types', '~> 1.0'
+if RUBY_VERSION < '2.2'
+  gem 'sinatra', '< 2'
+  gem 'rack', '>= 1.1', '< 2.0.0'
+else
+  gem 'sinatra'
+  gem 'rack', '>= 1.1'
 end
 
 # load bundler.d
