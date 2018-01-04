@@ -34,7 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('foreman-tasks-core', '>= 0.1.7')
   gem.add_runtime_dependency('sequel')
   gem.add_runtime_dependency('sqlite3')
-  gem.add_runtime_dependency('sinatra', '~> 1.4')
+  gem.add_runtime_dependency('sinatra')
   gem.add_runtime_dependency('rack')
   gem.add_runtime_dependency('rest-client')
 end
