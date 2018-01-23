@@ -90,6 +90,19 @@ module SmartProxyDynflowCore
       ssl_options |= OpenSSL::SSL::OP_NO_SSLv3 if defined?(OpenSSL::SSL::OP_NO_SSLv3)
       ssl_options |= OpenSSL::SSL::OP_NO_TLSv1 if defined?(OpenSSL::SSL::OP_NO_TLSv1)
 
+      if Settings.instance.tls_disabled_versions
+        Settings.instance.tls_disabled_versions.each do |version|
+          constant = OpenSSL::SSL.const_get("OP_NO_TLSv#{version.gsub(/\./, '_')}") rescue nil
+
+          if constant
+            Log.instance.info "TLSv#{version} will be disabled."
+            ssl_options |= constant
+          else
+            Log.instance.warn "TLSv#{version} was not found."
+          end
+        end
+      end
+
       {
         :SSLEnable => true,
         :SSLVerifyClient => OpenSSL::SSL::VERIFY_PEER,

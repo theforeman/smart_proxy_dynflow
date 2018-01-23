@@ -31,6 +31,7 @@ module SmartProxyDynflowCore
         :ssl_private_key => nil,
         :ssl_certificate => nil,
         :ssl_disabled_ciphers => [],
+        :tls_disabled_versions => [],
         :foreman_ssl_ca => nil,
         :foreman_ssl_key => nil,
         :foreman_ssl_cert => nil,
