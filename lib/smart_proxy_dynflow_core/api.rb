@@ -12,6 +12,7 @@ module SmartProxyDynflowCore
     end
 
     post "/tasks/status" do
+      params = MultiJson.load(request.body.read)
       ids = params.fetch('task_ids', [])
       result = world.persistence
                     .find_execution_plans(:filters => { :uuid => ids }).reduce({}) do |acc, plan|
