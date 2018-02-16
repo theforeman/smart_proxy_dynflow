@@ -1,5 +1,5 @@
-AllCops:
-  RunRailsCops: false
+Rails:
+  Enabled: false
 
 # Don't enforce documentation
 Style/Documentation:
@@ -16,8 +16,10 @@ Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
 
+Style/TrailingCommaInLiteral:
+  Enabled: false
 
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/AccessorMethodName:
