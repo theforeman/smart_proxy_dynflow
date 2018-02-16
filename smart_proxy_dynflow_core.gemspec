@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('mocha', '~> 1')
   gem.add_development_dependency('webmock', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
-  gem.add_development_dependency('rubocop', '0.32.1')
+  gem.add_development_dependency('rubocop', '~> 0.52.1')
 
   gem.add_runtime_dependency('dynflow', "~> 0.8.29")
   gem.add_runtime_dependency('foreman-tasks-core', '>= 0.1.7')
