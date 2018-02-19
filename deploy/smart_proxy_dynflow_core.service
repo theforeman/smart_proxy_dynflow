@@ -8,7 +8,6 @@ Type=forking
 User=foreman-proxy
 PIDFile=/var/run/foreman-proxy/smart_proxy_dynflow_core.pid
 ExecStart=/usr/bin/smart_proxy_dynflow_core -d -p /var/run/foreman-proxy/smart_proxy_dynflow_core.pid
-LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
