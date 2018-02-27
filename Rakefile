@@ -26,6 +26,7 @@ end
 
 desc 'Test Dynflow plugin.'
 task :test do
+  Rake::Task['rubocop'].invoke
   Rake::Task['test:core'].invoke
   Rake::Task['test:api'].invoke
 end
@@ -34,6 +35,5 @@ require 'rubocop/rake_task'
 
 desc 'Run RuboCop on the lib directory'
 RuboCop::RakeTask.new(:rubocop) do |task|
-  task.patterns = ['lib/**/*.rb', 'test/**/*.rb']
-  task.fail_on_error = false
+  task.fail_on_error = true
 end
