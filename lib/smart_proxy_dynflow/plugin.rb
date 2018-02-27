@@ -21,7 +21,7 @@ class Proxy::Dynflow
     after_activation do
       begin
         require 'smart_proxy_dynflow_core'
-      rescue LoadError => e
+      rescue LoadError # rubocop:disable Lint/HandleExceptions
         # Dynflow core is not available in the proxy, will be handled
         # by standalone Dynflow core
       end

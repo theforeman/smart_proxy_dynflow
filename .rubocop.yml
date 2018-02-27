@@ -1,5 +1,8 @@
 AllCops:
   Exclude:
+    - 'Gemfile*'
+    - 'bundler.d/*'
+    - '*.gemspec'
     - 'lib/smart_proxy_dynflow_core/webrick-patch.rb'
 
 Rails:

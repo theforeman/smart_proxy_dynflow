@@ -24,7 +24,8 @@ module SmartProxyDynflowCore
 
       db_file = Settings.instance.database
       if db_file.nil? || db_file.empty?
-        Log.instance.warn "Could not open DB for dynflow at '#{db_file}', will keep data in memory. Restart will drop all dynflow data."
+        Log.instance.warn "Could not open DB for dynflow at '#{db_file}', will keep data in memory. " \
+                          "Restart will drop all dynflow data."
       else
         db_conn_string += "/#{db_file}"
       end

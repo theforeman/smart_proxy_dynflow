@@ -9,7 +9,6 @@ module Proxy
       helpers ::Proxy::Dynflow::Helpers
 
       before do
-        logger = Proxy::LogBuffer::Decorator.instance
         content_type :json
         if request.env['HTTP_AUTHORIZATION'] && request.env['PATH_INFO'].end_with?('/done')
           # Halt running before callbacks if a token is provided and the request is notifying about task being done

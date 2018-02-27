@@ -10,7 +10,7 @@ module Proxy
 
         def relay(request, from, to)
           path = request.path.gsub(from, to)
-          Proxy::LogBuffer::Decorator.instance.debug "Proxy request from #{request.host_with_port}#{request.path} to #{uri}#{path}"
+          logger.debug "Proxy request from #{request.host_with_port}#{request.path} to #{uri}#{path}"
           req = case request.env['REQUEST_METHOD']
                 when 'GET'
                   request_factory.create_get path, request.env['rack.request.query_hash']
@@ -20,12 +20,18 @@ module Proxy
           req['X-Forwarded-For'] = request.env['HTTP_HOST']
           req['AUTHORIZATION'] = request.env['HTTP_AUTHORIZATION']
           response = send_request req
-          Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
+          logger.debug "Proxy request status #{response.code} - #{response}"
           response
         end
 
         def self.relay(request, from, to)
           self.new.relay request, from, to
+        end
+
+        private
+
+        def logger
+          Proxy::LogBuffer::Decorator.instance
         end
       end
     end
