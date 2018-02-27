@@ -1,6 +1,5 @@
 module SmartProxyDynflowCore
   class Core
-
     attr_accessor :world, :accepted_cert_serial
 
     def initialize
@@ -44,7 +43,7 @@ module SmartProxyDynflowCore
         config.persistence_adapter = persistence_adapter
         config.execution_plan_cleaner = execution_plan_cleaner
         # TODO: There has to be a better way
-        matchers = config.silent_dead_letter_matchers.call().concat(self.class.silencer_matchers)
+        matchers = config.silent_dead_letter_matchers.call.concat(self.class.silencer_matchers)
         config.silent_dead_letter_matchers = matchers
         yield config if block_given?
       end

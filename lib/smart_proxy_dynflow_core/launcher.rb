@@ -4,7 +4,6 @@ require 'smart_proxy_dynflow_core/settings'
 require 'smart_proxy_dynflow_core/webrick-patch'
 module SmartProxyDynflowCore
   class Launcher
-
     def self.launch!(options)
       self.new.start options
     end
@@ -92,7 +91,11 @@ module SmartProxyDynflowCore
 
       if Settings.instance.tls_disabled_versions
         Settings.instance.tls_disabled_versions.each do |version|
-          constant = OpenSSL::SSL.const_get("OP_NO_TLSv#{version.to_s.gsub(/\./, '_')}") rescue nil
+          constant = begin
+                       OpenSSL::SSL.const_get("OP_NO_TLSv#{version.to_s.tr('.', '_')}")
+                     rescue StandardError
+                       nil
+                     end
 
           if constant
             Log.instance.info "TLSv#{version} will be disabled."

@@ -19,37 +19,36 @@ end
 
 module SmartProxyDynflowCore
   class Settings < OpenStruct
-
     DEFAULT_SETTINGS = {
-        :database => '/var/lib/foreman-proxy/dynflow/dynflow.sqlite',
-        :foreman_url => 'https://127.0.0.1:3000',
-        :console_auth => true,
-        :listen => '127.0.0.1',
-        :port => '8008',
-        :use_https => false,
-        :ssl_ca_file => nil,
-        :ssl_private_key => nil,
-        :ssl_certificate => nil,
-        :ssl_disabled_ciphers => [],
-        :tls_disabled_versions => [],
-        :foreman_ssl_ca => nil,
-        :foreman_ssl_key => nil,
-        :foreman_ssl_cert => nil,
-        :standalone => false,
-        :log_file => '/var/log/foreman-proxy/smart_proxy_dynflow_core.log',
-        :log_level => :ERROR,
-        :plugins => {},
-        :pid_file => '/var/run/foreman-proxy/smart_proxy_dynflow_core.pid',
-        :daemonize => false,
-        :execution_plan_cleaner_age => 60 * 60 * 24,
-        :loaded => false
-    }
+      :database => '/var/lib/foreman-proxy/dynflow/dynflow.sqlite',
+      :foreman_url => 'https://127.0.0.1:3000',
+      :console_auth => true,
+      :listen => '127.0.0.1',
+      :port => '8008',
+      :use_https => false,
+      :ssl_ca_file => nil,
+      :ssl_private_key => nil,
+      :ssl_certificate => nil,
+      :ssl_disabled_ciphers => [],
+      :tls_disabled_versions => [],
+      :foreman_ssl_ca => nil,
+      :foreman_ssl_key => nil,
+      :foreman_ssl_cert => nil,
+      :standalone => false,
+      :log_file => '/var/log/foreman-proxy/smart_proxy_dynflow_core.log',
+      :log_level => :ERROR,
+      :plugins => {},
+      :pid_file => '/var/run/foreman-proxy/smart_proxy_dynflow_core.pid',
+      :daemonize => false,
+      :execution_plan_cleaner_age => 60 * 60 * 24,
+      :loaded => false
+    }.freeze
 
-    PROXY_SETTINGS = [:ssl_ca_file, :ssl_certificate, :ssl_private_key, :foreman_url,
-                      :foreman_ssl_ca, :foreman_ssl_cert, :foreman_ssl_key,
-                      :log_file, :log_level, :ssl_disabled_ciphers]
-    PLUGIN_SETTINGS = [:database, :core_url, :console_auth,
-                       :execution_plan_cleaner_age]
+    PROXY_SETTINGS = %i[ssl_ca_file ssl_certificate ssl_private_key foreman_url
+                        foreman_ssl_ca foreman_ssl_cert foreman_ssl_key
+                        log_file log_level ssl_disabled_ciphers].freeze
+    PLUGIN_SETTINGS = %i[database core_url console_auth
+                         execution_plan_cleaner_age].freeze
 
     def initialize(settings = {})
       super(DEFAULT_SETTINGS.merge(settings))
@@ -60,7 +59,7 @@ module SmartProxyDynflowCore
     end
 
     def self.load_global_settings(path)
-      if File.exists? File.join(path)
+      if File.exist? File.join(path)
         YAML.load_file(path).each do |key, value|
           SETTINGS[key] = value
         end
@@ -87,7 +86,7 @@ module SmartProxyDynflowCore
       PLUGIN_SETTINGS.each do |key|
         SETTINGS[key] = settings[key] if settings.key?(key)
       end
-      SETTINGS.plugins.values.each { |plugin| plugin.load_settings_from_proxy }
+      SETTINGS.plugins.values.each(&:load_settings_from_proxy)
       Settings.loaded!
     end
 

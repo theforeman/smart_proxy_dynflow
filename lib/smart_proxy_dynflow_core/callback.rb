@@ -7,13 +7,13 @@ end
 
 module SmartProxyDynflowCore
   module Callback
-    class Action < Dynflow::Action
+    class Action < ::Dynflow::Action
       def plan(callback, data)
         plan_self(:callback => callback, :data => data)
       end
 
       def run
-        Request.send_to_foreman_tasks(input[:callback], input[:data])
+        Callback::Request.send_to_foreman_tasks(input[:callback], input[:data])
       end
     end
 
@@ -41,6 +41,7 @@ module SmartProxyDynflowCore
                                                self.class.ssl_options)
       end
 
+      # rubocop:disable Metrics/PerceivedComplexity
       def self.ssl_options
         return @ssl_options if defined? @ssl_options
         @ssl_options = {}
@@ -64,16 +65,7 @@ module SmartProxyDynflowCore
         @ssl_options
       end
     end
-
-    class Action < ::Dynflow::Action
-      def plan(callback, data)
-        plan_self(:callback => callback, :data => data)
-      end
-
-      def run
-        Callback::Request.send_to_foreman_tasks(input[:callback], input[:data])
-      end
-    end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     module PlanHelper
       def plan_with_callback(input)

@@ -2,8 +2,7 @@ require 'logger'
 
 module SmartProxyDynflowCore
   class Log < ::Logger
-
-    alias_method :write, :debug
+    alias write debug
 
     class << self
       def instance
@@ -42,7 +41,7 @@ module SmartProxyDynflowCore
 
     def initialize(file, *rest)
       @file = file
-      @fd = @file.kind_of?(IO) ? @file : File.open(@file, 'a')
+      @fd = @file.is_a?(IO) ? @file : File.open(@file, 'a')
       @fd.sync = true
       super(@fd, rest)
     end
@@ -58,7 +57,7 @@ module SmartProxyDynflowCore
 
     def handle_log_rolling
       @roll_log = false
-      unless @file.kind_of? IO
+      unless @file.is_a? IO
         @fd.reopen @file, 'a'
         @fd.sync = true
       end
