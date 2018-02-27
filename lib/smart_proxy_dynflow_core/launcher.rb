@@ -25,8 +25,8 @@ module SmartProxyDynflowCore
       possible_config_dirs << config_dir if config_dir
       BundlerHelper.require_groups(:default)
       possible_config_dirs.reverse! if one_config
-      possible_config_dirs.select { |config_dir| File.directory? config_dir }.each do |config_dir|
-        break if load_config_dir(config_dir) && one_config
+      possible_config_dirs.select { |dir| File.directory? dir }.each do |dir|
+        break if load_config_dir(dir) && one_config
       end
       Settings.instance.daemonize = options[:daemonize] if options.key?(:daemonize)
       Settings.instance.pid_file = options[:pid_file] if options.key?(:pid_file)
@@ -81,6 +81,7 @@ module SmartProxyDynflowCore
       }
     end
 
+    # rubocop:disable Metrics/PerceivedComplexity
     def https_app
       ssl_options  = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:options]
       ssl_options |= OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE if defined?(OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE)
@@ -105,6 +106,7 @@ module SmartProxyDynflowCore
           end
         end
       end
+      # rubocop:enable Metrics/PerceivedComplexity
 
       {
         :SSLEnable => true,
@@ -122,15 +124,17 @@ module SmartProxyDynflowCore
 
     def ssl_private_key
       OpenSSL::PKey::RSA.new(File.read(Settings.instance.ssl_private_key))
-    rescue Exception => e
-      Log.instance.fatal "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      Log.instance.fatal "Unable to load private SSL key. " \
+                         "Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
     def ssl_certificate
       OpenSSL::X509::Certificate.new(File.read(Settings.instance.ssl_certificate))
-    rescue Exception => e
-      Log.instance.fatal "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      Log.instance.fatal "Unable to load SSL certificate. " \
+                         "Are the values correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
@@ -142,7 +146,7 @@ module SmartProxyDynflowCore
         Dir[File.join(dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
         true
       end
-      ForemanTasksCore::SettingsLoader.settings_registry.keys.each do |settings_keys|
+      ForemanTasksCore::SettingsLoader.settings_registry.each_key do |settings_keys|
         settings = settings_keys.inject({}) do |h, settings_key|
           if SETTINGS.plugins.key?(settings_key.to_s)
             h.merge(SETTINGS.plugins[settings_key.to_s].to_h)

@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - 'lib/smart_proxy_dynflow_core/webrick-patch.rb'
+
 Rails:
   Enabled: false
 
