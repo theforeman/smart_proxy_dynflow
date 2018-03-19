@@ -13,7 +13,9 @@ module SmartProxyDynflowCore
       load_settings!(options)
       Settings.instance.standalone = true
       install_usr1_trap
-      Rack::Server.new(rack_settings).start
+      Rack::Server.new(rack_settings).start do |_server|
+        SmartProxyDynflowCore::Core.ensure_initialized
+      end
     end
 
     def load_settings!(options = {})
