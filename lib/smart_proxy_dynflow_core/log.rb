@@ -47,17 +47,7 @@ module SmartProxyDynflowCore
       super(@fd, rest)
     end
 
-    def add(*args)
-      handle_log_rolling if @roll_log
-      super(*args)
-    end
-
     def roll_log
-      @roll_log = true
-    end
-
-    def handle_log_rolling
-      @roll_log = false
       unless @file.kind_of? IO
         @fd.reopen @file, 'a'
         @fd.sync = true
