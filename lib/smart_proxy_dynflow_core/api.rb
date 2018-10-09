@@ -21,6 +21,14 @@ module SmartProxyDynflowCore
       MultiJson.dump(result)
     end
 
+    post "/tasks/batch/?" do
+      params = MultiJson.load(request.body.read)
+      triggered = world.trigger(::Dynflow::Utils.constantize(params['action_name']),
+                                callback_host(params, request),
+                                params['action_input'])
+      world.persistence.load_execution_plan(triggered.id).actions.first.input[:result].to_json
+    end
+
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
       trigger_task(::Dynflow::Utils.constantize(params['action_name']),
