@@ -21,12 +21,11 @@ module SmartProxyDynflowCore
       MultiJson.dump(result)
     end
 
-    post "/tasks/batch/?" do
+    post "/tasks/launch/?" do
       params = MultiJson.load(request.body.read)
-      triggered = world.trigger(::Dynflow::Utils.constantize(params['action_name']),
-                                callback_host(params, request),
-                                params['action_input'])
-      world.persistence.load_execution_plan(triggered.id).actions.first.input[:result].to_json
+      launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('launcher_options', {}))
+      launcher.launch!(params['action_input'])
+      launcher.results.to_json
     end
 
     post "/tasks/?" do
@@ -56,6 +55,15 @@ module SmartProxyDynflowCore
 
     def callback_host(params, request)
       params.fetch('action_input', {})['proxy_url'] || request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
+    end
+
+    def launcher_class(params)
+      klass = params['launcher_class']
+      if klass
+        ::Dynflow::Utils.constantize klass
+      else
+        ::ForemanTasksCore::TaskLauncher
+      end
     end
   end
 end
