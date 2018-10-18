@@ -23,8 +23,8 @@ module SmartProxyDynflowCore
 
     post "/tasks/launch/?" do
       params = MultiJson.load(request.body.read)
-      launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('launcher_options', {}))
-      launcher.launch!(params['action_input'])
+      launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('options', {}))
+      launcher.launch!(params['input'])
       launcher.results.to_json
     end
 
@@ -51,6 +51,10 @@ module SmartProxyDynflowCore
       complete_task(task_id, data)
     end
 
+    get "/tasks/features" do
+      TaskLauncherRegistry.features.to_json
+    end
+
     private
 
     def callback_host(params, request)
@@ -58,11 +62,11 @@ module SmartProxyDynflowCore
     end
 
     def launcher_class(params)
-      klass = params['launcher_class']
-      if klass
-        ::Dynflow::Utils.constantize klass
+      feature = params.fetch('feature')
+      if TaskLauncherRegistry.key?(feature)
+        TaskLauncherRegistry.fetch(feature)
       else
-        ::ForemanTasksCore::TaskLauncher
+        halt 404, MultiJson.dump(:error => "Unknown feature '#{feature}' requested.")
       end
     end
   end
