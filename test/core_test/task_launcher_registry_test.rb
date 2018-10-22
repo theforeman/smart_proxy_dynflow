@@ -3,11 +3,11 @@ require 'test_helper'
 module SmartProxyDynflowCore
   class TaskLauncherRegistryTest < MiniTest::Spec
     describe TaskLauncherRegistry do
-      before do
-        TaskLauncherRegistry.instance_variable_set('@registry', {})
-      end
-
       let(:registry) { TaskLauncherRegistry }
+
+      before do
+        registry.stubs(:registry).returns({})
+      end
 
       describe '#register' do
         it 'can register launchers' do

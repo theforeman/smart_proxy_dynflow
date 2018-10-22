@@ -112,5 +112,35 @@ module SmartProxyDynflowCore
         response['count'].must_equal old_count + 1
       end
     end
+
+    describe 'POST /tasks/launch' do
+      it 'triggers a task by feature' do
+        klass = mock()
+        instance = mock()
+        klass.expects(:new).returns(instance)
+        instance.expects(:launch!).with({})
+        instance.expects(:results).returns({})
+        TaskLauncherRegistry.stubs(:registry).returns('something' => klass)
+        post '/tasks/launch', { :feature => 'something', :input => { } }.to_json, request_headers
+      end
+
+      it 'fail 404 when feature is missing' do
+        post '/tasks/launch', { :feature => 'something' }.to_json, request_headers
+        last_response.status.must_equal 404
+      end
+    end
+
+    describe 'GET /tasks/features' do
+      it 'gets the list of features' do
+        get '/tasks/features', request_headers
+        response = JSON.load(last_response.body)
+        response.must_equal []
+
+        TaskLauncherRegistry.stubs(:registry).returns({'foo' => 'foo-v', 'bar' => 'bar-v', 'baz' => 'baz-v'})
+        get '/tasks/features', request_headers
+        response = JSON.load(last_response.body)
+        response.must_equal %w(foo bar baz)
+      end
+    end
   end
 end
