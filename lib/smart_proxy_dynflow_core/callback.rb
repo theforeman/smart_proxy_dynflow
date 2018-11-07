@@ -7,16 +7,6 @@ end
 
 module SmartProxyDynflowCore
   module Callback
-    class Action < Dynflow::Action
-      def plan(callback, data)
-        plan_self(:callback => callback, :data => data)
-      end
-
-      def run
-        Request.send_to_foreman_tasks(input[:callback], input[:data])
-      end
-    end
-
     class Request
       def callback(payload)
         response = callback_resource.post(payload, :content_type => :json)
