@@ -146,7 +146,7 @@ module SmartProxyDynflowCore
         Dir[File.join(dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
         true
       end
-      ForemanTasksCore::SettingsLoader.settings_registry.keys.each do |settings_keys|
+      ForemanTasksCore::SettingsLoader.settings_registry.each_key do |settings_keys|
         settings = settings_keys.inject({}) do |h, settings_key|
           if SETTINGS.plugins.key?(settings_key.to_s)
             h.merge(SETTINGS.plugins[settings_key.to_s].to_h)
