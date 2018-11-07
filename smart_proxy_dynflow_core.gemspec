@@ -23,18 +23,18 @@ Gem::Specification.new do |gem|
   gem.license = 'GPL-3.0'
 
   gem.add_development_dependency "bundler", "~> 1.7"
-  gem.add_development_dependency "rake", "~> 10.0"
   gem.add_development_dependency('minitest')
   gem.add_development_dependency('mocha', '~> 1')
-  gem.add_development_dependency('webmock', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
+  gem.add_development_dependency "rake", "~> 10.0"
   gem.add_development_dependency('rubocop', '~> 0.52.1')
+  gem.add_development_dependency('webmock', '~> 1')
 
   gem.add_runtime_dependency('dynflow', "~> 1.0")
   gem.add_runtime_dependency('foreman-tasks-core', '>= 0.1.7')
-  gem.add_runtime_dependency('sequel')
-  gem.add_runtime_dependency('sqlite3')
-  gem.add_runtime_dependency('sinatra')
   gem.add_runtime_dependency('rack')
   gem.add_runtime_dependency('rest-client')
+  gem.add_runtime_dependency('sequel')
+  gem.add_runtime_dependency('sinatra')
+  gem.add_runtime_dependency('sqlite3')
 end
