@@ -13,9 +13,9 @@ module Proxy
           message = "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
           Proxy::LogBuffer::Decorator.instance.debug message
           req = case request.env['REQUEST_METHOD']
-                  when 'GET'
+                when 'GET'
                     request_factory.create_get path, request.env['rack.request.query_hash']
-                  when 'POST'
+                when 'POST'
                     request_factory.create_post path, request.body.read
                 end
           req['X-Forwarded-For'] = request.env['HTTP_HOST']
