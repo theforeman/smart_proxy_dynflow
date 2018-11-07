@@ -12,7 +12,7 @@ module WEBrick
       unless config[:SSLCertificate]
         cn = config[:SSLCertName]
         comment = config[:SSLCertComment]
-        cert, key = Utils::create_self_signed_cert(1024, cn, comment)
+        cert, key = Utils.create_self_signed_cert(1024, cn, comment)
         config[:SSLCertificate] = cert
         config[:SSLPrivateKey] = key
       end
