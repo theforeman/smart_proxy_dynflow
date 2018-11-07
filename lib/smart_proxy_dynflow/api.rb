@@ -27,7 +27,7 @@ module Proxy
         # HTTP: test the reverse DNS entry of the remote IP
         trusted_hosts = Proxy::SETTINGS.trusted_hosts
         if trusted_hosts
-          if [ 'yes', 'on', 1 ].include? request.env['HTTPS'].to_s
+          if ['yes', 'on', 1].include? request.env['HTTPS'].to_s
             fqdn = https_cert_cn
             source = 'SSL_CLIENT_CERT'
           else
