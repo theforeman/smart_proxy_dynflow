@@ -122,14 +122,16 @@ module SmartProxyDynflowCore
     def ssl_private_key
       OpenSSL::PKey::RSA.new(File.read(Settings.instance.ssl_private_key))
     rescue Exception => e
-      Log.instance.fatal "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load private SSL key. Are the values "\
+                         "correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
     def ssl_certificate
       OpenSSL::X509::Certificate.new(File.read(Settings.instance.ssl_certificate))
     rescue Exception => e
-      Log.instance.fatal "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load SSL certificate. Are the values " \
+                         "correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 

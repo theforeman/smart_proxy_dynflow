@@ -39,7 +39,8 @@ module Proxy
           logger.debug "verifying remote client #{fqdn} (based on #{source}) against trusted_hosts #{trusted_hosts}"
 
           unless Proxy::SETTINGS.trusted_hosts.include?(fqdn)
-            log_halt 403, "Untrusted client #{fqdn} attempted to access #{request.path_info}. Check :trusted_hosts: in settings.yml"
+            log_halt 403, "Untrusted client #{fqdn} attempted " \
+                          "to access #{request.path_info}. Check :trusted_hosts: in settings.yml"
           end
         end
       end
