@@ -15,7 +15,7 @@ class Proxy::Dynflow
     end
 
     def request_factory(kind, path, env = {})
-      body = mock()
+      body = mock
       body.stubs(:read).returns("")
       env = env.merge(
         'REQUEST_METHOD' => kind,
@@ -31,7 +31,7 @@ class Proxy::Dynflow
     let(:new_request) { Net::HTTP::Get.new 'example.org' }
 
     def mock_core_service(method, path, response)
-      factory = mock()
+      factory = mock
       factory.expects(method).with { |p| p == path }.returns(new_request)
       Proxy::Dynflow::Callback::Core.any_instance.expects(:request_factory).returns(factory)
       Proxy::Dynflow::Callback::Core.any_instance
@@ -47,7 +47,7 @@ class Proxy::Dynflow
     end
 
     it 'relays POST requests' do
-      factory = mock()
+      factory = mock
       factory.expects(:create_post).with('/tasks/12345/cancel', '').returns(new_request)
       Proxy::Dynflow::Callback::Core.any_instance.expects(:request_factory).returns(factory)
       Proxy::Dynflow::Callback::Core.any_instance
