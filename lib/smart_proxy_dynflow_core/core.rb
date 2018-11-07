@@ -1,6 +1,5 @@
 module SmartProxyDynflowCore
   class Core
-
     attr_accessor :world, :accepted_cert_serial
 
     def initialize

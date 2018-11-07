@@ -19,7 +19,6 @@ end
 
 module SmartProxyDynflowCore
   class Settings < OpenStruct
-
     DEFAULT_SETTINGS = {
         :database => '/var/lib/foreman-proxy/dynflow/dynflow.sqlite',
         :foreman_url => 'https://127.0.0.1:3000',

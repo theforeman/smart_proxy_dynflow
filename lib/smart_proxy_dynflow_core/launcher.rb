@@ -4,7 +4,6 @@ require 'smart_proxy_dynflow_core/settings'
 require 'smart_proxy_dynflow_core/webrick-patch'
 module SmartProxyDynflowCore
   class Launcher
-
     def self.launch!(options)
       self.new.start options
     end
