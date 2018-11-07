@@ -83,3 +83,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/ClassLength:
   Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
