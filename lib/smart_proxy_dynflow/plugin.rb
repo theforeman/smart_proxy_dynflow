@@ -18,6 +18,7 @@ class Proxy::Dynflow
     default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
 
+    # rubocop:disable Lint/HandleExceptions
     after_activation do
       begin
         require 'smart_proxy_dynflow_core'
@@ -26,5 +27,6 @@ class Proxy::Dynflow
         # by standalone Dynflow core
       end
     end
+    # rubocop:enable Lint/HandleExceptions
   end
 end
