@@ -17,6 +17,9 @@ Style/HashSyntax:
 Bundler/DuplicatedGem:
   Enabled: false
 
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
