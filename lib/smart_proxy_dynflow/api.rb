@@ -45,7 +45,7 @@ module Proxy
       end
 
       def do_authorize_with_ssl_client
-        if ['yes', 'on', '1'].include? request.env['HTTPS'].to_s
+        if %w[yes on 1].include? request.env['HTTPS'].to_s
           if request.env['SSL_CLIENT_CERT'].to_s.empty?
             log_halt 403, "No client SSL certificate supplied"
           end
