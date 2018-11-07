@@ -114,30 +114,30 @@ module SmartProxyDynflowCore
     end
 
     describe 'POST /tasks/launch' do
-      it 'triggers a task by feature' do
+      it 'triggers a task by operation' do
         klass = mock()
         instance = mock()
         klass.expects(:new).returns(instance)
         instance.expects(:launch!).with({})
         instance.expects(:results).returns({})
         TaskLauncherRegistry.stubs(:registry).returns('something' => klass)
-        post '/tasks/launch', { :feature => 'something', :input => { } }.to_json, request_headers
+        post '/tasks/launch', { :operation => 'something', :input => { } }.to_json, request_headers
       end
 
-      it 'fail 404 when feature is missing' do
-        post '/tasks/launch', { :feature => 'something' }.to_json, request_headers
+      it 'fail 404 when operation is missing' do
+        post '/tasks/launch', { :operation => 'something' }.to_json, request_headers
         last_response.status.must_equal 404
       end
     end
 
-    describe 'GET /tasks/features' do
-      it 'gets the list of features' do
-        get '/tasks/features', request_headers
+    describe 'GET /tasks/operations' do
+      it 'gets the list of operations' do
+        get '/tasks/operations', request_headers
         response = JSON.load(last_response.body)
         response.must_equal []
 
         TaskLauncherRegistry.stubs(:registry).returns({'foo' => 'foo-v', 'bar' => 'bar-v', 'baz' => 'baz-v'})
-        get '/tasks/features', request_headers
+        get '/tasks/operations', request_headers
         response = JSON.load(last_response.body)
         response.must_equal %w(foo bar baz)
       end

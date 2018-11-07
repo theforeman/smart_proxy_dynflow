@@ -11,8 +11,8 @@ module SmartProxyDynflowCore
 
       describe '#register' do
         it 'can register launchers' do
-          registry.register('my_feature', Integer)
-          registry.send(:registry).must_equal({ 'my_feature' => Integer })
+          registry.register('my_operation', Integer)
+          registry.send(:registry).must_equal({ 'my_operation' => Integer })
         end
       end
 
@@ -27,25 +27,25 @@ module SmartProxyDynflowCore
         end
 
         it 'fetches the value' do
-          registry.expects(:registry).returns({'my_feature' => Integer})
-          registry.fetch('my_feature').must_equal Integer
+          registry.expects(:registry).returns({'my_operation' => Integer})
+          registry.fetch('my_operation').must_equal Integer
         end
       end
 
       describe '#key' do
         it 'checks presence of a key' do
-          registry.expects(:registry).returns({'my_feature' => Integer}).twice
-          assert registry.key?('my_feature')
+          registry.expects(:registry).returns({'my_operation' => Integer}).twice
+          assert registry.key?('my_operation')
           refute registry.key?('missing')
         end
       end
 
-      describe '#features' do
-        it 'provides a list of features' do
+      describe '#operations' do
+        it 'provides a list of operations' do
           registry.register('foo', nil)
           registry.register('bar', nil)
           registry.register('baz', nil)
-          registry.features.must_equal %w(foo bar baz)
+          registry.operations.must_equal %w(foo bar baz)
         end
       end
     end

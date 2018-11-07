@@ -51,8 +51,8 @@ module SmartProxyDynflowCore
       complete_task(task_id, data)
     end
 
-    get "/tasks/features" do
-      TaskLauncherRegistry.features.to_json
+    get "/tasks/operations" do
+      TaskLauncherRegistry.operations.to_json
     end
 
     private
@@ -62,11 +62,11 @@ module SmartProxyDynflowCore
     end
 
     def launcher_class(params)
-      feature = params.fetch('feature')
-      if TaskLauncherRegistry.key?(feature)
-        TaskLauncherRegistry.fetch(feature)
+      operation = params.fetch('operation')
+      if TaskLauncherRegistry.key?(operation)
+        TaskLauncherRegistry.fetch(operation)
       else
-        halt 404, MultiJson.dump(:error => "Unknown feature '#{feature}' requested.")
+        halt 404, MultiJson.dump(:error => "Unknown operation '#{operation}' requested.")
       end
     end
   end

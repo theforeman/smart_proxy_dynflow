@@ -18,7 +18,7 @@ module SmartProxyDynflowCore
         registry.key?(name)
       end
 
-      def features
+      def operations
         registry.keys
       end
 
