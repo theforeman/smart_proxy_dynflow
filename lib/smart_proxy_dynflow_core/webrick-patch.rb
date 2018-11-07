@@ -3,7 +3,7 @@ require 'webrick/https'
 CIPHERS = ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-RSA-AES256-GCM-SHA384',
            'ECDHE-RSA-AES128-CBC-SHA', 'ECDHE-RSA-AES256-CBC-SHA',
            'AES128-GCM-SHA256', 'AES256-GCM-SHA384', 'AES128-SHA256',
-           'AES256-SHA256', 'AES128-SHA', 'AES256-SHA']
+           'AES256-SHA256', 'AES128-SHA', 'AES256-SHA'].freeze
 
 module WEBrick
   class GenericServer
