@@ -86,7 +86,7 @@ execution_plan_cleaner_age].freeze
       PLUGIN_SETTINGS.each do |key|
         SETTINGS[key] = settings[key] if settings.key?(key)
       end
-      SETTINGS.plugins.values.each { |plugin| plugin.load_settings_from_proxy }
+      SETTINGS.plugins.values.each(&:load_settings_from_proxy)
       Settings.loaded!
     end
 
