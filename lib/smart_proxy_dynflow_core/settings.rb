@@ -44,11 +44,11 @@ module SmartProxyDynflowCore
         :loaded => false
     }.freeze
 
-    PROXY_SETTINGS = [:ssl_ca_file, :ssl_certificate, :ssl_private_key, :foreman_url,
-                      :foreman_ssl_ca, :foreman_ssl_cert, :foreman_ssl_key,
-                      :log_file, :log_level, :ssl_disabled_ciphers].freeze
-    PLUGIN_SETTINGS = [:database, :core_url, :console_auth,
-                       :execution_plan_cleaner_age].freeze
+    PROXY_SETTINGS = %i[ssl_ca_file ssl_certificate ssl_private_key foreman_url 
+foreman_ssl_ca foreman_ssl_cert foreman_ssl_key 
+log_file log_level ssl_disabled_ciphers].freeze
+    PLUGIN_SETTINGS = %i[database core_url console_auth 
+execution_plan_cleaner_age].freeze
 
     def initialize(settings = {})
       super(DEFAULT_SETTINGS.merge(settings))
