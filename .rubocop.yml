@@ -21,6 +21,9 @@ Metrics/ClassLength:
 Naming/AccessorMethodName:
   Enabled: false
 
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
 Style/TrailingCommaInLiteral:
   Enabled: false
 
