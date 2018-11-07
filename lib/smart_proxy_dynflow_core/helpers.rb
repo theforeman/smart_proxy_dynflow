@@ -10,7 +10,7 @@ module SmartProxyDynflowCore
           auth = request.env['HTTP_AUTHORIZATION']
           basic_prefix = /\ABasic /
           if !auth.to_s.empty? && auth =~ basic_prefix &&
-              ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
+             ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
             Log.instance.debug('authorized with token')
             return true
           end
