@@ -41,13 +41,13 @@ module SmartProxyDynflowCore
 
     def initialize(file, *rest)
       @file = file
-      @fd = @file.kind_of?(IO) ? @file : File.open(@file, 'a')
+      @fd = @file.is_a?(IO) ? @file : File.open(@file, 'a')
       @fd.sync = true
       super(@fd, rest)
     end
 
     def roll_log
-      unless @file.kind_of? IO
+      unless @file.is_a? IO
         @fd.reopen @file, 'a'
         @fd.sync = true
       end
