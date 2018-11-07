@@ -14,7 +14,7 @@ module SmartProxyDynflowCore
     end
 
     it 'is not authenticated over HTTP' do
-      get '/tasks/count', {}, { }
+      get '/tasks/count', {}, {}
       assert last_response.status == 200
     end
 
