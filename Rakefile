@@ -5,7 +5,6 @@ desc 'Default: run unit tests.'
 task :default => :test
 
 namespace :test do
-
   desc 'Test Dynflow core plugin'
   Rake::TestTask.new(:core) do |t|
     ENV['DYNFLOW_DB_CONN_STRING'] = 'sqlite:/'
