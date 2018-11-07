@@ -58,10 +58,10 @@ module SmartProxyDynflowCore
       end
 
       it 'fallbacks to HTTP_HOST if X-Forwarded-For is not set as callback host' do
-        post "/tasks",
+        post("/tasks",
              { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
                'action_input' => { 'name' => 'World' } }.to_json,
-             request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' }
+             request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' })
         response = JSON.parse(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
