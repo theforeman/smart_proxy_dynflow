@@ -20,7 +20,6 @@ module Proxy
         end
       end
 
-
       # TODO: move this to foreman-proxy to reduce code duplicities
       def do_authorize_with_trusted_hosts
         # When :trusted_hosts is given, we check the client against the list
