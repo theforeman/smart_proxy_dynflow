@@ -83,6 +83,7 @@ module SmartProxyDynflowCore
       }
     end
 
+    # rubocop:disable Metrics/PerceivedComplexity
     def https_app
       ssl_options  = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:options]
       ssl_options |= OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE if defined?(OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE)
@@ -117,6 +118,7 @@ module SmartProxyDynflowCore
         :SSLOptions => ssl_options
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     def https_enabled?
       Settings.instance.use_https

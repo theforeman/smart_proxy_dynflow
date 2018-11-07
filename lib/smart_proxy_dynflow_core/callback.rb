@@ -33,6 +33,7 @@ module SmartProxyDynflowCore
                                                self.class.ssl_options)
       end
 
+      # rubocop:disable Metrics/PerceivedComplexity
       def self.ssl_options
         return @ssl_options if defined? @ssl_options
         @ssl_options = {}
@@ -55,6 +56,7 @@ module SmartProxyDynflowCore
         @ssl_options[:ssl_ca_file] = ca_file if ca_file
         @ssl_options
       end
+      # rubocop:enable Metrics/PerceivedComplexity
     end
 
     class Action < ::Dynflow::Action
