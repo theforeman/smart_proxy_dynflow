@@ -12,7 +12,11 @@ module SmartProxyDynflowCore
           # Debian packaging guidelines state to avoid needing rubygems, so
           # we only try to load it if the first require fails (for RPMs)
           begin
-            require 'rubygems' rescue nil
+            begin
+              require 'rubygems'
+            rescue
+              nil
+            end
             require 'bundler_ext'
           rescue LoadError
             puts "`bundler_ext` gem is required to run smart_proxy"
