@@ -10,7 +10,7 @@ module Proxy
 
         def relay(request, from, to)
           path = request.path.gsub(from, to)
-          message = "Proxy request from #{request.host_with_port}#{request.path} to #{uri.to_s}#{path}"
+          message = "Proxy request from #{request.host_with_port}#{request.path} to #{uri}#{path}"
           Proxy::LogBuffer::Decorator.instance.debug message
           req = case request.env['REQUEST_METHOD']
                 when 'GET'
