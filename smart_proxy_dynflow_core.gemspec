@@ -2,6 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'smart_proxy_dynflow_core/version'
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |gem|
   gem.name          = "smart_proxy_dynflow_core"
   gem.version       = SmartProxyDynflowCore::VERSION
@@ -37,3 +38,4 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('sinatra')
   gem.add_runtime_dependency('sqlite3')
 end
+# rubocop:enable Metrics/BlockLength
