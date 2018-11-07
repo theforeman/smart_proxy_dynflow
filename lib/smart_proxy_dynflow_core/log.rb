@@ -2,7 +2,7 @@ require 'logger'
 
 module SmartProxyDynflowCore
   class Log < ::Logger
-    alias_method :write, :debug
+    alias write debug
 
     class << self
       def instance
