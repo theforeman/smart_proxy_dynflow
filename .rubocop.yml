@@ -14,6 +14,9 @@ Style/HashSyntax:
     - ruby19
     - hash_rockets
 
+Bundler/DuplicatedGem:
+  Enabled: false
+
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
