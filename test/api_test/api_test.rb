@@ -77,7 +77,7 @@ class Proxy::Dynflow
 
     it 'refuses unauthorized https connections (using https_cert_cn)' do
       Proxy::Dynflow::Api.any_instance.stubs(:request)
-                         .returns(request_factory('POST', '/tasks', 'HTTPS' => 'yes','SSL_CLIENT_CERT' => 'mytrustedcert'))
+                         .returns(request_factory('POST', '/tasks', 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'mytrustedcert'))
       Proxy::Dynflow::Api.any_instance.stubs(:https_cert_cn).returns('unauthorized_host.example.com')
       Proxy::SETTINGS.stubs(:trusted_hosts).returns(["mytrustedhost.example.com"])
       post '/tasks'
