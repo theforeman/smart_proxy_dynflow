@@ -14,9 +14,9 @@ module Proxy
           Proxy::LogBuffer::Decorator.instance.debug message
           req = case request.env['REQUEST_METHOD']
                 when 'GET'
-                    request_factory.create_get path, request.env['rack.request.query_hash']
+                  request_factory.create_get path, request.env['rack.request.query_hash']
                 when 'POST'
-                    request_factory.create_post path, request.body.read
+                  request_factory.create_post path, request.body.read
                 end
           req['X-Forwarded-For'] = request.env['HTTP_HOST']
           req['AUTHORIZATION'] = request.env['HTTP_AUTHORIZATION']
