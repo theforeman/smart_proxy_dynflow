@@ -59,7 +59,7 @@ module SmartProxyDynflowCore
     end
 
     def self.load_global_settings(path)
-      if File.exists? File.join(path)
+      if File.exist? File.join(path)
         YAML.load_file(path).each do |key, value|
           SETTINGS[key] = value
         end
