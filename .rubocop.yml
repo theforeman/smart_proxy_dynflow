@@ -27,6 +27,9 @@ Metrics/ClassLength:
 Naming/AccessorMethodName:
   Enabled: false
 
+Naming/FileName:
+  Enabled: false
+
 Naming/HeredocDelimiterNaming:
   Enabled: false
 
