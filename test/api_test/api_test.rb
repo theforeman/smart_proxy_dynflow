@@ -107,7 +107,7 @@ class Proxy::Dynflow
       mock_core_service(:create_post, '/tasks/123/done', :code => 200, :body => {})
       Proxy::Dynflow::Api.any_instance.stubs(:request)
                          .returns(request_factory('POST', '/tasks/123/done', 'HTTPS' => 'yes',
-                                                           'HTTP_AUTHORIZATION' => 'Basic ValidToken'))
+                                                                             'HTTP_AUTHORIZATION' => 'Basic ValidToken'))
       Proxy::Dynflow::Api.any_instance.stubs(:https_cert_cn).returns('mytrustedhost.example.com')
       Proxy::SETTINGS.stubs(:trusted_hosts).returns(["mytrustedhost.example.com"])
       post '/tasks'
