@@ -49,7 +49,7 @@ module SmartProxyDynflowCore
                'action_input' => { 'name' => 'World' } }.to_json,
              request_headers
 
-        response = JSON.load(last_response.body)
+        response = JSON.parse(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
         execution_plan.state.must_equal :stopped
@@ -62,7 +62,7 @@ module SmartProxyDynflowCore
              { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
                'action_input' => { 'name' => 'World' } }.to_json,
              request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' }
-        response = JSON.load(last_response.body)
+        response = JSON.parse(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
         execution_plan.state.must_equal :stopped
@@ -101,14 +101,14 @@ module SmartProxyDynflowCore
     describe 'GET /tasks/count' do
       it 'counts the actions in state' do
         get "/tasks/count", { :state => 'stopped' }, request_headers
-        response = JSON.load(last_response.body)
+        response = JSON.parse(last_response.body)
         old_count = response['count']
 
         triggered = WORLD.trigger(DummyAction)
         wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :stopped }
 
         get "/tasks/count", :state => 'stopped'
-        response = JSON.load(last_response.body)
+        response = JSON.parse(last_response.body)
         response['count'].must_equal old_count + 1
       end
     end
