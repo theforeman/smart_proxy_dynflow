@@ -20,6 +20,9 @@ Bundler/DuplicatedGem:
 Lint/ShadowingOuterLocalVariable:
   Enabled: false
 
+Lint/RescueException:
+  Enabled: false
+
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
