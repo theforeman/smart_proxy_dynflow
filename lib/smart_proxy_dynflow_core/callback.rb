@@ -12,13 +12,7 @@ module SmartProxyDynflowCore
     class Request
       class << self
         def send_to_foreman_tasks(callback_info, data)
-          self.new.callback(self.prepare_payload(callback_info, data))
-        end
-
-        private
-
-        def prepare_payload(callback, data)
-          { :callback => callback, :data => data }.to_json
+          self.new.callback(prepare_payload(callback_info, data))
         end
 
         # rubocop:disable Metrics/PerceivedComplexity
@@ -45,6 +39,12 @@ module SmartProxyDynflowCore
           @ssl_options
         end
         # rubocop:enable Metrics/PerceivedComplexity
+
+        private
+
+        def prepare_payload(callback, data)
+          { :callback => callback, :data => data }.to_json
+        end
       end
 
       def callback(payload)
