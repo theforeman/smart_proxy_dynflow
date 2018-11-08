@@ -92,3 +92,9 @@ Metrics/ClassLength:
 
 Style/RescueStandardError:
   Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/Alias:
+  Enabled: false
