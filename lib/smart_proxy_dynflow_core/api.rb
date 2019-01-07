@@ -21,6 +21,13 @@ module SmartProxyDynflowCore
       MultiJson.dump(result)
     end
 
+    post "/tasks/launch/?" do
+      params = MultiJson.load(request.body.read)
+      launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('options', {}))
+      launcher.launch!(params['input'])
+      launcher.results.to_json
+    end
+
     post "/tasks/?" do
       params = MultiJson.load(request.body.read)
       trigger_task(::Dynflow::Utils.constantize(params['action_name']),
@@ -44,10 +51,23 @@ module SmartProxyDynflowCore
       complete_task(task_id, data)
     end
 
+    get "/tasks/operations" do
+      TaskLauncherRegistry.operations.to_json
+    end
+
     private
 
     def callback_host(params, request)
       params.fetch('action_input', {})['proxy_url'] || request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
+    end
+
+    def launcher_class(params)
+      operation = params.fetch('operation')
+      if TaskLauncherRegistry.key?(operation)
+        TaskLauncherRegistry.fetch(operation)
+      else
+        halt 404, MultiJson.dump(:error => "Unknown operation '#{operation}' requested.")
+      end
     end
   end
 end
