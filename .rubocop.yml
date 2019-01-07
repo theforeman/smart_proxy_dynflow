@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 Rails:
   Enabled: false
 
@@ -12,17 +14,32 @@ Style/HashSyntax:
     - ruby19
     - hash_rockets
 
+Bundler/DuplicatedGem:
+  Enabled: false
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+
+Lint/RescueException:
+  Enabled: false
+
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/FileName:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
 
 Style/TrailingCommaInLiteral:
   Enabled: false
 
 Style/TrailingCommaInArguments:
-  Enabled: false
-
-Style/AccessorMethodName:
   Enabled: false
 
 Metrics/LineLength:
@@ -71,4 +88,13 @@ Metrics/CyclomaticComplexity:
   Max: 15
 
 Metrics/ClassLength:
+  Enabled: false
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/Alias:
   Enabled: false

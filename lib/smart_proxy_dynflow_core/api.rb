@@ -6,7 +6,6 @@ module SmartProxyDynflowCore
     helpers Helpers
 
     before do
-      logger = Log.instance
       authorize_with_token || authorize_with_ssl_client
       content_type :json
     end
@@ -58,7 +57,8 @@ module SmartProxyDynflowCore
     private
 
     def callback_host(params, request)
-      params.fetch('action_input', {})['proxy_url'] || request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
+      params.fetch('action_input', {})['proxy_url'] ||
+        request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
     end
 
     def launcher_class(params)

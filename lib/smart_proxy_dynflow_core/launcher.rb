@@ -4,7 +4,6 @@ require 'smart_proxy_dynflow_core/settings'
 require 'smart_proxy_dynflow_core/webrick-patch'
 module SmartProxyDynflowCore
   class Launcher
-
     def self.launch!(options)
       self.new.start options
     end
@@ -84,6 +83,7 @@ module SmartProxyDynflowCore
       }
     end
 
+    # rubocop:disable Metrics/PerceivedComplexity
     def https_app
       ssl_options  = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:options]
       ssl_options |= OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE if defined?(OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE)
@@ -94,7 +94,7 @@ module SmartProxyDynflowCore
 
       if Settings.instance.tls_disabled_versions
         Settings.instance.tls_disabled_versions.each do |version|
-          constant = OpenSSL::SSL.const_get("OP_NO_TLSv#{version.to_s.gsub(/\./, '_')}") rescue nil
+          constant = OpenSSL::SSL.const_get("OP_NO_TLSv#{version.to_s.tr('.', '_')}") rescue nil
 
           if constant
             Log.instance.info "TLSv#{version} will be disabled."
@@ -114,6 +114,7 @@ module SmartProxyDynflowCore
         :SSLOptions => ssl_options
       }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     def https_enabled?
       Settings.instance.use_https
@@ -122,14 +123,16 @@ module SmartProxyDynflowCore
     def ssl_private_key
       OpenSSL::PKey::RSA.new(File.read(Settings.instance.ssl_private_key))
     rescue Exception => e
-      Log.instance.fatal "Unable to load private SSL key. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load private SSL key. Are the values "\
+                         "correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
     def ssl_certificate
       OpenSSL::X509::Certificate.new(File.read(Settings.instance.ssl_certificate))
     rescue Exception => e
-      Log.instance.fatal "Unable to load SSL certificate. Are the values correct in settings.yml and do permissions allow reading?: #{e}"
+      Log.instance.fatal "Unable to load SSL certificate. Are the values " \
+                         "correct in settings.yml and do permissions allow reading?: #{e}"
       raise e
     end
 
@@ -141,7 +144,7 @@ module SmartProxyDynflowCore
         Dir[File.join(dir, 'settings.d', '*.yml')].each { |path| Settings.load_plugin_settings(path) }
         true
       end
-      ForemanTasksCore::SettingsLoader.settings_registry.keys.each do |settings_keys|
+      ForemanTasksCore::SettingsLoader.settings_registry.each_key do |settings_keys|
         settings = settings_keys.inject({}) do |h, settings_key|
           if SETTINGS.plugins.key?(settings_key.to_s)
             h.merge(SETTINGS.plugins[settings_key.to_s].to_h)
