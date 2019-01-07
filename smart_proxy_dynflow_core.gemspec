@@ -27,7 +27,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('mocha', '~> 1')
   gem.add_development_dependency('rack-test', '~> 0')
   gem.add_development_dependency "rake", "~> 10.0"
-  gem.add_development_dependency('rubocop', '~> 0.52.1')
   gem.add_development_dependency('webmock', '~> 1')
 
   gem.add_runtime_dependency('dynflow', "~> 1.1")

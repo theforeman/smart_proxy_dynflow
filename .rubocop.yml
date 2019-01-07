@@ -26,6 +26,10 @@ Lint/RescueException:
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*'
+    
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
 
 Naming/AccessorMethodName:
   Enabled: false
