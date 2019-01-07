@@ -13,7 +13,6 @@ group :test do
   if RUBY_VERSION < '2.1'
     gem 'public_suffix', '< 3'
     gem 'rainbow', '< 3'
-    gem 'rubocop', '< 0.51.0'
   else
     gem 'public_suffix'
     gem 'rubocop', '~> 0.52.1'

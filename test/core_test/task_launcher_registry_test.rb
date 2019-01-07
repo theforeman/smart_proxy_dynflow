@@ -27,14 +27,14 @@ module SmartProxyDynflowCore
         end
 
         it 'fetches the value' do
-          registry.expects(:registry).returns({'my_operation' => Integer})
+          registry.expects(:registry).returns({ 'my_operation' => Integer })
           registry.fetch('my_operation').must_equal Integer
         end
       end
 
       describe '#key' do
         it 'checks presence of a key' do
-          registry.expects(:registry).returns({'my_operation' => Integer}).twice
+          registry.expects(:registry).returns({ 'my_operation' => Integer }).twice
           assert registry.key?('my_operation')
           refute registry.key?('missing')
         end
@@ -45,7 +45,7 @@ module SmartProxyDynflowCore
           registry.register('foo', nil)
           registry.register('bar', nil)
           registry.register('baz', nil)
-          registry.operations.must_equal %w(foo bar baz)
+          registry.operations.must_equal %w[foo bar baz]
         end
       end
     end

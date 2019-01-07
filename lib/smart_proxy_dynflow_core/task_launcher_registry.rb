@@ -1,7 +1,6 @@
 module SmartProxyDynflowCore
   class TaskLauncherRegistry
     class << self
-
       def register(name, launcher)
         registry[name] = launcher
       end

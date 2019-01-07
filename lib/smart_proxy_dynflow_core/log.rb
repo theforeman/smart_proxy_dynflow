@@ -55,7 +55,7 @@ module SmartProxyDynflowCore
 
     class ProxyStructuredFormater < ::Dynflow::LoggerAdapters::Formatters::Abstract
       def call(_severity, _datetime, _prog_name, message)
-        if ::Exception === message
+        if message.is_a?(::Exception)
           subject = "#{message.message} (#{message.class})"
           if @base.respond_to?(:exception)
             @base.exception("Error details", message)
@@ -74,7 +74,7 @@ module SmartProxyDynflowCore
     end
 
     class ProxyAdapter < ::Dynflow::LoggerAdapters::Simple
-      def initialize(logger, level = Logger::DEBUG, formatters = [])
+      def initialize(logger, level = Logger::DEBUG, _formatters = [])
         @logger           = logger
         @logger.level     = level
         @logger.formatter = ProxyStructuredFormater.new(@logger)
