@@ -21,7 +21,7 @@ module SmartProxyDynflowCore
     end
 
     def authorize_with_ssl_client
-      if %w[yes on 1].include? request.env['HTTPS'].to_s
+      if request.env['HTTPS']
         if request.env['SSL_CLIENT_CERT'].to_s.empty?
           Log.instance.error "No client SSL certificate supplied"
           halt 403, MultiJson.dump(:error => "No client SSL certificate supplied")
@@ -32,8 +32,10 @@ module SmartProxyDynflowCore
             halt 403, MultiJson.dump(:error => "SSL certificate with unexpected serial supplied")
           end
         end
-      else
+      elsif !Settings.instance.use_https
         Log.instance.debug 'require_ssl_client_verification: skipping, non-HTTPS request'
+      else
+        halt 403, MultiJson.dump(:error => "The client could not be authorized")
       end
     end
 
