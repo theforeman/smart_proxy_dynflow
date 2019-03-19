@@ -86,7 +86,7 @@ Style/Next:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 30
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Max: 15
