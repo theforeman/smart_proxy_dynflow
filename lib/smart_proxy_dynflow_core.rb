@@ -1,3 +1,5 @@
+raise LoadError, 'Ruby >= 2.1 is required' unless RUBY_VERSION >= '2.1'
+
 require 'dynflow'
 require 'smart_proxy_dynflow_core/task_launcher_registry'
 require 'foreman_tasks_core'
