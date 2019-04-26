@@ -4,13 +4,13 @@ module SmartProxyDynflowCore
       SmartProxyDynflowCore::Core.world
     end
 
-    def authorize_with_token
+    def authorize_with_token(clear: true)
       if request.env.key? 'HTTP_AUTHORIZATION'
         if defined?(::ForemanTasksCore)
           auth = request.env['HTTP_AUTHORIZATION']
           basic_prefix = /\ABasic /
           if !auth.to_s.empty? && auth =~ basic_prefix &&
-             ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''))
+             ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''), clear: clear)
             Log.instance.debug('authorized with token')
             return true
           end
@@ -63,7 +63,7 @@ module SmartProxyDynflowCore
       { :count => tasks.count, :state => state }
     end
 
-    def complete_task(task_id, params)
+    def dispatch_external_event(task_id, params)
       world.event(task_id,
                   params['step_id'].to_i,
                   ::ForemanTasksCore::Runner::ExternalEvent.new(params))

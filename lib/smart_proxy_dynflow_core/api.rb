@@ -6,7 +6,13 @@ module SmartProxyDynflowCore
     helpers Helpers
 
     before do
-      authorize_with_token || authorize_with_ssl_client
+      if request.path_info =~ %r{/tasks/.*/done}
+        authorize_with_token(clear: true)
+      elsif request.path_info =~ %r{/tasks/.*/update}
+        authorize_with_token(clear: false)
+      else
+        authorize_with_ssl_client
+      end
       content_type :json
     end
 
@@ -45,9 +51,14 @@ module SmartProxyDynflowCore
       tasks_count(params['state']).to_json
     end
 
+    post "/tasks/:task_id/update" do |task_id|
+      data = MultiJson.load(request.body.read)
+      dispatch_external_event(task_id, data)
+    end
+
     post "/tasks/:task_id/done" do |task_id|
       data = MultiJson.load(request.body.read)
-      complete_task(task_id, data)
+      dispatch_external_event(task_id, data)
     end
 
     get "/tasks/operations" do
