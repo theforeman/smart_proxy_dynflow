@@ -3,8 +3,6 @@ require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
 require 'sd_notify'
 
-require 'smart_proxy_dynflow_core/test_action'
-
 module SmartProxyDynflowCore
   class Launcher
     CIPHERS = ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-RSA-AES256-GCM-SHA384',
@@ -16,13 +14,15 @@ module SmartProxyDynflowCore
     end
 
     def start(options)
-      load_settings!(options)
       Settings.instance.standalone = true
+      load_settings!(options)
       install_usr1_trap
       Rack::Server.new(rack_settings).start do |_server|
         SmartProxyDynflowCore::Core.ensure_initialized
         ::SdNotify.ready
       end
+      Log.instance.info "Finished shutting down"
+      Logging.shutdown
     end
 
     def load_settings!(options = {})

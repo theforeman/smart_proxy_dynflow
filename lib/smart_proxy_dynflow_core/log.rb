@@ -1,6 +1,25 @@
 require 'logging'
 
 module SmartProxyDynflowCore
+  class ReopenAppender < ::Logging::Appender
+    def initialize(name, logger, opts = {})
+      @reopen = false
+      @logger = logger
+      super(name, opts)
+    end
+
+    def set(status = true)
+      @reopen = status
+    end
+
+    def append(_event)
+      if @reopen
+        Logging.reopen
+        @reopen = false
+      end
+    end
+  end
+
   class Log
     BASE_LOG_SIZE = 1024 * 1024 # 1 MiB
     LOGGER_NAME = 'dynflow-core'.freeze
@@ -11,7 +30,6 @@ module SmartProxyDynflowCore
     rescue LoadError
       @syslog_available = false
     end
-    @reopen = false
 
     class << self
       def reload!
@@ -22,29 +40,21 @@ module SmartProxyDynflowCore
       end
 
       def reopen
-        return if @logger.nil?
+        return if @logger.nil? || @reopen.nil?
         if Settings.instance.log_file !~ /^(STDOUT|SYSLOG|JOURNALD?)$/i
-          @logger.warn "Scheduled log file reopen"
-          @reopen = true
-        else
-          @logger.debug "Not scheduling log file reopen (no file appender)"
+          @reopen.set
         end
       end
 
-      def handle_reopen
-        @logger.warn "Performing log file reopen"
-        @reopen = false
-        @logger.appenders.each(&:reopen)
-        @logger.warn "Finished log file reopen"
-      end
-
       def instance
-        handle_reopen if @reopen
+        return ::Proxy::LogBuffer::Decorator.instance unless Settings.instance.standalone
         return @logger if @logger
         layout = Logging::Layouts.pattern(pattern: Settings.instance.file_logging_pattern + "\n")
         notime_layout = Logging::Layouts.pattern(pattern: Settings.instance.system_logging_pattern + "\n")
-        log_file = Settings.instance.log_file
+        log_file = Settings.instance.log_file || ''
         @logger = Logging.logger[LOGGER_NAME]
+        @reopen = ReopenAppender.new("Reopen dummy appender", @logger)
+        @logger.add_appenders(@reopen)
         if !Settings.instance.loaded || log_file.casecmp('STDOUT').zero?
           @logger.add_appenders(Logging.appenders.stdout(LOGGER_NAME, layout: layout))
         elsif log_file.casecmp('SYSLOG').zero?
@@ -65,7 +75,11 @@ module SmartProxyDynflowCore
             keep = Settings.instance.file_rolling_keep
             size = BASE_LOG_SIZE * Settings.instance.file_rolling_size
             age = Settings.instance.file_rolling_age
-            @logger.add_appenders(Logging.appenders.rolling_file(LOGGER_NAME, layout: layout, filename: log_file, keep: keep, size: size, age: age, roll_by: 'date'))
+            if size.positive?
+              @logger.add_appenders(Logging.appenders.rolling_file(LOGGER_NAME, layout: layout, filename: log_file, keep: keep, size: size, age: age, roll_by: 'number'))
+            else
+              @logger.add_appenders(Logging.appenders.file(LOGGER_NAME, layout: layout, filename: log_file))
+            end
           rescue ArgumentError => ae
             @logger.add_appenders(Logging.appenders.stdout(LOGGER_NAME, layout: layout))
             @logger.warn "Log file #{log_file} cannot be opened. Falling back to STDOUT: #{ae}"

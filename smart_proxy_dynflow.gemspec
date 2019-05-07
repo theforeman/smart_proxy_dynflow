@@ -21,10 +21,12 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '~> 2.5'
 
+  gem.add_runtime_dependency "logging"
+
   gem.add_development_dependency "bundler", ">= 1.7"
-  gem.add_development_dependency('minitest')
-  gem.add_development_dependency('mocha', '~> 1')
-  gem.add_development_dependency('rack-test', '~> 0')
+  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'mocha', '~> 1'
+  gem.add_development_dependency 'rack-test', '~> 0'
   gem.add_development_dependency "rake", "~> 10.0"
-  gem.add_development_dependency('webmock', '~> 1')
+  gem.add_development_dependency 'webmock', '~> 1'
 end
