@@ -7,9 +7,11 @@ module SmartProxyDynflowCore
     helpers Helpers
 
     configure do
-      ::Sinatra::Base.set :logging, false
-      ::Sinatra::Base.use ::SmartProxyDynflowCore::RequestIdMiddleware
-      ::Sinatra::Base.use ::SmartProxyDynflowCore::LoggerMiddleware
+      if Settings.instance.standalone
+        ::Sinatra::Base.set :logging, false
+        ::Sinatra::Base.use ::SmartProxyDynflowCore::RequestIdMiddleware
+        ::Sinatra::Base.use ::SmartProxyDynflowCore::LoggerMiddleware
+      end
     end
 
     before do

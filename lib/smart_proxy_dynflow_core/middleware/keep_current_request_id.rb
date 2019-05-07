@@ -42,7 +42,7 @@ module Actions
         unless (restored_id = action.input[:current_request_id]).nil?
           old_id = ::Logging.mdc['request']
           if !old_id.nil? && old_id != restored_id
-            action.action_logger.warn(_('Changing request id %{request_id} to saved id %{saved_id}') % { :saved_id => restored_id, :request_id => old_id })
+            action.action_logger.warn('Changing request id %{request_id} to saved id %{saved_id}' % { :saved_id => restored_id, :request_id => old_id })
           end
           ::Logging.mdc['request'] = restored_id
         end

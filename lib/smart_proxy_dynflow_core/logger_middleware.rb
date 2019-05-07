@@ -13,7 +13,7 @@ module SmartProxyDynflowCore
       @logger.debug { 'Headers: ' + env.select { |k, v| k.start_with? 'HTTP_' }.inspect }
       if @logger.debug? && env['rack.input']
         body = env['rack.input'].read
-        @logger.debug body.empty? ? '' : 'Body: ' + body
+        @logger.debug('Body: ' + body) unless body.empty?
         env['rack.input'].rewind
       end
       status, = @app.call(env)

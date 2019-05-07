@@ -45,8 +45,9 @@
 # Log level, one of UNKNOWN, FATAL, ERROR, WARN, INFO, DEBUG
 #:log_level: ERROR
 
-# The maximum size of a log file before it's rolled (in MiB)
-#:file_rolling_size: 100
+# The maximum size of a log file before it's rolled (in MiB) or zero to disable file rolling
+# and rely on logrotate or similar tool
+#:file_rolling_size: 0
 
 # The maximum age of a log file before it's rolled (in seconds). Also accepts 'daily', 'weekly', or 'monthly'.
 #:file_rolling_age: weekly
