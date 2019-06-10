@@ -4,7 +4,7 @@ require 'proxy/plugin'
 
 class Proxy::Dynflow
   class Plugin < Proxy::Plugin
-    rackup_path = File.expand_path('http_config.ru', File.expand_path("../", __FILE__))
+    rackup_path = File.expand_path('http_config.ru', __dir__)
     http_rackup_path rackup_path
     https_rackup_path rackup_path
 
