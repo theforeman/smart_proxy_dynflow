@@ -4,29 +4,18 @@ require 'proxy/plugin'
 
 class Proxy::Dynflow
   class Plugin < Proxy::Plugin
-    rackup_path = begin
-      require 'smart_proxy_dynflow_core'
-      'http_config_with_executor.ru'
-    rescue LoadError
-      'http_config.ru'
-    end
-    http_rackup_path File.expand_path(rackup_path, File.expand_path("../", __FILE__))
-    https_rackup_path File.expand_path(rackup_path, File.expand_path("../", __FILE__))
+    rackup_path = File.expand_path('http_config.ru', File.expand_path("../", __FILE__))
+    http_rackup_path rackup_path
+    https_rackup_path rackup_path
 
     settings_file "dynflow.yml"
     requires :foreman_proxy, ">= 1.12.0"
     default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
 
-    # rubocop:disable Lint/HandleExceptions
     after_activation do
-      begin
-        require 'smart_proxy_dynflow_core'
-      rescue LoadError
-        # Dynflow core is not available in the proxy, will be handled
-        # by standalone Dynflow core
-      end
+      # Ensure the core gem is loaded, if configure NOT to use the external core
+      require 'smart_proxy_dynflow_core' if Proxy::Dynflow::Plugin.settings.external_core == false
     end
-    # rubocop:enable Lint/HandleExceptions
   end
 end
