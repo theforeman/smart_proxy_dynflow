@@ -24,7 +24,7 @@ class Proxy::Dynflow
       @core_available ||= begin
                             require 'smart_proxy_dynflow_core'
                             true
-                          rescue LoadError
+                          rescue LoadError # rubocop:disable Lint/HandleExceptions
                           end
     end
   end
