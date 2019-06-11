@@ -2,3 +2,8 @@
 :enabled: true
 :database: /var/lib/foreman-proxy/dynflow/dynflow.sqlite
 :core_url: 'http://127.0.0.1:8008'
+
+# If true, external core will be used even if the core gem is available
+# If false, the feature will be disabled if the core gem is not available
+# If unset, the process will fallback to external core if the core gem is not available
+# :external_core: true
