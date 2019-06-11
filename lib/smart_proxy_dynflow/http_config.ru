@@ -1,15 +1,7 @@
 # Internal core will be used if external core is either disabled or unset
 # and the core gem can be loaded
-internal_core = unless Proxy::Dynflow::Plugin.settings.external_core
-                  begin
-                    require 'smart_proxy_dynflow_core'
-                    true
-                  rescue LoadError
-                    false
-                  end
-                end
 
-if internal_core
+if !::Proxy::Dynflow::Plugin.settings.external_core && Proxy::Dynflow::Plugin.internal_core_available?
   require 'smart_proxy_dynflow_core/api'
   require 'smart_proxy_dynflow_core/launcher'
 

@@ -15,7 +15,17 @@ class Proxy::Dynflow
 
     after_activation do
       # Ensure the core gem is loaded, if configure NOT to use the external core
-      require 'smart_proxy_dynflow_core' if Proxy::Dynflow::Plugin.settings.external_core == false
+      if Proxy::Dynflow::Plugin.settings.external_core == false && !internal_core_available?
+        raise "'smart_proxy_dynflow_core' gem is required, but not available"
+      end
+    end
+
+    def self.internal_core_available?
+      @core_available ||= begin
+                            require 'smart_proxy_dynflow_core'
+                            true
+                          rescue LoadError
+                          end
     end
   end
 end
