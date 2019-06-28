@@ -4,10 +4,9 @@ Documentation=https://github.com/theforeman/smart_proxy_dynflow
 After=network.target remote-fs.target nss-lookup.target
 
 [Service]
-Type=forking
+Type=notify
 User=foreman-proxy
-PIDFile=/var/run/foreman-proxy/smart_proxy_dynflow_core.pid
-ExecStart=/usr/bin/smart_proxy_dynflow_core -d -p /var/run/foreman-proxy/smart_proxy_dynflow_core.pid
+ExecStart=/usr/bin/smart_proxy_dynflow_core --no-daemonize
 EnvironmentFile=-/etc/sysconfig/smart_proxy_dynflow_core
 
 [Install]
