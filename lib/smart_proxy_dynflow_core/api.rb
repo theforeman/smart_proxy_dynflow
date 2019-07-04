@@ -51,12 +51,7 @@ module SmartProxyDynflowCore
       tasks_count(params['state']).to_json
     end
 
-    post "/tasks/:task_id/update" do |task_id|
-      data = MultiJson.load(request.body.read)
-      dispatch_external_event(task_id, data)
-    end
-
-    post "/tasks/:task_id/done" do |task_id|
+    post %r{/tasks/([\S]+)/(?:update|done)} do |task_id|
       data = MultiJson.load(request.body.read)
       dispatch_external_event(task_id, data)
     end
