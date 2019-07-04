@@ -8,7 +8,8 @@ module SmartProxyDynflowCore
 
     before do
       if match = request.path_info.match(TASK_UPDATE_REGEXP_PATH)
-        task_id, action = match[1], match[2]
+        task_id = match[1]
+        action = match[2]
         authorize_with_token(task_id: task_id, clear: action == 'done')
       else
         authorize_with_ssl_client
