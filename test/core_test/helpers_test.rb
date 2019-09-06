@@ -38,19 +38,34 @@ module SmartProxyDynflowCore
       assert last_response.status == 200
     end
 
-    it 'skips client cert authentication if token succeeds' do
-      username = 'user'
+    it 'performs token-based authentication for task update/done paths' do
+      task_id = username = 'task-id'
+      other_task_id = 'other-task-id'
+
+      # Happy path for update
       otp = ::ForemanTasksCore::OtpManager.generate_otp(username)
       http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
-      Log.instance.expects(:debug).with('authorized with token')
-      get '/tasks/count', {}, 'HTTP_AUTHORIZATION' => http_auth
+      post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 200
-    end
 
-    it 'tries ssl client cert based authorization when token based fails' do
-      ForemanTasksCore::OtpManager.generate_otp('someone')
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize('someone', 'wrong pass')
-      get '/tasks/count', {}, 'HTTPS' => 'yes', 'HTTP_AUTHORIZATION' => http_auth
+      # Wrong password
+      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, 'wrong pass')
+      post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
+      assert last_response.status == 403
+
+      # Wrong task id
+      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      post "/tasks/#{other_task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
+      assert last_response.status == 403
+
+      # Happy path for done
+      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
+      assert last_response.status == 200
+
+      # Call to done should remove the token, so using it the second time should fail
+      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 403
     end
   end

@@ -30,7 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('webmock', '~> 1')
 
   gem.add_runtime_dependency('dynflow', "~> 1.1")
-  gem.add_runtime_dependency('foreman-tasks-core', '>= 0.1.7')
+  gem.add_runtime_dependency('foreman-tasks-core', '>= 0.3.3')
   gem.add_runtime_dependency('rack')
   gem.add_runtime_dependency('rest-client')
   gem.add_runtime_dependency('sequel')

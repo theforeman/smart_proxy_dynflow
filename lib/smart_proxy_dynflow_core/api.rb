@@ -3,10 +3,17 @@ require 'multi_json'
 
 module SmartProxyDynflowCore
   class Api < ::Sinatra::Base
+    TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}
     helpers Helpers
 
     before do
-      authorize_with_token || authorize_with_ssl_client
+      if match = request.path_info.match(TASK_UPDATE_REGEXP_PATH)
+        task_id = match[1]
+        action = match[2]
+        authorize_with_token(task_id: task_id, clear: action == 'done')
+      else
+        authorize_with_ssl_client
+      end
       content_type :json
     end
 
@@ -45,9 +52,10 @@ module SmartProxyDynflowCore
       tasks_count(params['state']).to_json
     end
 
-    post "/tasks/:task_id/done" do |task_id|
+    # capturing post "/tasks/:task_id/(update|done)"
+    post TASK_UPDATE_REGEXP_PATH do |task_id, _action|
       data = MultiJson.load(request.body.read)
-      complete_task(task_id, data)
+      dispatch_external_event(task_id, data)
     end
 
     get "/tasks/operations" do

@@ -11,7 +11,7 @@ module Proxy
 
       before do
         content_type :json
-        if request.env['HTTP_AUTHORIZATION'] && request.env['PATH_INFO'].end_with?('/done')
+        if request.env['HTTP_AUTHORIZATION'] && request.path_info =~ %r{/tasks/.*/(update|done)}
           # Halt running before callbacks if a token is provided and the request is notifying about task being done
           return
         else
