@@ -1,7 +1,9 @@
 require 'webrick/https'
 require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
-require 'smart_proxy_dynflow_core/webrick-patch'
+# mute Ruby redefinition warnings when running embedded
+require 'smart_proxy_dynflow_core/webrick-patch' unless defined?(::Proxy::Launcher)
+
 module SmartProxyDynflowCore
   class Launcher
     def self.launch!(options)
