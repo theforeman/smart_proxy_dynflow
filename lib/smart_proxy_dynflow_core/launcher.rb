@@ -1,11 +1,13 @@
 require 'webrick/https'
 require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
-# mute Ruby redefinition warnings when running embedded
-require 'smart_proxy_dynflow_core/webrick-patch' unless defined?(::Proxy::Launcher)
 
 module SmartProxyDynflowCore
   class Launcher
+    CIPHERS = ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-RSA-AES256-GCM-SHA384',
+               'AES128-GCM-SHA256', 'AES256-GCM-SHA384', 'AES128-SHA256',
+               'AES256-SHA256', 'AES128-SHA', 'AES256-SHA'].freeze
+
     def self.launch!(options)
       self.new.start options
     end
@@ -114,6 +116,7 @@ module SmartProxyDynflowCore
         :SSLPrivateKey => ssl_private_key,
         :SSLCertificate => ssl_certificate,
         :SSLCACertificateFile => Settings.instance.ssl_ca_file,
+        :SSLCiphers => CIPHERS - SmartProxyDynflowCore::Settings.instance.ssl_disabled_ciphers,
         :SSLOptions => ssl_options
       }
     end
