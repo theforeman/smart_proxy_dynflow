@@ -1,6 +1,7 @@
 require 'webrick/https'
 require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
+require 'smart_proxy_dynflow_core/sd_notify'
 
 module SmartProxyDynflowCore
   class Launcher
@@ -18,6 +19,7 @@ module SmartProxyDynflowCore
       install_usr1_trap
       Rack::Server.new(rack_settings).start do |_server|
         SmartProxyDynflowCore::Core.ensure_initialized
+        SmartProxyDynflowCore::SdNotify.new.tap { |sd| sd.ready if sd.active? }
       end
     end
 
@@ -82,7 +84,7 @@ module SmartProxyDynflowCore
         :AccessLog => [[Log.instance, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
         :Logger => Log.instance,
         :daemonize => Settings.instance.daemonize,
-        :pid => Settings.instance.pid_file,
+        :pid => Settings.instance.daemonize && Settings.instance.pid_file,
         :server => :webrick
       }
     end
