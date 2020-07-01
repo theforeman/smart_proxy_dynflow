@@ -54,7 +54,12 @@ module SmartProxyDynflowCore
     end
 
     class ProxyStructuredFormater < ::Dynflow::LoggerAdapters::Formatters::Abstract
-      def call(_severity, _datetime, _prog_name, message)
+      def initialize(*args)
+        super
+        @original_formatter = ::Logger::Formatter.new
+      end
+
+      def call(severity, datetime, prog_name, message)
         if message.is_a?(::Exception)
           subject = "#{message.message} (#{message.class})"
           if @base.respond_to?(:exception)
@@ -64,7 +69,7 @@ module SmartProxyDynflowCore
             "#{subject}\n#{message.backtrace.join("\n")}"
           end
         else
-          message
+          @original_formatter.call(severity, datetime, prog_name, message)
         end
       end
 
@@ -77,8 +82,9 @@ module SmartProxyDynflowCore
       def initialize(logger, level = Logger::DEBUG, _formatters = [])
         @logger           = logger
         @logger.level     = level
-        @action_logger    = apply_formatters(ProgNameWrapper.new(@logger, ' action'), [ProxyStructuredFormater])
-        @dynflow_logger   = apply_formatters(ProgNameWrapper.new(@logger, 'dynflow'), [ProxyStructuredFormater])
+        @logger.formatter = ProxyStructuredFormater.new(@logger)
+        @action_logger    = apply_formatters(ProgNameWrapper.new(@logger, ' action'), [])
+        @dynflow_logger   = apply_formatters(ProgNameWrapper.new(@logger, 'dynflow'), [])
       end
     end
   end
