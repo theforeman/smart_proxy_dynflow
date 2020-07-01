@@ -77,7 +77,6 @@ module SmartProxyDynflowCore
       def initialize(logger, level = Logger::DEBUG, _formatters = [])
         @logger           = logger
         @logger.level     = level
-        @logger.formatter = ProxyStructuredFormater.new(@logger)
         @action_logger    = apply_formatters(ProgNameWrapper.new(@logger, ' action'), [ProxyStructuredFormater])
         @dynflow_logger   = apply_formatters(ProgNameWrapper.new(@logger, 'dynflow'), [ProxyStructuredFormater])
       end
