@@ -43,7 +43,7 @@ module SmartProxyDynflowCore
       @file = file
       @fd = @file.is_a?(IO) ? @file : File.open(@file, 'a')
       @fd.sync = true
-      super(@fd, rest)
+      super(@fd, *rest)
     end
 
     def roll_log
