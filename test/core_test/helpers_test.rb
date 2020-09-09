@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'test_helper'
 require 'foreman_tasks_core/otp_manager'
 
 module SmartProxyDynflowCore
@@ -45,6 +46,7 @@ module SmartProxyDynflowCore
       # Happy path for update
       otp = ::ForemanTasksCore::OtpManager.generate_otp(username)
       http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      Log.instance.stubs(:debug)
       post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 200
 

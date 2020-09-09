@@ -20,6 +20,7 @@ module Proxy
                 end
           req['X-Forwarded-For'] = request.env['HTTP_HOST']
           req['AUTHORIZATION'] = request.env['HTTP_AUTHORIZATION']
+          req['X-Request-Id'] = ::Logging.mdc['request']
           response = send_request req
           Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
           response

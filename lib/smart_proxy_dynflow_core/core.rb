@@ -15,7 +15,9 @@ module SmartProxyDynflowCore
 
     def create_world(&block)
       config = default_world_config(&block)
-      ::Dynflow::World.new(config)
+      world = ::Dynflow::World.new(config)
+      world.middleware.use ::Actions::Middleware::KeepCurrentRequestID
+      world
     end
 
     def persistence_conn_string

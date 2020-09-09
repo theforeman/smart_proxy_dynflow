@@ -3,6 +3,8 @@ require 'smart_proxy_dynflow_core/bundler_helper'
 require 'smart_proxy_dynflow_core/settings'
 require 'sd_notify'
 
+require 'smart_proxy_dynflow_core/test_action'
+
 module SmartProxyDynflowCore
   class Launcher
     CIPHERS = ['ECDHE-RSA-AES128-GCM-SHA256', 'ECDHE-RSA-AES256-GCM-SHA384',
@@ -53,7 +55,7 @@ module SmartProxyDynflowCore
 
     def install_usr1_trap
       trap(:USR1) do
-        Log.instance.roll_log
+        Log.reopen
       end
     end
 
@@ -81,7 +83,7 @@ module SmartProxyDynflowCore
         :app => app,
         :Host => Settings.instance.listen,
         :Port => Settings.instance.port,
-        :AccessLog => [[Log.instance, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
+        :AccessLog => [],
         :Logger => Log.instance,
         :daemonize => Settings.instance.daemonize,
         :pid => Settings.instance.daemonize && Settings.instance.pid_file,
@@ -89,7 +91,6 @@ module SmartProxyDynflowCore
       }
     end
 
-    # rubocop:disable Metrics/PerceivedComplexity
     def https_app
       ssl_options  = OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:options]
       ssl_options |= OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE if defined?(OpenSSL::SSL::OP_CIPHER_SERVER_PREFERENCE)

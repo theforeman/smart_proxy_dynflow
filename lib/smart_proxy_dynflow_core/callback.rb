@@ -15,7 +15,6 @@ module SmartProxyDynflowCore
           self.new.callback(prepare_payload(callback_info, data))
         end
 
-        # rubocop:disable Metrics/PerceivedComplexity
         def ssl_options
           return @ssl_options if defined? @ssl_options
           @ssl_options = {}

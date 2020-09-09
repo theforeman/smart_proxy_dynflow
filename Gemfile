@@ -17,6 +17,7 @@ end
 
 gem 'rack', '>= 1.1'
 gem 'sinatra'
+gem 'logging-journald', '~> 2.0', :platforms => [:ruby]
 
 # load bundler.d
 Dir["#{File.dirname(__FILE__)}/bundler.d/*.rb"].each do |bundle|

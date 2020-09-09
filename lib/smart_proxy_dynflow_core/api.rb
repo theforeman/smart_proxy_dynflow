@@ -6,6 +6,12 @@ module SmartProxyDynflowCore
     TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}
     helpers Helpers
 
+    configure do
+      ::Sinatra::Base.set :logging, false
+      ::Sinatra::Base.use ::SmartProxyDynflowCore::RequestIdMiddleware
+      ::Sinatra::Base.use ::SmartProxyDynflowCore::LoggerMiddleware
+    end
+
     before do
       if match = request.path_info.match(TASK_UPDATE_REGEXP_PATH)
         task_id = match[1]
