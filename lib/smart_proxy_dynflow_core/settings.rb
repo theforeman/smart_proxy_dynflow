@@ -24,7 +24,12 @@ module SmartProxyDynflowCore
       :pid_file => '/var/run/foreman-proxy/smart_proxy_dynflow_core.pid',
       :daemonize => false,
       :execution_plan_cleaner_age => 60 * 60 * 24,
-      :loaded => false
+      :loaded => false,
+      :file_logging_pattern => '%d %.8X{request} [%.1l] %m',
+      :system_logging_pattern => '%.8X{request} [%.1l] %m',
+      :file_rolling_keep => 6,
+      :file_rolling_size => 100,
+      :file_rolling_age => 'weekly'
     }.freeze
 
     PROXY_SETTINGS = %i[ssl_ca_file ssl_certificate ssl_private_key foreman_url

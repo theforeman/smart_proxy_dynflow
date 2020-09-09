@@ -1,6 +1,5 @@
 module SmartProxyDynflowCore
   class BundlerHelper
-    # rubocop:disable Metrics/PerceivedComplexity
     def self.require_groups(*groups)
       if File.exist?(File.expand_path('../../../Gemfile.in', __FILE__))
         # If there is a Gemfile.in file, we will not use Bundler but BundlerExt

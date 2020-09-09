@@ -26,14 +26,6 @@ Lint/ShadowingOuterLocalVariable:
 Lint/RescueException:
   Enabled: false
 
-Metrics/ClassLength:
-  Exclude:
-    - 'test/**/*'
-    
-Metrics/BlockLength:
-  Exclude:
-    - 'test/**/*'
-
 Naming/AccessorMethodName:
   Enabled: false
 
@@ -49,8 +41,8 @@ Style/TrailingCommaInLiteral:
 Style/TrailingCommaInArguments:
   Enabled: false
 
-Metrics/LineLength:
-  Max: 120
+Style/FormatStringToken:
+  Enabled: false
 
 Style/StringLiterals:
   Enabled: false
@@ -73,9 +65,6 @@ Style/BracesAroundHashParameters:
 Style/SignalException:
   Enabled: false
 
-Metrics/MethodLength:
-  Max: 40
-
 Lint/AssignmentInCondition:
   Enabled: false
 
@@ -88,13 +77,16 @@ Lint/UnusedBlockArgument:
 Style/Next:
   Enabled: false
 
-Metrics/AbcSize:
-  Max: 30
+Metrics:
+  Enabled: false
 
-Metrics/CyclomaticComplexity:
-  Max: 15
+Style/FormatString:
+  Enabled: false
 
-Metrics/ClassLength:
+Style/PreferredHashMethods:
+  Enabled: false
+
+Style/ConditionalAssignment:
   Enabled: false
 
 Style/RescueStandardError:

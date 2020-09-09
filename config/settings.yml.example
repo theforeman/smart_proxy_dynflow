@@ -39,11 +39,26 @@
 # Specify versions like: '1.1', or '1.2'
 #:tls_disabled_versions: []
 
-# File to log to, leave empty for logging to STDOUT
-# :log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
+# File to log to, leave empty for stdout or use STDOUT, STDERR, SYSLOG or JOURNAL
+#:log_file: /var/log/foreman-proxy/smart_proxy_dynflow_core.log
 
 # Log level, one of UNKNOWN, FATAL, ERROR, WARN, INFO, DEBUG
-# :log_level: ERROR
+#:log_level: ERROR
+
+# The maximum size of a log file before it's rolled (in MiB)
+#:file_rolling_size: 100
+
+# The maximum age of a log file before it's rolled (in seconds). Also accepts 'daily', 'weekly', or 'monthly'.
+#:file_rolling_age: weekly
+
+# Number of log files to keep
+#:file_rolling_keep: 6
+
+# Logging pattern for file-based loging
+#:file_logging_pattern: '%d %.8X{request} [%.1l] %m'
+
+# Logging pattern for syslog or journal loging
+#:system_logging_pattern: '%.8X{request} [%.1l] %m'
 
 # Maximum age of execution plans to keep before having them cleaned
 # by the execution plan cleaner (in seconds), defaults to 24 hours
