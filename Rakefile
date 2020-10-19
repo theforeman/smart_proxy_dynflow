@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/testtask'
-require 'rubocop/rake_task' if RUBY_VERSION >= '2.1'
+require 'rubocop/rake_task'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -28,7 +28,7 @@ end
 desc 'Test Dynflow plugin.'
 task :test do
   Rake::Task['rubocop'].invoke if defined? RuboCop
-  Rake::Task['test:core'].invoke if RUBY_VERSION >= '2.1'
+  Rake::Task['test:core'].invoke
   Rake::Task['test:api'].invoke
 end
 
