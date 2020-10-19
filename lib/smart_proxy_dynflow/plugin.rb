@@ -9,7 +9,7 @@ class Proxy::Dynflow
     https_rackup_path rackup_path
 
     settings_file "dynflow.yml"
-    requires :foreman_proxy, ">= 1.12.0"
+    requires :foreman_proxy, ">= 1.16.0"
     default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
 
