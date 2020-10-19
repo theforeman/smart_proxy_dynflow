@@ -73,13 +73,7 @@ module SmartProxyDynflowCore
     end
 
     def self.load_from_proxy(plugin)
-      plugin_class = if Proxy::VERSION >= '1.16.0'
-                       plugin
-                     else
-                       # DEPRECATION: Remove this branch when dropping support for smart-proxy < 1.16
-                       plugin[:class]
-                     end
-      settings = plugin_class.settings.to_h
+      settings = plugin.settings.to_h
       PROXY_SETTINGS.each do |key|
         SETTINGS[key] = Proxy::SETTINGS[key]
       end
