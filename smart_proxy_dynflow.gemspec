@@ -19,6 +19,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.license = 'GPL-3.0'
 
+  gem.required_ruby_version = '~> 2.5'
+
   gem.add_development_dependency "bundler", ">= 1.7"
   gem.add_development_dependency('minitest')
   gem.add_development_dependency('mocha', '~> 1')
