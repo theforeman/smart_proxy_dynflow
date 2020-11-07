@@ -94,7 +94,7 @@ module SmartProxyDynflowCore
       settings = YAML.load_file(path)
       name = File.basename(path).gsub(/\.yml$/, '')
       if SETTINGS.plugins.key? name
-        settings = SETTINGS.plugins[name].to_h.merge(settings)
+        settings = SETTINGS.plugins[name].to_h.merge(settings || {})
       end
       SETTINGS.plugins[name] = OpenStruct.new settings
     end
