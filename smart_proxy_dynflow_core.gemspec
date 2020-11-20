@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
 
   gem.executables   = ['smart_proxy_dynflow_core']
   gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'config/settings.yml.example',
-                          'lib/smart_proxy_dynflow_core/**/*', 'LICENSE', 'Gemfile',
+                          'lib/smart_proxy_dynflow_core/**/*', 'LICENSE', 'Gemfile', 'bundler.d/*.rb',
                           'bin/smart_proxy_dynflow_core', 'deploy/*', 'smart_proxy_dynflow_core.gemspec']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]

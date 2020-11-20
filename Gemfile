@@ -15,7 +15,6 @@ group :test do
   gem 'rubocop', '~> 0.52.1'
 end
 
-gem 'logging-journald', '~> 2.0', :platforms => [:ruby]
 gem 'rack', '>= 1.1'
 gem 'sinatra'
 
