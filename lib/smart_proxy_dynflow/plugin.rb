@@ -14,6 +14,8 @@ module Proxy::Dynflow
                      :execution_plan_cleaner_age => 60 * 60 * 24
     plugin :dynflow, Proxy::Dynflow::VERSION
 
+    capability(proc { self.available_operations })
+
     after_activation do
       require 'smart_proxy_dynflow/settings_loader'
       require 'smart_proxy_dynflow/otp_manager'
@@ -24,6 +26,10 @@ module Proxy::Dynflow
                                                     Proxy::Dynflow::TaskLauncher::Single)
 
       Proxy::Dynflow::Core.ensure_initialized
+    end
+
+    def self.available_operations
+      TaskLauncherRegistry.operations
     end
   end
 end
