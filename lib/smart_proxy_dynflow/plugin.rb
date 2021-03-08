@@ -13,6 +13,8 @@ class Proxy::Dynflow
     default_settings :core_url => 'http://localhost:8008'
     plugin :dynflow, Proxy::Dynflow::VERSION
 
+    capability(proc { self.available_core_operations })
+
     after_activation do
       # Ensure the core gem is loaded, if configure NOT to use the external core
       if Proxy::Dynflow::Plugin.settings.external_core == false && !internal_core_available?
@@ -26,6 +28,18 @@ class Proxy::Dynflow
                             true
                           rescue LoadError # rubocop:disable Lint/HandleExceptions
                           end
+    end
+
+    def self.available_core_operations
+      if Proxy::Dynflow::Plugin.settings.external_core || !internal_core_available?
+        begin
+          JSON.parse(Proxy::Dynflow::Callback::Core.operations.body)
+        rescue
+          []
+        end
+      else
+        TaskLauncherRegistry.operations.to_json
+      end
     end
   end
 end

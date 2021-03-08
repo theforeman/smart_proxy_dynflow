@@ -26,6 +26,20 @@ module Proxy
           response
         end
 
+        def operations
+          message = "Querying available operations from smart proxy dynflow core"
+          Proxy::LogBuffer::Decorator.instance.debug message
+          req = request_factory.create_get '/tasks/operations'
+          req['X-Request-Id'] = ::Logging.mdc['request']
+          response = send_request req
+          Proxy::LogBuffer::Decorator.instance.debug "Proxy request status #{response.code} - #{response}"
+          response
+        end
+
+        def self.operations
+          self.new.operations
+        end
+
         def self.relay(request, from, to)
           self.new.relay request, from, to
         end
