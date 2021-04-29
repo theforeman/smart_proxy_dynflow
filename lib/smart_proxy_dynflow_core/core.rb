@@ -53,11 +53,7 @@ module SmartProxyDynflowCore
     end
 
     def logger_adapter
-      if Settings.instance.standalone
-        Log::ProxyAdapter.new(Log.instance, Log.instance.level)
-      else
-        Log::ProxyAdapter.new(Proxy::LogBuffer::Decorator.instance, Log.instance.level)
-      end
+      Log::ProxyAdapter.new(Proxy::LogBuffer::Decorator.instance, Log.instance.level)
     end
 
     def execution_plan_cleaner

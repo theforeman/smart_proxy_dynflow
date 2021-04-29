@@ -47,46 +47,7 @@ module SmartProxyDynflowCore
       end
 
       def instance
-        return ::Proxy::LogBuffer::Decorator.instance unless Settings.instance.standalone
-        return @logger if @logger
-        layout = Logging::Layouts.pattern(pattern: Settings.instance.file_logging_pattern + "\n")
-        notime_layout = Logging::Layouts.pattern(pattern: Settings.instance.system_logging_pattern + "\n")
-        log_file = Settings.instance.log_file || ''
-        @logger = Logging.logger[LOGGER_NAME]
-        @reopen = ReopenAppender.new("Reopen dummy appender", @logger)
-        @logger.add_appenders(@reopen)
-        if !Settings.instance.loaded || log_file.casecmp('STDOUT').zero?
-          @logger.add_appenders(Logging.appenders.stdout(LOGGER_NAME, layout: layout))
-        elsif log_file.casecmp('SYSLOG').zero?
-          unless @syslog_available
-            puts "Syslog is not supported on this platform, use STDOUT or a file"
-            exit(1)
-          end
-          @logger.add_appenders(Logging.appenders.syslog(LOGGER_NAME, layout: notime_layout, facility: ::Syslog::Constants::LOG_LOCAL5))
-        elsif log_file.casecmp('JOURNAL').zero? || log_file.casecmp('JOURNALD').zero?
-          begin
-            @logger.add_appenders(Logging.appenders.journald(LOGGER_NAME, LOGGER_NAME: :proxy_logger, layout: notime_layout, facility: ::Syslog::Constants::LOG_LOCAL5))
-          rescue NoMethodError
-            @logger.add_appenders(Logging.appenders.stdout(LOGGER_NAME, layout: layout))
-            @logger.warn "Journald is not available on this platform. Falling back to STDOUT."
-          end
-        else
-          begin
-            keep = Settings.instance.file_rolling_keep
-            size = BASE_LOG_SIZE * Settings.instance.file_rolling_size
-            age = Settings.instance.file_rolling_age
-            if size.positive?
-              @logger.add_appenders(Logging.appenders.rolling_file(LOGGER_NAME, layout: layout, filename: log_file, keep: keep, size: size, age: age, roll_by: 'number'))
-            else
-              @logger.add_appenders(Logging.appenders.file(LOGGER_NAME, layout: layout, filename: log_file))
-            end
-          rescue ArgumentError => ae
-            @logger.add_appenders(Logging.appenders.stdout(LOGGER_NAME, layout: layout))
-            @logger.warn "Log file #{log_file} cannot be opened. Falling back to STDOUT: #{ae}"
-          end
-        end
-        @logger.level = ::Logging.level_num(Settings.instance.log_level)
-        @logger
+        ::Proxy::LogBuffer::Decorator.instance
       end
 
       def with_fields(fields = {})

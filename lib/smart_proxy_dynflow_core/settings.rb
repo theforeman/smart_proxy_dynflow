@@ -17,7 +17,6 @@ module SmartProxyDynflowCore
       :foreman_ssl_ca => nil,
       :foreman_ssl_key => nil,
       :foreman_ssl_cert => nil,
-      :standalone => false,
       :log_file => '/var/log/foreman-proxy/smart_proxy_dynflow_core.log',
       :log_level => :ERROR,
       :plugins => {},

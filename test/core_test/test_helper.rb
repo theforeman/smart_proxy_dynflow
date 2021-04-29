@@ -11,6 +11,5 @@ require 'smart_proxy_dynflow_core'
 require 'smart_proxy_dynflow_core/testing'
 
 SmartProxyDynflowCore::Settings.instance.log_file = nil
-SmartProxyDynflowCore::Settings.instance.standalone = true
 WORLD = SmartProxyDynflowCore::Dynflow::Testing.create_world
 SmartProxyDynflowCore::Core.instance.world = WORLD

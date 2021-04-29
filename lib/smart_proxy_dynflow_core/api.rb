@@ -17,14 +17,6 @@ module SmartProxyDynflowCore
 
     include ::Sinatra::Authorization::Helpers if defined?(::Sinatra::Authorization::Helpers)
 
-    configure do
-      if Settings.instance.standalone
-        ::Sinatra::Base.set :logging, false
-        ::Sinatra::Base.use ::SmartProxyDynflowCore::RequestIdMiddleware
-        ::Sinatra::Base.use ::SmartProxyDynflowCore::LoggerMiddleware
-      end
-    end
-
     before do
       if match = request.path_info.match(TASK_UPDATE_REGEXP_PATH)
         task_id = match[1]
