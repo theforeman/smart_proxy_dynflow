@@ -4,7 +4,7 @@ module SmartProxyDynflowCore
 
     def initialize
       @world = create_world
-      cert_file = Settings.instance.foreman_ssl_cert || Settings.instance.ssl_certificate
+      cert_file = Proxy::SETTINGS.foreman_ssl_cert || Proxy::SETTINGS.ssl_certificate
       if cert_file
         client_cert = File.read(cert_file)
         # we trust only requests using the same certificate as we are

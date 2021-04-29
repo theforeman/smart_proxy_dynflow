@@ -11,7 +11,7 @@ module SmartProxyDynflowCore
         def ssl_options
           return @ssl_options if defined? @ssl_options
           @ssl_options = {}
-          settings = Settings.instance
+          settings = Proxy::SETTINGS
           return @ssl_options unless URI.parse(settings.foreman_url).scheme == 'https'
 
           @ssl_options[:verify_ssl] = OpenSSL::SSL::VERIFY_PEER
@@ -50,7 +50,7 @@ module SmartProxyDynflowCore
       private
 
       def callback_resource
-        @resource ||= RestClient::Resource.new(Settings.instance.foreman_url + '/foreman_tasks/api/tasks/callback',
+        @resource ||= RestClient::Resource.new(Proxy::SETTINGS.foreman_url + '/foreman_tasks/api/tasks/callback',
                                                self.class.ssl_options)
       end
     end
