@@ -1,6 +1,6 @@
 require 'rest-client'
 
-module SmartProxyDynflowCore
+class Proxy::Dynflow
   module Callback
     class Request
       class << self

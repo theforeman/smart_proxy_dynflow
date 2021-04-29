@@ -1,6 +1,6 @@
 # require 'ostruct'
 
-module SmartProxyDynflowCore
+class Proxy::Dynflow
   class Settings
     def self.instance
       Proxy::Dynflow::Plugin.settings

@@ -1,11 +1,11 @@
-require 'smart_proxy_dynflow_core/api'
+require 'smart_proxy_dynflow/api'
 
 map "/dynflow" do
   map '/console' do
-    run SmartProxyDynflowCore::Core.web_console
+    run Proxy::Dynflow::Core.web_console
   end
 
   map '/' do
-    run SmartProxyDynflowCore::Api
+    run Proxy::Dynflow::Api
   end
 end
