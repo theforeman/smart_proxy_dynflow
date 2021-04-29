@@ -1,12 +1,5 @@
 require 'rest-client'
 
-# rubocop:disable Lint/HandleExceptions
-begin
-  require 'smart_proxy_dynflow/callback'
-rescue LoadError
-end
-# rubocop:enable Lint/HandleExceptions
-
 module SmartProxyDynflowCore
   module Callback
     class Request
