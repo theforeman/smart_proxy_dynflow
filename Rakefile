@@ -20,7 +20,6 @@ desc 'Test Dynflow plugin.'
 task :test do
   Rake::Task['rubocop'].invoke if defined? RuboCop
   Rake::Task['test:core'].invoke
-  Rake::Task['test:api'].invoke
 end
 
 if defined? RuboCop

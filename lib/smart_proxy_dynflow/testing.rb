@@ -22,5 +22,3 @@ class Proxy::Dynflow
     end
   end
 end
-
-Concurrent.disable_at_exit_handlers!
