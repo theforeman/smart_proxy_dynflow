@@ -20,20 +20,11 @@ class Proxy::Dynflow
     end
 
     it 'requires client SSL certificate when using https' do
-      Log.instance.expects(:error).twice
+      Log.instance.expects(:error)
       # HTTPS without client cert
       get '/tasks/count', {}, { 'HTTPS' => 'yes' }
       assert last_response.status == 403
 
-      serial = 1
-      cert = 'valid cert'
-      OpenSSL::X509::Certificate.expects(:new).with(cert)
-                                .returns(OpenStruct.new(:serial => serial)).twice
-      # HTTPS with invalid cert
-      get '/tasks/count', {}, { 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'valid cert' }
-      assert last_response.status == 403
-
-      Proxy::Dynflow::Core.instance.expects(:accepted_cert_serial).returns(serial)
       # HTTPS with valid cert
       get '/tasks/count', {}, { 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'valid cert' }
       assert last_response.status == 200

@@ -27,12 +27,6 @@ module Proxy
           if request.env['SSL_CLIENT_CERT'].to_s.empty?
             Log.instance.error "No client SSL certificate supplied"
             halt 403, MultiJson.dump(:error => "No client SSL certificate supplied")
-          else
-            client_cert = OpenSSL::X509::Certificate.new(request.env['SSL_CLIENT_CERT'])
-            unless SmartProxyDynflowCore::Core.instance.accepted_cert_serial == client_cert.serial
-              Log.instance.error "SSL certificate with unexpected serial supplied"
-              halt 403, MultiJson.dump(:error => "SSL certificate with unexpected serial supplied")
-            end
           end
         else
           Log.instance.debug 'require_ssl_client_verification: skipping, non-HTTPS request'
