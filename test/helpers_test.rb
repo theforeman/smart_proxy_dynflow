@@ -2,12 +2,12 @@ require 'ostruct'
 require 'test_helper'
 require 'foreman_tasks_core/otp_manager'
 
-module SmartProxyDynflowCore
+class Proxy::Dynflow
   class HelpersTest < Minitest::Spec
     include Rack::Test::Methods
 
     def app
-      @app ||= SmartProxyDynflowCore::Api.new
+      @app ||= Proxy::Dynflow::Api.new
     end
 
     before do
@@ -33,7 +33,7 @@ module SmartProxyDynflowCore
       get '/tasks/count', {}, { 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'valid cert' }
       assert last_response.status == 403
 
-      SmartProxyDynflowCore::Core.instance.expects(:accepted_cert_serial).returns(serial)
+      Proxy::Dynflow::Core.instance.expects(:accepted_cert_serial).returns(serial)
       # HTTPS with valid cert
       get '/tasks/count', {}, { 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'valid cert' }
       assert last_response.status == 200
