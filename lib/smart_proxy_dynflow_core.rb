@@ -1,6 +1,4 @@
 require 'dynflow'
-require 'smart_proxy_dynflow_core/request_id_middleware'
-require 'smart_proxy_dynflow_core/logger_middleware'
 require 'smart_proxy_dynflow_core/middleware/keep_current_request_id'
 require 'smart_proxy_dynflow_core/task_launcher_registry'
 require 'foreman_tasks_core'
