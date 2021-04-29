@@ -13,5 +13,9 @@ class Proxy::Dynflow
     default_settings :console_auth => true,
                      :execution_plan_cleaner_age => 60 * 60 * 24
     plugin :dynflow, Proxy::Dynflow::VERSION
+
+    after_activation do
+      Proxy::Dynflow::Core.ensure_initialized
+    end
   end
 end
