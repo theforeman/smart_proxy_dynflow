@@ -1,10 +1,21 @@
 require 'sinatra/base'
 require 'multi_json'
 
+# rubocop:disable Lint/HandleExceptions
+begin
+  require 'proxy/log'
+  require 'proxy/helpers'
+  require 'sinatra/authorization'
+rescue LoadError
+end
+# rubocop:enable Lint/HandleExceptions
+
 module SmartProxyDynflowCore
   class Api < ::Sinatra::Base
     TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}
     helpers Helpers
+
+    include ::Sinatra::Authorization::Helpers if defined?(::Sinatra::Authorization::Helpers)
 
     configure do
       if Settings.instance.standalone
@@ -19,8 +30,10 @@ module SmartProxyDynflowCore
         task_id = match[1]
         action = match[2]
         authorize_with_token(task_id: task_id, clear: action == 'done')
-      else
+      elsif Settings.instance.standalone
         authorize_with_ssl_client
+      else
+        do_authorize_any
       end
       content_type :json
     end
