@@ -9,4 +9,5 @@ require 'smart_proxy_dynflow_core/task_launcher_registry'
 
 module SmartProxyDynflowCore
   Callback = Proxy::Dynflow::Callback
+  Log = Proxy::Dynflow::Log
 end
