@@ -9,6 +9,8 @@ module Proxy
       helpers ::Proxy::Log
       helpers ::Proxy::Dynflow::Helpers
 
+      include ::Sinatra::Authorization::Helpers
+
       TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}
 
       before do
@@ -17,7 +19,7 @@ module Proxy
           action = match[2]
           authorize_with_token(task_id: task_id, clear: action == 'done')
         else
-          authorize_with_ssl_client
+          do_authorize_any
         end
         content_type :json
       end
