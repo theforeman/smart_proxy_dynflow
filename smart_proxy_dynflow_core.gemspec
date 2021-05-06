@@ -14,9 +14,8 @@ Gem::Specification.new do |gem|
   EOS
 
   gem.executables   = ['smart_proxy_dynflow_core']
-  gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'config/settings.yml.example',
-                          'lib/smart_proxy_dynflow_core/**/*', 'LICENSE', 'Gemfile',
-                          'bin/smart_proxy_dynflow_core', 'deploy/*', 'smart_proxy_dynflow_core.gemspec']
+  gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'lib/smart_proxy_dynflow_core/**/*',
+                          'LICENSE', 'Gemfile', 'smart_proxy_dynflow_core.gemspec']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.license = 'GPL-3.0'
