@@ -91,9 +91,10 @@ class Proxy::Dynflow
           # TODO: extend smart proxy to enable hooks that happen after
           # the forking
           helpers Helpers
+          include ::Sinatra::Authorization::Helpers
 
           before do
-            authorize_with_ssl_client if Settings.instance.console_auth
+            do_authorize_with_ssl_client if Settings.instance.console_auth
           end
 
           Core.ensure_initialized
