@@ -1,10 +1,10 @@
-module SmartProxyDynflowCore
+class Proxy::Dynflow
   class Core
     attr_accessor :world, :accepted_cert_serial
 
     def initialize
       @world = create_world
-      cert_file = Settings.instance.foreman_ssl_cert || Settings.instance.ssl_certificate
+      cert_file = Proxy::SETTINGS.foreman_ssl_cert || Proxy::SETTINGS.ssl_certificate
       if cert_file
         client_cert = File.read(cert_file)
         # we trust only requests using the same certificate as we are
@@ -53,11 +53,7 @@ module SmartProxyDynflowCore
     end
 
     def logger_adapter
-      if Settings.instance.standalone
-        Log::ProxyAdapter.new(Log.instance, Log.instance.level)
-      else
-        Log::ProxyAdapter.new(Proxy::LogBuffer::Decorator.instance, Log.instance.level)
-      end
+      Log::ProxyAdapter.new(Proxy::LogBuffer::Decorator.instance, Log.instance.level)
     end
 
     def execution_plan_cleaner
@@ -95,9 +91,10 @@ module SmartProxyDynflowCore
           # TODO: extend smart proxy to enable hooks that happen after
           # the forking
           helpers Helpers
+          include ::Sinatra::Authorization::Helpers
 
           before do
-            authorize_with_ssl_client if Settings.instance.console_auth
+            do_authorize_with_ssl_client if Settings.instance.console_auth
           end
 
           Core.ensure_initialized

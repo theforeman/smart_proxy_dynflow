@@ -10,22 +10,12 @@ class Proxy::Dynflow
 
     settings_file "dynflow.yml"
     requires :foreman_proxy, ">= 1.16.0"
-    default_settings :core_url => 'http://localhost:8008'
+    default_settings :console_auth => true,
+                     :execution_plan_cleaner_age => 60 * 60 * 24
     plugin :dynflow, Proxy::Dynflow::VERSION
 
     after_activation do
-      # Ensure the core gem is loaded, if configure NOT to use the external core
-      if Proxy::Dynflow::Plugin.settings.external_core == false && !internal_core_available?
-        raise "'smart_proxy_dynflow_core' gem is required, but not available"
-      end
-    end
-
-    def self.internal_core_available?
-      @core_available ||= begin
-                            require 'smart_proxy_dynflow_core'
-                            true
-                          rescue LoadError # rubocop:disable Lint/HandleExceptions
-                          end
+      Proxy::Dynflow::Core.ensure_initialized
     end
   end
 end

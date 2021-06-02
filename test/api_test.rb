@@ -1,6 +1,6 @@
 require 'test_helper'
 require 'json'
-require 'smart_proxy_dynflow_core/api.rb'
+require 'smart_proxy_dynflow/api.rb'
 require 'foreman_tasks_core/runner/update'
 
 module SmartProxyDynflowCore
@@ -8,7 +8,7 @@ module SmartProxyDynflowCore
     include Rack::Test::Methods
 
     def app
-      SmartProxyDynflowCore::Api.new
+      Proxy::Dynflow::Api.new
     end
 
     class DummyAction < ::Dynflow::Action
@@ -52,9 +52,9 @@ module SmartProxyDynflowCore
         response = JSON.parse(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
-        execution_plan.state.must_equal :stopped
-        execution_plan.result.must_equal :success
-        execution_plan.entry_action.input[:callback_host].must_equal forwarded
+        _(execution_plan.state).must_equal :stopped
+        _(execution_plan.result).must_equal :success
+        _(execution_plan.entry_action.input[:callback_host]).must_equal forwarded
       end
 
       it 'fallbacks to HTTP_HOST if X-Forwarded-For is not set as callback host' do
@@ -65,9 +65,9 @@ module SmartProxyDynflowCore
         response = JSON.parse(last_response.body)
         wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
         execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
-        execution_plan.state.must_equal :stopped
-        execution_plan.result.must_equal :success
-        execution_plan.entry_action.input[:callback_host].must_equal hostname
+        _(execution_plan.state).must_equal :stopped
+        _(execution_plan.result).must_equal :success
+        _(execution_plan.entry_action.input[:callback_host]).must_equal hostname
       end
     end
 
@@ -79,8 +79,8 @@ module SmartProxyDynflowCore
         triggered.finished.wait(5)
 
         execution_plan = WORLD.persistence.load_execution_plan(triggered.id)
-        execution_plan.state.must_equal :stopped
-        execution_plan.result.must_equal :success
+        _(execution_plan.state).must_equal :stopped
+        _(execution_plan.result).must_equal :success
       end
     end
 
@@ -109,7 +109,7 @@ module SmartProxyDynflowCore
 
         get "/tasks/count", :state => 'stopped'
         response = JSON.parse(last_response.body)
-        response['count'].must_equal old_count + 1
+        _(response['count']).must_equal old_count + 1
       end
     end
 
@@ -126,7 +126,7 @@ module SmartProxyDynflowCore
 
       it 'fail 404 when operation is missing' do
         post '/tasks/launch', { :operation => 'something' }.to_json, request_headers
-        last_response.status.must_equal 404
+        _(last_response.status).must_equal 404
       end
     end
 
@@ -134,12 +134,12 @@ module SmartProxyDynflowCore
       it 'gets the list of operations' do
         get '/tasks/operations', request_headers
         response = JSON.parse(last_response.body)
-        response.must_equal []
+        _(response).must_equal []
 
         TaskLauncherRegistry.stubs(:registry).returns({ 'foo' => 'foo-v', 'bar' => 'bar-v', 'baz' => 'baz-v' })
         get '/tasks/operations', request_headers
         response = JSON.parse(last_response.body)
-        response.must_equal %w[foo bar baz]
+        _(response).must_equal %w[foo bar baz]
       end
     end
   end
