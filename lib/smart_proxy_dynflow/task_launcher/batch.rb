@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module TaskLauncher
     class Batch < Abstract
       def launch!(input)

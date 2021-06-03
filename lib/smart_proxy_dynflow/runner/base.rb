@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     # Runner is an object that is able to initiate some action and
     # provide update data on refresh call.
@@ -78,7 +78,7 @@ module ForemanTasksCore
       def generate_updates
         return no_update if @continuous_output.empty? && @exit_status.nil?
         new_data = @continuous_output
-        @continuous_output = ForemanTasksCore::ContinuousOutput.new
+        @continuous_output = Proxy::Dynflow::ContinuousOutput.new
         new_update(new_data, @exit_status)
       end
 
@@ -91,7 +91,7 @@ module ForemanTasksCore
       end
 
       def initialize_continuous_outputs
-        @continuous_output = ::ForemanTasksCore::ContinuousOutput.new
+        @continuous_output = ::Proxy::Dynflow::ContinuousOutput.new
       end
     end
   end

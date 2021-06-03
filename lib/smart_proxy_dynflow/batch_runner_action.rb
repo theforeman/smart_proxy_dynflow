@@ -1,7 +1,7 @@
-require 'foreman_tasks_core/runner/action'
+require 'smart_proxy_dynflow/runner/action'
 
-module ForemanTasksCore
-  class BatchRunnerAction < ::ForemanTasksCore::Runner::Action
+class Proxy::Dynflow
+  class BatchRunnerAction < ::Proxy::Dynflow::Runner::Action
     def plan(launcher, input)
       plan_self :targets => launcher.runner_input(input), :operation => launcher.operation
     end

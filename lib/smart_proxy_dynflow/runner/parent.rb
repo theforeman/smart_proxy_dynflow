@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     class Parent < Base
       # targets = { identifier => { :execution_plan_id => "...", :run_step_id => id,
@@ -11,11 +11,11 @@ module ForemanTasksCore
 
       def generate_updates
         base = {}
-        base[@suspended_action] = Runner::Update.new(ForemanTasksCore::ContinuousOutput.new, @exit_status) if @exit_status
+        base[@suspended_action] = Runner::Update.new(Proxy::Dynflow::ContinuousOutput.new, @exit_status) if @exit_status
         # Operate on all hosts if the main process ended or only on hosts for which we have updates
         @outputs.reject { |_, output| @exit_status.nil? && output.empty? }
                 .reduce(base) do |acc, (identifier, output)|
-                  @outputs[identifier] = ForemanTasksCore::ContinuousOutput.new # Create a new ContinuousOutput for next round of updates
+                  @outputs[identifier] = Proxy::Dynflow::ContinuousOutput.new # Create a new ContinuousOutput for next round of updates
                   exit_status = @exit_statuses[identifier] || @exit_status if @exit_status
                   acc.merge(host_action(identifier) => Runner::Update.new(output, exit_status))
                 end
@@ -23,7 +23,7 @@ module ForemanTasksCore
 
       def initialize_continuous_outputs
         @outputs = @targets.keys.reduce({}) do |acc, target|
-          acc.merge(target => ForemanTasksCore::ContinuousOutput.new)
+          acc.merge(target => Proxy::Dynflow::ContinuousOutput.new)
         end
       end
 

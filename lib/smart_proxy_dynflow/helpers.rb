@@ -7,11 +7,11 @@ module Proxy
 
       def authorize_with_token(task_id:, clear: true)
         if request.env.key? 'HTTP_AUTHORIZATION'
-          if defined?(::ForemanTasksCore)
+          if defined?(::Proxy::Dynflow)
             auth = request.env['HTTP_AUTHORIZATION']
             basic_prefix = /\ABasic /
             if !auth.to_s.empty? && auth =~ basic_prefix &&
-               ForemanTasksCore::OtpManager.authenticate(auth.gsub(basic_prefix, ''),
+               Proxy::Dynflow::OtpManager.authenticate(auth.gsub(basic_prefix, ''),
                                                          expected_user: task_id, clear: clear)
               Log.instance.debug('authorized with token')
               return true
@@ -51,7 +51,7 @@ module Proxy
       def dispatch_external_event(task_id, params)
         world.event(task_id,
                     params['step_id'].to_i,
-                    ::ForemanTasksCore::Runner::ExternalEvent.new(params))
+                    ::Proxy::Dynflow::Runner::ExternalEvent.new(params))
       end
     end
   end

@@ -1,6 +1,6 @@
 require 'dynflow'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   class Ticker < ::Dynflow::Actor
     attr_reader :clock
 

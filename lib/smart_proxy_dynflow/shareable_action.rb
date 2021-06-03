@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   class ShareableAction < ::Dynflow::Action
     def plan(input)
       input = input.dup

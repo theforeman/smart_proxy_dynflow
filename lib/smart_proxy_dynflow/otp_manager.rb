@@ -1,7 +1,7 @@
 require 'base64'
 require 'securerandom'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   class OtpManager
     class << self
       def generate_otp(username)

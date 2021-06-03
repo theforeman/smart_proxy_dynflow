@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   class BatchAction < ::Dynflow::Action
     include Dynflow::Action::WithSubPlans
     include Dynflow::Action::WithPollingSubPlans

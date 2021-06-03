@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module TaskLauncher
     class Single < Abstract
       def self.input_format

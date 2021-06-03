@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     module Command
       def initialize_command(*command)

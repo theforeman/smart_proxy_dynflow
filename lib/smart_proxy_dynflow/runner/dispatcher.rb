@@ -1,6 +1,6 @@
-require 'foreman_tasks_core/ticker'
+require 'smart_proxy_dynflow/ticker'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     class Dispatcher
       def self.instance
@@ -109,7 +109,7 @@ module ForemanTasksCore
         @mutex  = Mutex.new
         @clock  = clock
         @logger = logger
-        @ticker = ::ForemanTasksCore::Ticker.spawn('dispatcher-ticker', @clock, @logger, refresh_interval)
+        @ticker = ::Proxy::Dynflow::Ticker.spawn('dispatcher-ticker', @clock, @logger, refresh_interval)
         @runner_actors = {}
         @runner_suspended_actions = {}
       end

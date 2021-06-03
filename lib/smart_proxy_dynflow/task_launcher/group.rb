@@ -1,6 +1,6 @@
-require 'foreman_tasks_core/runner'
+require 'smart_proxy_dynflow/runner'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module TaskLauncher
     class AbstractGroup < Batch
       def self.runner_class

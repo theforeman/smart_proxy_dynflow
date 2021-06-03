@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   class ContinuousOutput
     attr_accessor :raw_outputs
 

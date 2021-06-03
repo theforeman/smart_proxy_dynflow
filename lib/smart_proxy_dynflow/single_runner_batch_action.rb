@@ -1,5 +1,5 @@
-module ForemanTasksCore
-  class SingleRunnerBatchAction < ForemanTasksCore::BatchAction
+class Proxy::Dynflow
+  class SingleRunnerBatchAction < Proxy::Dynflow::BatchAction
     def plan(launcher, input_hash)
       launcher.launch_children(self, input_hash)
       sequence do

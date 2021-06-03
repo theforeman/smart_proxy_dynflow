@@ -1,6 +1,6 @@
-require 'foreman_tasks_core/continuous_output'
+require 'smart_proxy_dynflow/continuous_output'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     # Runner::Update represents chunk of data produced by runner that
     # can be consumed by other components, such as RunnerAction
@@ -12,7 +12,7 @@ module ForemanTasksCore
       end
 
       def self.encode_exception(context, exception, fatal = true)
-        continuous_output = ::ForemanTasksCore::ContinuousOutput.new
+        continuous_output = ::Proxy::Dynflow::ContinuousOutput.new
         continuous_output.add_exception(context, exception)
         new(continuous_output, fatal ? 'EXCEPTION' : nil)
       end

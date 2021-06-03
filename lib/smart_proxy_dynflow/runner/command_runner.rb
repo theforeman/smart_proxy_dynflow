@@ -1,8 +1,8 @@
 require 'io/wait'
 require 'pty'
-require 'foreman_tasks_core/runner/command'
+require 'smart_proxy_dynflow/runner/command'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     class CommandRunner < Base
       include Command

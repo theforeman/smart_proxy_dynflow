@@ -1,7 +1,7 @@
-require 'foreman_tasks_core/shareable_action'
-module ForemanTasksCore
+require 'smart_proxy_dynflow/shareable_action'
+class Proxy::Dynflow
   module Runner
-    class Action < ::ForemanTasksCore::ShareableAction
+    class Action < ::Proxy::Dynflow::ShareableAction
       include ::Dynflow::Action::Cancellable
 
       def run(event = nil)

@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module TaskLauncher
     class Abstract
       attr_reader :callback, :options, :results, :world

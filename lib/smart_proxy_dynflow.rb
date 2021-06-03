@@ -3,8 +3,6 @@ require 'dynflow'
 require 'smart_proxy_dynflow/task_launcher_registry'
 require 'smart_proxy_dynflow/middleware/keep_current_request_id'
 
-require 'foreman_tasks_core'
-
 require 'smart_proxy_dynflow/log'
 require 'smart_proxy_dynflow/settings'
 require 'smart_proxy_dynflow/core'

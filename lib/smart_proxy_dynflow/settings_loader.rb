@@ -1,4 +1,4 @@
-module ForemanTasksCore
+class Proxy::Dynflow
   module SettingsLoader
     def self.settings_registry
       @settings_registry ||= {}
