@@ -49,7 +49,7 @@ class Proxy::Dynflow
           # This is a workaround when the runner does not accept the suspended action
           main_key = updates.keys.any?(&:nil?) ? nil : @suspended_action
           main_process = updates[main_key]
-          finish if main_process && main_process.exit_status
+          finish if main_process&.exit_status
         end
 
         def timeout_runner
@@ -136,7 +136,7 @@ class Proxy::Dynflow
       def kill(runner_id)
         synchronize do
           runner_actor = @runner_actors[runner_id]
-          runner_actor.tell(:kill) if runner_actor
+          runner_actor&.tell(:kill)
         rescue => exception
           _handle_command_exception(runner_id, exception, false)
         end
@@ -153,7 +153,7 @@ class Proxy::Dynflow
       def external_event(runner_id, external_event)
         synchronize do
           runner_actor = @runner_actors[runner_id]
-          runner_actor.tell([:external_event, external_event]) if runner_actor
+          runner_actor&.tell([:external_event, external_event])
         end
       end
 

@@ -34,7 +34,7 @@ class Proxy::Dynflow
       end
 
       def broadcast_data(data, type)
-        @outputs.each { |_k, output| output.add_output(data, type) }
+        @outputs.each_value { |output| output.add_output(data, type) }
       end
 
       def publish_data(_data, _type)
@@ -46,7 +46,7 @@ class Proxy::Dynflow
       end
 
       def dispatch_exception(context, exception)
-        @outputs.values.each { |output| output.add_exception(context, exception) }
+        @outputs.each_value { |output| output.add_exception(context, exception) }
       end
 
       def publish_exit_status_for(identifier, exit_status)

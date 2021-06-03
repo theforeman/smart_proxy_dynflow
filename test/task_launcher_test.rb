@@ -43,7 +43,7 @@ module ForemanTasksCore
           it 'provides results' do
             launcher.launch!('foo' => launcher_input, 'bar' => launcher_input)
             _(launcher.results.keys).must_equal %w[foo bar]
-            launcher.results.values.each do |result|
+            launcher.results.each_value do |result|
               plan = ForemanTasks.dynflow.world.persistence.load_execution_plan(result[:task_id])
               _(result[:result]).must_equal 'success'
               _(plan.result).must_equal :success

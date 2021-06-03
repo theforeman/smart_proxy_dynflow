@@ -12,7 +12,7 @@ module Proxy
             basic_prefix = /\ABasic /
             if !auth.to_s.empty? && auth =~ basic_prefix &&
                Proxy::Dynflow::OtpManager.authenticate(auth.gsub(basic_prefix, ''),
-                                                         expected_user: task_id, clear: clear)
+                                                       expected_user: task_id, clear: clear)
               Log.instance.debug('authorized with token')
               return true
             end

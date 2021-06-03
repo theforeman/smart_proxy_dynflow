@@ -54,7 +54,7 @@ module ForemanTasksCore
           it 'initializes outputs for targets and parent' do
             outputs = runner.initialize_continuous_outputs
             _(outputs.keys.count).must_equal 2
-            outputs.values.each { |output| _(output).must_be_instance_of ContinuousOutput }
+            outputs.each_value { |output| _(output).must_be_instance_of ContinuousOutput }
           end
         end
 
@@ -70,7 +70,7 @@ module ForemanTasksCore
             runner.broadcast_data('something', 'stdout')
             updates = runner.generate_updates
             _(updates.keys.count).must_equal 2
-            updates.keys.each do |key|
+            updates.each_key do |key|
               _(key).must_be_instance_of ::Dynflow::Action::Suspended
             end
           end

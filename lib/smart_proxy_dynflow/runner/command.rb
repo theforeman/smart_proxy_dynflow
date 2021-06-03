@@ -11,7 +11,7 @@ class Proxy::Dynflow
         return if @command_out.nil?
         ready_outputs, * = IO.select([@command_out], nil, nil, 0.1)
         if ready_outputs
-          if @command_out.nread > 0
+          if @command_out.nread.positive?
             lines = @command_out.read_nonblock(@command_out.nread)
           else
             close_io
