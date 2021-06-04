@@ -1,18 +1,19 @@
 require 'test_helper'
 require 'smart_proxy_dynflow/batch_action'
+require 'smart_proxy_dynflow/task_launcher'
 
 class Proxy::Dynflow
   module TaskLauncher
     class TaskLauncherTest < MiniTest::Spec
       class DummyDynflowAction < Dynflow::Action; end
 
-      describe ForemanTasksCore::TaskLauncher do
+      describe TaskLauncher do
         let(:launcher) { launcher_class.new Proxy::Dynflow::Core.world, {} }
         let(:launcher_input) { { 'action_class' => DummyDynflowAction.to_s, 'action_input' => input } }
         let(:input) { { :do => :something } }
         let(:expected_result) { input.merge(:callback_host => {}) }
 
-        describe ForemanTasksCore::TaskLauncher::Single do
+        describe TaskLauncher::Single do
           let(:launcher_class) { Single }
 
           it 'triggers an action' do
@@ -29,7 +30,7 @@ class Proxy::Dynflow
           end
         end
 
-        describe ForemanTasksCore::TaskLauncher::Batch do
+        describe TaskLauncher::Batch do
           let(:launcher_class) { Batch }
 
           it 'triggers the actions' do

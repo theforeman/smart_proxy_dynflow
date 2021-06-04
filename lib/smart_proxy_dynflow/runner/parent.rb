@@ -29,7 +29,7 @@ class Proxy::Dynflow
 
       def host_action(identifier)
         options = @targets[identifier].slice('execution_plan_id', 'run_step_id')
-                                      .merge(:world => ForemanTasksCore.dynflow_world)
+                                      .merge(:world => Proxy::Dynflow::Core.world)
         Dynflow::Action::Suspended.new OpenStruct.new(options)
       end
 

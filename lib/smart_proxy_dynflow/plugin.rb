@@ -17,7 +17,6 @@ class Proxy::Dynflow
     after_activation do
       require 'smart_proxy_dynflow/settings_loader'
       require 'smart_proxy_dynflow/otp_manager'
-      require 'smart_proxy_dynflow/ticker'
       require 'smart_proxy_dynflow/batch_action'
       require 'smart_proxy_dynflow/batch_callback_action'
       require 'smart_proxy_dynflow/batch_runner_action'

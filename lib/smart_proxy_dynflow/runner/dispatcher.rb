@@ -5,8 +5,8 @@ class Proxy::Dynflow
     class Dispatcher
       def self.instance
         return @instance if @instance
-        @instance = new(ForemanTasksCore.dynflow_world.clock,
-                        ForemanTasksCore.dynflow_world.logger)
+        @instance = new(Proxy::Dynflow::Core.world.clock,
+                        Proxy::Dynflow::Core.world.logger)
       end
 
       class RunnerActor < ::Dynflow::Actor
