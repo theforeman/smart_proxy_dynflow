@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class Core
     attr_accessor :world, :accepted_cert_serial
 

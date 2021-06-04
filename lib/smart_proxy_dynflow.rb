@@ -15,6 +15,6 @@ require 'smart_proxy_dynflow/helpers'
 require 'smart_proxy_dynflow/api'
 
 module Proxy
-  class Dynflow
+  module Dynflow
   end
 end

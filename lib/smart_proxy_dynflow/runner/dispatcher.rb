@@ -1,6 +1,6 @@
 require 'smart_proxy_dynflow/ticker'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     class Dispatcher
       def self.instance

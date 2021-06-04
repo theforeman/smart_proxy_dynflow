@@ -1,5 +1,5 @@
 module Proxy
-  class Dynflow
+  module Dynflow
     module Helpers
       def world
         Proxy::Dynflow::Core.world

@@ -1,6 +1,6 @@
 require 'dynflow'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   class Ticker < ::Dynflow::Actor
     attr_reader :clock
 

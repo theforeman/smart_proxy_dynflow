@@ -1,5 +1,5 @@
 require 'smart_proxy_dynflow/shareable_action'
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     class Action < ::Proxy::Dynflow::ShareableAction
       include ::Dynflow::Action::Cancellable

@@ -4,7 +4,7 @@ unless defined? DYNFLOW_TESTING_LOG_LEVEL
   DYNFLOW_TESTING_LOG_LEVEL = 4
 end
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   # Helper for usage in other dependent plugins that need Dynflow
   # related things, such as testing instance of world etc.
   module Testing

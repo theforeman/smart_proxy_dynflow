@@ -1,7 +1,7 @@
 require 'base64'
 require 'securerandom'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   class OtpManager
     class << self
       def generate_otp(username)

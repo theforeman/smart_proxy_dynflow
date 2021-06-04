@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class BatchCallback < ::Dynflow::Action
     def plan(input_hash, results)
       plan_self :targets => input_hash, :results => results

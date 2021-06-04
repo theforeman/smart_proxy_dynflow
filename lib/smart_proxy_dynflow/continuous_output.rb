@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class ContinuousOutput
     attr_accessor :raw_outputs
 

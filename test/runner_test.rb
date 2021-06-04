@@ -2,7 +2,7 @@ require 'test_helper'
 require 'smart_proxy_dynflow/runner'
 require 'ostruct'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     class RunnerTest < MiniTest::Spec
       describe Base do

@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'smart_proxy_dynflow/otp_manager'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   class OtpManagerTest < MiniTest::Spec
     class TestOtpManager < OtpManager
       def self.reset!

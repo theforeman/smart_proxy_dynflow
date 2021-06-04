@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'smart_proxy_dynflow/runner'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     describe Dispatcher::RunnerActor do
       let(:dispatcher) { Dispatcher.instance }

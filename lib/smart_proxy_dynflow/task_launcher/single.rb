@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   module TaskLauncher
     class Single < Abstract
       def self.input_format

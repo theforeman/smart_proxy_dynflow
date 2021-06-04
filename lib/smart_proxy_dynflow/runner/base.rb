@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     # Runner is an object that is able to initiate some action and
     # provide update data on refresh call.

@@ -2,7 +2,7 @@ require 'test_helper'
 require 'smart_proxy_dynflow/batch_action'
 require 'smart_proxy_dynflow/task_launcher'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module TaskLauncher
     class TaskLauncherTest < MiniTest::Spec
       class DummyDynflowAction < Dynflow::Action; end

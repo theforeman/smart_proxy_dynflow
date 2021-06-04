@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     class Parent < Base
       # targets = { identifier => { :execution_plan_id => "...", :run_step_id => id,

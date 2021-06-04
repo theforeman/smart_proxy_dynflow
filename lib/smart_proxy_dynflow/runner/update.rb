@@ -1,6 +1,6 @@
 require 'smart_proxy_dynflow/continuous_output'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     # Runner::Update represents chunk of data produced by runner that
     # can be consumed by other components, such as RunnerAction

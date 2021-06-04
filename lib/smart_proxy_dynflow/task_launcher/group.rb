@@ -1,6 +1,6 @@
 require 'smart_proxy_dynflow/runner'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   module TaskLauncher
     class AbstractGroup < Batch
       def self.runner_class

@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class ShareableAction < ::Dynflow::Action
     def plan(input)
       input = input.dup

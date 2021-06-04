@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   module Runner
     module Command
       def initialize_command(*command)

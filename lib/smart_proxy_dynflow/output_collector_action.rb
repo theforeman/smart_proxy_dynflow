@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class OutputCollectorAction < ::Proxy::Dynflow::Runner::Action
     def init_run
       output[:result] = []
