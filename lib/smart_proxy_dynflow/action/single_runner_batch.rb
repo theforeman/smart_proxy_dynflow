@@ -1,5 +1,5 @@
 module Proxy::Dynflow::Action
-  class SingleRunnerBatchAction < BatchAction
+  class SingleRunnerBatch < Batch
     def plan(launcher, input_hash)
       launcher.launch_children(self, input_hash)
       sequence do

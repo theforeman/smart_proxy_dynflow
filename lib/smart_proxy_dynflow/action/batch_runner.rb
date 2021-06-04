@@ -1,7 +1,7 @@
-require 'smart_proxy_dynflow/runner/action'
+require 'smart_proxy_dynflow/action/runner'
 
 module Proxy::Dynflow::Action
-  class BatchRunnerAction < ::Proxy::Dynflow::Runner::Action
+  class BatchRunner < ::Proxy::Dynflow::Action::Runner
     def plan(launcher, input)
       plan_self :targets => launcher.runner_input(input), :operation => launcher.operation
     end

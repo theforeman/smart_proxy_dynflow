@@ -1,5 +1,5 @@
 module Proxy::Dynflow::Action
-  class ShareableAction < ::Dynflow::Action
+  class Shareable < ::Dynflow::Action
     def plan(input)
       input = input.dup
       callback = input.delete('callback')

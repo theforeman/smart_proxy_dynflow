@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'smart_proxy_dynflow/action/batch_action'
+require 'smart_proxy_dynflow/action/batch'
 require 'smart_proxy_dynflow/task_launcher'
 
 module Proxy::Dynflow

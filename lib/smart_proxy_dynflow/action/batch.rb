@@ -1,5 +1,5 @@
 module Proxy::Dynflow::Action
-  class BatchAction < ::Dynflow::Action
+  class Batch < ::Dynflow::Action
     include Dynflow::Action::WithSubPlans
     include Dynflow::Action::WithPollingSubPlans
 

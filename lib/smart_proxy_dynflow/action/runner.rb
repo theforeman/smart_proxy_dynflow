@@ -1,16 +1,16 @@
-require 'smart_proxy_dynflow/action/shareable_action'
+require 'smart_proxy_dynflow/action/shareable'
 module Proxy::Dynflow
-  module Runner
-    class Action < ::Proxy::Dynflow::Action::ShareableAction
+  module Action
+    class Runner < Shareable
       include ::Dynflow::Action::Cancellable
 
       def run(event = nil)
         case event
         when nil
           init_run
-        when Runner::Update
+        when Proxy::Dynflow::Runner::Update
           process_update(event)
-        when Runner::ExternalEvent
+        when Proxy::Dynflow::Runner::ExternalEvent
           process_external_event(event)
         when ::Dynflow::Action::Cancellable::Cancel
           kill_run
@@ -19,7 +19,7 @@ module Proxy::Dynflow
         end
       rescue => e
         action_logger.error(e)
-        process_update(Runner::Update.encode_exception('Proxy error', e))
+        process_update(Proxy::Dynflow::Runner::Update.encode_exception('Proxy error', e))
       end
 
       def finalize
@@ -42,7 +42,7 @@ module Proxy::Dynflow
       end
 
       def runner_dispatcher
-        Runner::Dispatcher.instance
+        Proxy::Dynflow::Runner::Dispatcher.instance
       end
 
       def kill_run

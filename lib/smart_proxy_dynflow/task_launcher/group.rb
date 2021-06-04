@@ -8,12 +8,12 @@ module Proxy::Dynflow
       end
 
       def launch!(input)
-        trigger(nil, SingleRunnerBatchAction, self, input)
+        trigger(nil, Action::SingleRunnerBatch, self, input)
       end
 
       def launch_children(parent, input_hash)
         super(parent, input_hash)
-        trigger(parent, BatchRunnerAction, self, input_hash)
+        trigger(parent, Action::BatchRunner, self, input_hash)
       end
 
       def operation
@@ -32,7 +32,7 @@ module Proxy::Dynflow
       private
 
       def child_launcher(parent)
-        Single.new(world, callback, :parent => parent, :action_class_override => OutputCollectorAction)
+        Single.new(world, callback, :parent => parent, :action_class_override => Action::OutputCollector)
       end
 
       def transform_input(input)
