@@ -1,8 +1,8 @@
-require 'foreman_tasks_test_helper'
-require 'foreman_tasks_core/otp_manager'
+require 'test_helper'
+require 'smart_proxy_dynflow/otp_manager'
 
-module ForemanTasksCore
-  class OtpManagerTest < ActiveSupport::TestCase
+class Proxy::Dynflow
+  class OtpManagerTest < MiniTest::Spec
     class TestOtpManager < OtpManager
       def self.reset!
         @passwords = nil
@@ -22,7 +22,7 @@ module ForemanTasksCore
     let(:base64)   { 'bXl1c2VyOjEyMzQ1Njc4OQ==' }
 
     it 'it doesn\'t raise when no passwords were generated yet' do
-      assert_not try_to_authenticate('missing', 'password')
+      refute try_to_authenticate('missing', 'password')
     end
 
     it 'generates OTPs using SecureRandom.hex and converts them to strings' do
@@ -33,18 +33,18 @@ module ForemanTasksCore
 
     it 'provides #drop_otp method that removes OTP only when correct username and password is provided' do
       otp = TestOtpManager.generate_otp(username)
-      assert_not TestOtpManager.drop_otp('wrong_username', 'wrong_password')
-      assert_not TestOtpManager.drop_otp(username, 'wrong_password')
-      assert_not TestOtpManager.drop_otp('wrong_username', otp)
+      refute TestOtpManager.drop_otp('wrong_username', 'wrong_password')
+      refute TestOtpManager.drop_otp(username, 'wrong_password')
+      refute TestOtpManager.drop_otp('wrong_username', otp)
       assert TestOtpManager.drop_otp(username, otp)
     end
 
     it 'authenticate removes OTP only when correct username and password is provided' do
       otp = TestOtpManager.generate_otp(username)
-      assert_not try_to_authenticate('wrong_username', 'wrong_password')
-      assert_not try_to_authenticate(username, 'wrong_password')
-      assert_not try_to_authenticate(username, 'wrong_password')
-      assert_not try_to_authenticate('wrong_username', otp)
+      refute try_to_authenticate('wrong_username', 'wrong_password')
+      refute try_to_authenticate(username, 'wrong_password')
+      refute try_to_authenticate(username, 'wrong_password')
+      refute try_to_authenticate('wrong_username', otp)
       assert try_to_authenticate(username, otp)
     end
 
@@ -60,7 +60,7 @@ module ForemanTasksCore
       TestOtpManager.generate_otp(username)
 
       assert TestOtpManager.authenticate(base64)
-      assert_not TestOtpManager.authenticate(base64)
+      refute TestOtpManager.authenticate(base64)
     end
 
     it 'creates token from username and password correctly' do
@@ -70,7 +70,7 @@ module ForemanTasksCore
     it 'overwrites old OTP when generating a new one for the same username' do
       old = TestOtpManager.generate_otp(username)
       new = TestOtpManager.generate_otp(username)
-      assert_not try_to_authenticate(username, old)
+      refute try_to_authenticate(username, old)
       assert try_to_authenticate(username, new)
     end
   end

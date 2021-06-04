@@ -1,13 +1,10 @@
-require 'foreman_tasks_core_test_helper'
-require 'foreman_tasks/test_helpers'
-require 'foreman_tasks_core/runner'
+require 'test_helper'
+require 'smart_proxy_dynflow/runner'
 require 'ostruct'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
-    class RunnerTest < ActiveSupport::TestCase
-      include ForemanTasks::TestHelpers::WithInThreadExecutor
-
+    class RunnerTest < MiniTest::Spec
       describe Base do
         let(:suspended_action) { Class.new }
         let(:runner) { Base.new suspended_action: suspended_action }

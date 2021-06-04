@@ -2,7 +2,7 @@ class Proxy::Dynflow
   module TaskLauncher
     class Batch < Abstract
       def launch!(input)
-        trigger(nil, BatchAction, self, input)
+        trigger(nil, Proxy::Dynflow::BatchAction, self, input)
       end
 
       def launch_children(parent, input_hash)

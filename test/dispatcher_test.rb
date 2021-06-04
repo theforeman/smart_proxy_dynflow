@@ -1,16 +1,13 @@
-require 'foreman_tasks_core_test_helper'
-require 'foreman_tasks/test_helpers'
-require 'foreman_tasks_core/runner'
+require 'test_helper'
+require 'smart_proxy_dynflow/runner'
 
-module ForemanTasksCore
+class Proxy::Dynflow
   module Runner
     describe Dispatcher::RunnerActor do
-      include ForemanTasks::TestHelpers::WithInThreadExecutor
-
       let(:dispatcher) { Dispatcher.instance }
       let(:suspended_action) { mock }
       let(:runner) { mock.tap { |r| r.stubs(:id) } }
-      let(:clock) { ForemanTasks.dynflow.world.clock }
+      let(:clock) { Proxy::Dynflow::Core.world.clock }
       let(:logger) { mock.tap { |l| l.stubs(:debug) } }
       let(:actor) do
         Dispatcher::RunnerActor.new dispatcher, suspended_action, runner, clock, logger

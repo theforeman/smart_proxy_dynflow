@@ -1,6 +1,6 @@
 require 'ostruct'
 require 'test_helper'
-require 'foreman_tasks_core/otp_manager'
+require 'smart_proxy_dynflow/otp_manager'
 
 class Proxy::Dynflow
   class HelpersTest < Minitest::Spec
@@ -35,29 +35,29 @@ class Proxy::Dynflow
       other_task_id = 'other-task-id'
 
       # Happy path for update
-      otp = ::ForemanTasksCore::OtpManager.generate_otp(username)
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      otp = ::Proxy::Dynflow::OtpManager.generate_otp(username)
+      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
       Log.instance.stubs(:debug)
       post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 200
 
       # Wrong password
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, 'wrong pass')
+      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, 'wrong pass')
       post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 403
 
       # Wrong task id
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
       post "/tasks/#{other_task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 403
 
       # Happy path for done
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
       post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 200
 
       # Call to done should remove the token, so using it the second time should fail
-      http_auth = 'Basic ' + ::ForemanTasksCore::OtpManager.tokenize(username, otp)
+      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
       post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
       assert last_response.status == 403
     end
