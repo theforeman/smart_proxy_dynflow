@@ -17,11 +17,7 @@ module Proxy::Dynflow
     after_activation do
       require 'smart_proxy_dynflow/settings_loader'
       require 'smart_proxy_dynflow/otp_manager'
-      require 'smart_proxy_dynflow/batch_action'
-      require 'smart_proxy_dynflow/batch_callback_action'
-      require 'smart_proxy_dynflow/batch_runner_action'
-      require 'smart_proxy_dynflow/output_collector_action'
-      require 'smart_proxy_dynflow/single_runner_batch_action'
+      require 'smart_proxy_dynflow/action'
       require 'smart_proxy_dynflow/task_launcher'
 
       Proxy::Dynflow::Core.ensure_initialized

@@ -1,7 +1,7 @@
-require 'smart_proxy_dynflow/shareable_action'
+require 'smart_proxy_dynflow/action/shareable_action'
 module Proxy::Dynflow
   module Runner
-    class Action < ::Proxy::Dynflow::ShareableAction
+    class Action < ::Proxy::Dynflow::Action::ShareableAction
       include ::Dynflow::Action::Cancellable
 
       def run(event = nil)
