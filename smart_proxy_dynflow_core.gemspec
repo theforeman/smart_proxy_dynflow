@@ -13,7 +13,6 @@ Gem::Specification.new do |gem|
     Use the Dynflow inside Foreman smart proxy
   EOS
 
-  gem.executables   = ['smart_proxy_dynflow_core']
   gem.files         = Dir['lib/smart_proxy_dynflow_core.rb', 'lib/smart_proxy_dynflow_core/**/*',
                           'LICENSE', 'Gemfile', 'smart_proxy_dynflow_core.gemspec']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
