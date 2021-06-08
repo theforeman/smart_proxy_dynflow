@@ -1,6 +1,6 @@
 require 'logging'
 
-class Proxy::Dynflow
+module Proxy::Dynflow
   class Log
     LOGGER_NAME = 'dynflow-core'.freeze
 

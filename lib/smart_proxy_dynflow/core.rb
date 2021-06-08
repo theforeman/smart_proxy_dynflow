@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class Core
     attr_accessor :world, :accepted_cert_serial
 
@@ -75,7 +75,7 @@ class Proxy::Dynflow
       end
 
       def silencer_matchers
-        @matchers ||= []
+        @matchers ||= [::Dynflow::DeadLetterSilencer::Matcher.new(Ticker)]
       end
 
       def register_silencer_matchers(matchers)

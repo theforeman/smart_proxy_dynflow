@@ -3,7 +3,7 @@ require 'proxy/helpers'
 require 'sinatra/authorization'
 
 module Proxy
-  class Dynflow
+  module Dynflow
     class Api < ::Sinatra::Base
       helpers ::Proxy::Helpers
       helpers ::Proxy::Log

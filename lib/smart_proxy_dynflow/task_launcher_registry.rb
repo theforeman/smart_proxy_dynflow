@@ -1,4 +1,4 @@
-class Proxy::Dynflow
+module Proxy::Dynflow
   class TaskLauncherRegistry
     class << self
       def register(name, launcher)

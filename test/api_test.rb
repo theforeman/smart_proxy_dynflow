@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'json'
 require 'smart_proxy_dynflow/api.rb'
-require 'foreman_tasks_core/runner/update'
+require 'smart_proxy_dynflow/runner/update'
 
 module SmartProxyDynflowCore
   class ApiTest < Minitest::Spec
