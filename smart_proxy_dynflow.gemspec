@@ -21,7 +21,9 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '~> 2.5'
 
-  gem.add_runtime_dependency "logging"
+  gem.add_runtime_dependency('dynflow', "~> 1.1")
+  gem.add_runtime_dependency('rest-client')
+  gem.add_runtime_dependency('sqlite3')
 
   gem.add_development_dependency "bundler", ">= 1.7"
   gem.add_development_dependency 'minitest'
