@@ -35,7 +35,15 @@ module Proxy
 
       def task_status(task_id)
         ep = world.persistence.load_execution_plan(task_id)
-        ep.to_hash.merge(:actions => ep.actions.map(&:to_hash))
+        actions = ep.actions.map do |action|
+          hash = action.to_hash
+          if action.is_a?(Proxy::Dynflow::Action::Runner)
+            output = action.stored_output_chunks.map { |c| c[:chunk] }.reduce(&:concat)
+            hash[:output][:result] = output
+          end
+          hash
+        end
+        ep.to_hash.merge(:actions => actions)
       rescue KeyError => _e
         status 404
         {}

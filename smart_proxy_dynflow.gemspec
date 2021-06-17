@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '~> 2.5'
 
-  gem.add_runtime_dependency('dynflow', "~> 1.1")
+  gem.add_runtime_dependency('dynflow', "~> 1.6")
   gem.add_runtime_dependency('rest-client')
   gem.add_runtime_dependency('sqlite3')
 
