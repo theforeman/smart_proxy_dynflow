@@ -6,7 +6,7 @@ module Proxy::Dynflow::Action
 
     def run
       payload = format_payload(input['targets'], input['results'])
-      SmartProxyDynflowCore::Callback::Request.new.callback({ :callbacks => payload }.to_json)
+      Proxy::Dynflow::Callback::Request.new.callback({ :callbacks => payload }.to_json)
     end
 
     private
