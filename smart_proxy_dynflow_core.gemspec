@@ -36,5 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('sd_notify', '~> 0.1')
   gem.add_runtime_dependency('sequel')
   gem.add_runtime_dependency('sinatra')
+  gem.add_runtime_dependency('smart_proxy_dynflow')
   gem.add_runtime_dependency('sqlite3')
 end
