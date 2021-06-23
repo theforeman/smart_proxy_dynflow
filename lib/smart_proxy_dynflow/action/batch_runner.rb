@@ -7,7 +7,7 @@ module Proxy::Dynflow::Action
     end
 
     def initiate_runner
-      launcher = SmartProxyDynflowCore::TaskLauncherRegistry.fetch(input[:operation])
+      launcher = Proxy::Dynflow::TaskLauncherRegistry.fetch(input[:operation])
       launcher.runner_class.new(input[:targets], suspended_action: suspended_action)
     end
   end

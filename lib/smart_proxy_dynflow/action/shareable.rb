@@ -12,14 +12,14 @@ module Proxy::Dynflow::Action
       planned_action = plan_self(input)
       # code only applicable, when run with SmartProxyDynflowCore in place
       if on_proxy? && callback
-        plan_action(SmartProxyDynflowCore::Callback::Action, callback, planned_action.output)
+        plan_action(Proxy::Dynflow::Callback::Action, callback, planned_action.output)
       end
     end
 
     private
 
     def on_proxy?
-      defined?(SmartProxyDynflowCore::Callback)
+      true
     end
   end
 end
