@@ -7,8 +7,8 @@ module Proxy::Dynflow
         raise NotImplementedError
       end
 
-      def launch!(input)
-        trigger(nil, Action::SingleRunnerBatch, self, input)
+      def action_class
+        Action::AsyncSingleRunnerBatch
       end
 
       def launch_children(parent, input_hash)
