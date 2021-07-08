@@ -15,6 +15,14 @@ module Proxy::Dynflow
 
       def self.input_format; end
 
+      def to_hash
+        {:class => self.class.to_s, :callback => callback, :options => options}
+      end
+
+      def self.new_from_hash(world, hash)
+        ::Dynflow::Utils.constantize(hash[:class]).new(world, hash[:callback], hash[:options])
+      end
+
       private
 
       def format_result(result)
@@ -34,9 +42,9 @@ module Proxy::Dynflow
         input.merge(:callback_host => callback)
       end
 
-      def trigger(parent, klass, *input)
+      def trigger(parent, klass, *input, id: nil)
         world.trigger do
-          world.plan_with_options(caller_action: parent, action_class: klass, args: input)
+          world.plan_with_options(caller_action: parent, action_class: klass, args: input, id: id)
         end
       end
     end

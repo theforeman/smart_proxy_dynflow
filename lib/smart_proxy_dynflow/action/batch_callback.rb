@@ -1,7 +1,10 @@
 module Proxy::Dynflow::Action
   class BatchCallback < ::Dynflow::Action
     def plan(input_hash, results)
-      plan_self :targets => input_hash, :results => results
+      callbacks = input_hash.reduce({}) do |acc, (key, value)|
+        acc.merge(key => value['action_input']['callback'])
+      end
+      plan_self :targets => callbacks, :results => results
     end
 
     def run
