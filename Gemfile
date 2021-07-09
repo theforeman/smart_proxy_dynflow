@@ -10,8 +10,11 @@ group :test do
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
   gem 'smart_proxy_dynflow', :path => '.'
 
+  gem 'minitest'
+  gem 'mocha'
   gem 'public_suffix'
   gem 'rack-test'
+  gem 'rake'
   gem 'rubocop', '~> 0.52.1'
 end
 
