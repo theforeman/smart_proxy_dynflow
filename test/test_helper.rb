@@ -9,7 +9,6 @@ require 'smart_proxy_for_testing'
 
 require 'dynflow'
 require 'smart_proxy_dynflow'
-require 'smart_proxy_dynflow_core'
 require 'smart_proxy_dynflow/testing'
 
 Proxy::Dynflow::Plugin.load_test_settings({})

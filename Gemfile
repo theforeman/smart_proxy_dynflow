@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-gemspec :name => 'smart_proxy_dynflow_core'
-
 group :development do
   gem 'pry'
 end
