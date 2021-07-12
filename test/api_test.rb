@@ -3,7 +3,7 @@ require 'json'
 require 'smart_proxy_dynflow/api.rb'
 require 'smart_proxy_dynflow/runner/update'
 
-module SmartProxyDynflowCore
+module Proxy::Dynflow
   class ApiTest < Minitest::Spec
     include Rack::Test::Methods
 
@@ -45,7 +45,7 @@ module SmartProxyDynflowCore
     describe 'POST /tasks' do
       it 'triggers the action' do
         post "/tasks",
-             { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
+             { 'action_name' => 'Proxy::Dynflow::ApiTest::DummyAction',
                'action_input' => { 'name' => 'World' } }.to_json,
              request_headers
 
@@ -59,7 +59,7 @@ module SmartProxyDynflowCore
 
       it 'fallbacks to HTTP_HOST if X-Forwarded-For is not set as callback host' do
         post("/tasks",
-             { 'action_name' => 'SmartProxyDynflowCore::ApiTest::DummyAction',
+             { 'action_name' => 'Proxy::Dynflow::ApiTest::DummyAction',
                'action_input' => { 'name' => 'World' } }.to_json,
              request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' })
         response = JSON.parse(last_response.body)
