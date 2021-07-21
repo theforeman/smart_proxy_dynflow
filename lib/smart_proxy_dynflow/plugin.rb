@@ -20,6 +20,9 @@ module Proxy::Dynflow
       require 'smart_proxy_dynflow/action'
       require 'smart_proxy_dynflow/task_launcher'
 
+      Proxy::Dynflow::TaskLauncherRegistry.register('single',
+                                                    Proxy::Dynflow::TaskLauncher::Single)
+
       Proxy::Dynflow::Core.ensure_initialized
     end
   end
