@@ -37,10 +37,7 @@ module Proxy
         ep = world.persistence.load_execution_plan(task_id)
         actions = ep.actions.map do |action|
           hash = action.to_hash
-          if action.is_a?(Proxy::Dynflow::Action::Runner)
-            output = action.stored_output_chunks.map { |c| c[:chunk] }.reduce(&:concat)
-            hash[:output][:result] = output
-          end
+          hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
           hash
         end
         ep.to_hash.merge(:actions => actions)

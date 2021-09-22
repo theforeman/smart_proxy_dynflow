@@ -52,7 +52,7 @@ module Proxy::Dynflow
 
       def finish_run(update)
         output[:exit_status] = update.exit_status
-        output[:result] = stored_output_chunks.map { |c| c[:chunk] }.reduce(&:concat)
+        output[:result] = output_result
       end
 
       def process_external_event(event)
@@ -71,6 +71,10 @@ module Proxy::Dynflow
 
       def failed_run?
         output[:exit_status] != 0
+      end
+
+      def output_result
+        stored_output_chunks.map { |c| c[:chunk] }.reduce(&:concat)
       end
     end
   end
