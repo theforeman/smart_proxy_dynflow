@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gemspec :name => 'smart_proxy_dynflow_core'
+gemspec :name => 'smart_proxy_dynflow'
 
 group :development do
   gem 'pry'
@@ -8,7 +8,6 @@ end
 
 group :test do
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
-  gem 'smart_proxy_dynflow', :path => '.'
 
   gem 'minitest'
   gem 'mocha'
