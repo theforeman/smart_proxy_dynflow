@@ -17,10 +17,10 @@ group :test do
   gem 'rubocop', '~> 0.52.1'
 end
 
+gem 'dynflow', :git => "https://github.com/adamruzicka/dynflow.git", :branch => "sqlite-shenanigans"
 gem 'logging-journald', '~> 2.0', :platforms => [:ruby], :require => false
 gem 'rack', '>= 1.1'
 gem 'sinatra'
-gem 'dynflow', :git => "https://github.com/adamruzicka/dynflow.git", :branch => "sqlite-shenanigans"
 
 # load local gemfile
 local_gemfile = File.join(File.dirname(__FILE__), 'Gemfile.local.rb')
