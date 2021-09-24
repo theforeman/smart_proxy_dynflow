@@ -9,6 +9,7 @@ namespace :test do
   desc 'Test Dynflow core plugin'
   Rake::TestTask.new(:core) do |t|
     ENV['DYNFLOW_DB_CONN_STRING'] = 'sqlite:/'
+    ENV['DYNFLOW_SQL_LOG'] = '1'
     t.libs << '.'
     t.libs << 'lib'
     t.libs << 'test'
