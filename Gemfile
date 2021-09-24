@@ -21,6 +21,8 @@ gem 'logging-journald', '~> 2.0', :platforms => [:ruby], :require => false
 gem 'rack', '>= 1.1'
 gem 'sinatra'
 
+gem 'dynflow', :git => "https://github.com/ezr-ondrej/dynflow.git", :branch => "do_not_update_pk"
+
 # load local gemfile
 local_gemfile = File.join(File.dirname(__FILE__), 'Gemfile.local.rb')
 self.instance_eval(Bundler.read_file(local_gemfile)) if File.exist?(local_gemfile)
