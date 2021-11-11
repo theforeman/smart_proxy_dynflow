@@ -1,5 +1,5 @@
 module Proxy
   module Dynflow
-    VERSION = '0.5.2'.freeze
+    VERSION = '0.6.0'.freeze
   end
 end
