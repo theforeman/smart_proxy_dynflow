@@ -1,0 +1,23 @@
+sequenceDiagram
+    SmartProxyAPI->>SmartProxyAPI: /tasks/launch
+    SmartProxyAPI->>SmartProxyAPI: CustomGroupLauncher = TaskLauncherRegistry.fetch(params['operation'])
+    SmartProxyAPI->>+CustomGroupLauncher: launch!(input = params['input'])
+    participant SingleLauncher
+    CustomGroupLauncher->>dynflow: trigger(action=SingleRunnerBatch, input)
+    dynflow->>+SingleRunnerBatch: plan(launcher, input)
+    SingleRunnerBatch->>CustomGroupLauncher: launch_children(parent_action = self, input)
+    loop OutputCollector for every child
+    CustomGroupLauncher->>CustomGroupLauncher: SingleLauncher = child_launcher(parent_action)
+    CustomGroupLauncher->>+SingleLauncher: launch!(child_input = input[foreman_child_plan_id])
+    SingleLauncher->>dynflow: results = trigger(action=OutputCollector, parent, child_input)
+    SingleLauncher->>-CustomGroupLauncher: results[foreman_child_plan_id] = results
+    end
+    CustomGroupLauncher->>dynflow: trigger(action=BatchRunner, parent, input)
+    dynflow->>+BatchRunner: plan(launcher, input)
+    BatchRunner->>-BatchRunner: initiate_runner()
+    dynflow->>+BatchRunner: run()
+    BatchRunner->>BatchRunner: init_run()
+    BatchRunner->>CustomRunner: start
+    BatchRunner-->>-dynflow: triggered
+    dynflow-->CustomGroupLauncher: triggered
+    CustomGroupLauncher->>-SmartProxyAPI: results
