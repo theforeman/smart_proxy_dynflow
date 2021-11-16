@@ -3,6 +3,8 @@ require 'smart_proxy_dynflow/runner'
 module Proxy::Dynflow
   module TaskLauncher
     class AbstractGroup < Batch
+      attr_reader :group_runner_plan_id
+
       def self.runner_class
         raise NotImplementedError
       end
@@ -13,7 +15,8 @@ module Proxy::Dynflow
 
       def launch_children(parent, input_hash)
         super(parent, input_hash)
-        trigger(parent, Action::BatchRunner, self, input_hash)
+        runner_plan = trigger(parent, Action::BatchRunner, self, input_hash)
+        @group_runner_plan_id = runner_plan.execution_plan_id
       end
 
       def operation

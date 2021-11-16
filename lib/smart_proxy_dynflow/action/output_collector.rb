@@ -4,5 +4,10 @@ module Proxy::Dynflow::Action
       output[:result] = []
       suspend
     end
+
+    def kill_run
+      execution_plan = world.persistence.load_execution_plan(caller_execution_plan_id)
+      execution_plan.cancel
+    end
   end
 end
