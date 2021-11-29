@@ -1,0 +1,126 @@
+[[task-launching]]
+= How the tasks are launched
+:imagesdir: architecture/
+
+Launching of the tasks is done through `POST /tasks/launch` endpoint.
+The previously used endpoint `POST /tasks` is being decomisioned so it is not documented.
+
+For the launch to be succesful, you have to specify `operation` which has a defined launcher
+in the `TaskLauncherRegistry`.
+
+There are default launchers registered that can be utilized.
+It is useful to understand concepts of these as those are just slightly changed in actual launchers used.
+For simple Tasks these can be used by themself.
+
+[single-launcher]
+== Single task triggering
+
+Sample input for single task triggering:
+
+[source, json]
+----
+{
+  "operation": "single",
+  "input": {
+    "action_class": "MyDynflowActionClass",
+    "action_input": { "some": "action data" }
+  }
+}
+----
+
+[batch-launcher]
+== Batch triggering
+
+Batch triggering allows running multiple actions while making only one HTTP API call to the Proxy.
+
+Sample input for batch triggering would be:
+
+[source, json]
+----
+{
+  "operation": "batch",
+  "input": {
+    "<child_task_caller_ID>": {
+      "action_class": "MyDynflowActionClass",
+      "action_input": { "some": "childaction data" }
+    },
+    "<child2_task_caller_ID": {
+      "action_class": "MyDynflowActionClass",
+      "action_input": { "some": "childaction2 data" }
+    }
+  }
+}
+----
+
+This allows running multiple independent actions, that share same parent action in the underlying dynflow,
+but nothing much apart of that.
+
+Following diagram shows how this gets processed internally.
+
+[caption="Diagram: batch launching"]
+image::batch_launching.svg[Batch launching]
+
+
+[group-launcher]
+== Group triggering
+
+Group triggering is there to run single action on multiple nodes (Hosts).
+This has the advantage of having only one runner and save resources, if the runner actually supports running for multiple nodes.
+
+Best example is probably Ansible, but there would be more like that.
+
+First we need to implement and register the actual group launcher as we need to define what runner to use for the group.
+
+[source, ruby]
+----
+class Runner::CoolRunner < ::Proxy::Dynflow::Runner::Parent
+  def initialize(input, suspended_action:)
+    super input, suspended_action: suspended_action
+    # prepare the stuff from input you need to perform cool things
+  end
+
+  def start
+    # start doing the cool stuff for the nodes
+  end
+
+  def kill
+    # stop doing the cool stuff prematurely
+  end
+end
+
+class TaskLauncher::MyCoolLauncher < Proxy::Dynflow::TaskLauncher::AbstractGroup
+  def operation
+    'cool-operation'
+  end
+
+  def self.runner_class
+    Runner::CoolRunner
+  end
+end
+
+Proxy::Dynflow::TaskLauncherRegistry.register('cool-operation',
+        TaskLauncher::MyCoolLauncher)
+----
+
+Then the input for launching our cool-operation would be:
+
+----
+{
+  "operation": "cool-operation",
+  "input": {
+    "<child_task_caller_ID>": {
+      "action_input": { "some": "childaction data" }
+    },
+    "<child2_task_caller_ID": {
+      "action_input": { "some": "childaction2 data" }
+    }
+  }
+}
+----
+
+You can notice that you do not need to define the action, as our Runner defines how to run stuff for every node.
+
+The following diagram can be used to compare the launch with the Batch launching.
+
+[caption="Diagram: group launching"]
+image::group_launching.svg[Group launching]

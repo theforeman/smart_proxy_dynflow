@@ -3,29 +3,14 @@
 A plugin into Foreman's Smart Proxy for running Dynflow actions on the Smart
 Proxy.
 
-## Split architecture
+## Public API
 
-This repository contains two gems, `smart_proxy_dynflow` and
-`smart_proxy_dynflow_core`.
-
-### smart_proxy_dynflow
-
-A Smart Proxy plugin which allows to run Dynflow actions and provides a simple
-API for triggering actions and querying information about execution plans.
-
-### smart_proxy_dynflow_core
-
-Historically this gem could be used to run as a standalone service or as a part
-of the Smart Proxy process. This is not possible starting with
-`smart_proxy_dynflow_core-0.4.0`. The gem is still kept around, but instead of
-providing functionality on its own, it depends on `smart_proxy_dynflow` and
-exposes certain parts of it under the old names and so it serves as a
-compatibility layer.
-
-#### GET /console
+### GET /console
 Serves the Dynflow console for human friendly task inspection.
 
-#### POST /tasks
+### POST /tasks
+**Deprecated** it still works, but you should use `POST /tasks/launch`
+
 Used for triggering a task, expects `action_class` and `action_input` in the
 request's body. The action specified by `action_class` is then planned with
 `action_input` provided to the action's `#plan` method.
@@ -60,7 +45,7 @@ END
 Note: The example above requires `smart_proxy_remote_execution_ssh` Smart Proxy
 plugin.
 
-#### POST /tasks/$TASK_ID/cancel
+### POST /tasks/$TASK_ID/cancel
 Tries to cancel a task.
 
 ```
@@ -71,12 +56,12 @@ curl -X POST localhost:8008/tasks/dd5a8306-0e52-4f68-9e83-c7f51c9e95c3/cancel -d
 }
 ```
 
-#### GET /tasks/$TASK_ID/status
+### GET /tasks/$TASK_ID/status
 Allows querying the task by its id. Returns the full hash of the execution plan,
 for details about output of this API call see `::Dynflow::ExecutionPlan#to_hash` and
 `::Dynflow::Action#to_hash`.
 
-#### GET /tasks/count
+### GET /tasks/count
 
 Returns the number of tasks. Optionally a state parameter can be provided to
 obtain count of tasks in the specified state.
@@ -98,7 +83,7 @@ curl localhost:8008/tasks/count?state='stopped' 2>/dev/null
 
 ```
 
-#### POST /tasks/$TASK_ID/done
+### POST /tasks/$TASK_ID/done
 
 Sends an `::ForemanTasksCore::Runner::ExternalEvent` event with full copy of the
 parsed request's body to the task's step specified by `step_id`.
@@ -108,7 +93,7 @@ curl -X POST localhost:8008/tasks/dd5a8306-0e52-4f68-9e83-c7f51c9e95c3/done \
   -d '{"step_id": 1, "my_custom_data": "something"}'
 ```
 
-#### GET /tasks/operations
+### GET /tasks/operations
 
 `smart_proxy_dynflow` allows registering `TaskLauncher`s into a registry. A
 `TaskLauncher` is an abstraction which defines how to start a suite of execution
@@ -117,11 +102,13 @@ implementation of the actions and their inputs.
 
 This endpoint returns a list of registered `TaskLauncher`s from the registry.
 
-#### POST /tasks/launch
+### POST /tasks/launch
 
 Launches a suite of execution plans to perform an operation. Parameter
 `operation` specifies the operation and `input` is an input for task launcher
 registered with the operation. `input` is specific to each operation.
+
+More details can be found in [Task Launching docs](developer_docs/task_launching.asciidoc)
 
 # Installation
 
