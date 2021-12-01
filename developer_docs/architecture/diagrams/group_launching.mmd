@@ -1,23 +1,34 @@
 sequenceDiagram
-    SmartProxyAPI->>SmartProxyAPI: /tasks/launch
+    Client->>+SmartProxyAPI: /tasks/launch
     SmartProxyAPI->>SmartProxyAPI: CustomGroupLauncher = TaskLauncherRegistry.fetch(params['operation'])
     SmartProxyAPI->>+CustomGroupLauncher: launch!(input = params['input'])
     participant SingleLauncher
     CustomGroupLauncher->>dynflow: trigger(action=SingleRunnerBatch, input)
     dynflow->>+SingleRunnerBatch: plan(launcher, input)
-    SingleRunnerBatch->>CustomGroupLauncher: launch_children(parent_action = self, input)
+    SingleRunnerBatch->>SingleRunnerBatch: Serialize launcher
+    SingleRunnerBatch-->>dynflow: finish plan
+
+    dynflow-->>CustomGroupLauncher: triggered
+    CustomGroupLauncher->>-SmartProxyAPI: results
+    SmartProxyAPI->>-Client: partial results
+    note right of Client: Child tasks were not planned yet
+
+    dynflow->>+SingleRunnerBatch: Start run
+    SingleRunnerBatch->>SingleRunnerBatch: Restore serialized launcher
+    SingleRunnerBatch->>CustomGroupLauncher: launcher.launch_children(parent_action = self, input)
     loop OutputCollector for every child
     CustomGroupLauncher->>CustomGroupLauncher: SingleLauncher = child_launcher(parent_action)
-    CustomGroupLauncher->>+SingleLauncher: launch!(child_input = input[foreman_child_plan_id])
-    SingleLauncher->>dynflow: results = trigger(action=OutputCollector, parent, child_input)
-    SingleLauncher->>-CustomGroupLauncher: results[foreman_child_plan_id] = results
+    CustomGroupLauncher->>+SingleLauncher: launch!(child_input = input[foreman_child_plan_id], id: foreman_child_plan_id)
+    SingleLauncher->>dynflow: trigger(action=OutputCollector, parent, child_input)
     end
     CustomGroupLauncher->>dynflow: trigger(action=BatchRunner, parent, input)
     dynflow->>+BatchRunner: plan(launcher, input)
-    BatchRunner->>-BatchRunner: initiate_runner()
+
+    BatchRunner->>BatchRunner: initiate_runner()
+    BatchRunner-->>-dynflow: triggered
     dynflow->>+BatchRunner: run()
     BatchRunner->>BatchRunner: init_run()
     BatchRunner->>CustomRunner: start
-    BatchRunner-->>-dynflow: triggered
-    dynflow-->CustomGroupLauncher: triggered
-    CustomGroupLauncher->>-SmartProxyAPI: results
+    CustomRunner->>BatchRunner: eventually finish
+    BatchRunner-->>-dynflow: finish run
+    SingleRunnerBatch-->>-dynflow: finish run

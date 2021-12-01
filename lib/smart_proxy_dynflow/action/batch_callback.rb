@@ -1,6 +1,8 @@
 module Proxy::Dynflow::Action
   class BatchCallback < ::Dynflow::Action
     def plan(input_hash, results)
+      # In input_hash there are complete inputs for all the actions for which this is reporting
+      # Trim it down to only the bare minimum we actually need
       callbacks = input_hash.reduce({}) do |acc, (key, value)|
         acc.merge(key => value['action_input']['callback'])
       end

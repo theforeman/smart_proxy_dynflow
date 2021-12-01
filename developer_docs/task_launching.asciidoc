@@ -60,6 +60,9 @@ Following diagram shows how this gets processed internally.
 [caption="Diagram: batch launching"]
 image::batch_launching.svg[Batch launching]
 
+There are two key takeaways that might not be obvious from the sequence diagram:
+1) The launched child tasks will actually have the same UUIDs as in the request which caused them to spawn
+2) The HTTP request ends before all the child tasks are spawned. This shouldn't be an issue since we know the UUIDs they'll have from the previous point
 
 [group-launcher]
 == Group triggering
