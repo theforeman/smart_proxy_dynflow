@@ -37,7 +37,7 @@ module Proxy
       post "/tasks/launch/?" do
         params = MultiJson.load(request.body.read)
         launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('options', {}))
-        plan = launcher.launch!(params['input'])
+        launcher.launch!(params['input'])
         launcher.results.to_json
       end
 

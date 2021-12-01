@@ -16,7 +16,7 @@ module Proxy::Dynflow
       def self.input_format; end
 
       def to_hash
-        {:class => self.class.to_s, :callback => callback, :options => options}
+        { :class => self.class.to_s, :callback => callback, :options => options }
       end
 
       def self.new_from_hash(world, hash)
