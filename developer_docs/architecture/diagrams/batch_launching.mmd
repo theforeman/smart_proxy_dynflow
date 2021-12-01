@@ -1,15 +1,25 @@
 sequenceDiagram
-    SmartProxyAPI->>SmartProxyAPI: /tasks/launch
+    Client->>SmartProxyAPI: /tasks/launch
     SmartProxyAPI->>SmartProxyAPI: TaskLauncherRegistry.fetch(params['operation'])
     SmartProxyAPI->>+BatchTaskLauncher: launch!(input = params['input'])
     participant SingleLauncher
     BatchTaskLauncher->>dynflow: trigger(action=BatchAction, input)
     dynflow->>+BatchAction: plan(launcher, input)
-    BatchAction->>BatchTaskLauncher: launch_children(parent_action = self, input)
+    BatchAction->>BatchAction: input[:launcher] = launcher.to_hash
+    BatchAction->>BatchAction: plan_self
+    BatchAction->>BatchTaskLauncher: return from trigger(action=BatchAction, input)
+    BatchTaskLauncher->>-SmartProxyAPI: results
+    SmartProxyAPI->>Client: partial results
+    note right of Client: Children were not planned yet
+
+    dynflow->>+BatchAction: Start run
+    BatchAction->>BatchAction: Restore serialized launcher
+    BatchAction->>BatchTaskLauncher: Launch children to spawn sub-plans
     loop Every child in the input [{child_id => child_input}]
     BatchTaskLauncher->>BatchTaskLauncher: SingleLauncher = child_launcher(parent_action)
-    BatchTaskLauncher->>+SingleLauncher: launch!(child_input = input[foreman_child_plan_id])
-    SingleLauncher->>dynflow: results = trigger(parent, child_input)
-    SingleLauncher->>-BatchTaskLauncher: results[foreman_child_plan_id] = results
+    BatchTaskLauncher->>+SingleLauncher: launch!(child_input = input[foreman_child_plan_id], id: foreman_child_plan_id)
+    note right of SingleLauncher: We request child tasks to have specific IDs
+    SingleLauncher->>dynflow: trigger(parent, child_input, id: id)
     end
-    BatchTaskLauncher->>-SmartProxyAPI: results
+
+    BatchAction->>-dynflow: Finish run
