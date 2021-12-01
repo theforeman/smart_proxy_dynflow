@@ -8,7 +8,7 @@ module Proxy::Dynflow
       end
 
       def action_class
-        Action::AsyncSingleRunnerBatch
+        Action::SingleRunnerBatch
       end
 
       def launch_children(parent, input_hash)

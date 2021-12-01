@@ -34,11 +34,5 @@ module Proxy::Dynflow
         Proxy::Dynflow::Action::Batch
       end
     end
-
-    class AsyncBatch < Batch
-      def action_class
-        Proxy::Dynflow::Action::AsyncBatch
-      end
-    end
   end
 end
