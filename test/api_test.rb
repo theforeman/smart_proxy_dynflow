@@ -6,9 +6,14 @@ require 'smart_proxy_dynflow/runner/update'
 module Proxy::Dynflow
   class ApiTest < Minitest::Spec
     include Rack::Test::Methods
+    include WithPerTestWorld
 
     def app
       Proxy::Dynflow::Api.new
+    end
+
+    def world
+      Proxy::Dynflow::Core.instance.world
     end
 
     class DummyAction < ::Dynflow::Action
@@ -24,13 +29,6 @@ module Proxy::Dynflow
         if event.nil?
           suspend
         end
-      end
-    end
-
-    def wait_until(iterations = 10, interval = 0.2)
-      iterations.times do
-        break if yield
-        sleep interval
       end
     end
 
@@ -50,8 +48,8 @@ module Proxy::Dynflow
              request_headers
 
         response = JSON.parse(last_response.body)
-        wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
-        execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
+        wait_until { world.persistence.load_execution_plan(response['task_id']).state == :stopped }
+        execution_plan = world.persistence.load_execution_plan(response['task_id'])
         _(execution_plan.state).must_equal :stopped
         _(execution_plan.result).must_equal :success
         _(execution_plan.entry_action.input[:callback_host]).must_equal forwarded
@@ -63,8 +61,8 @@ module Proxy::Dynflow
                'action_input' => { 'name' => 'World' } }.to_json,
              request_headers.reject { |key, _| key == 'HTTP_X_FORWARDED_FOR' })
         response = JSON.parse(last_response.body)
-        wait_until { WORLD.persistence.load_execution_plan(response['task_id']).state == :stopped }
-        execution_plan = WORLD.persistence.load_execution_plan(response['task_id'])
+        wait_until { world.persistence.load_execution_plan(response['task_id']).state == :stopped }
+        execution_plan = world.persistence.load_execution_plan(response['task_id'])
         _(execution_plan.state).must_equal :stopped
         _(execution_plan.result).must_equal :success
         _(execution_plan.entry_action.input[:callback_host]).must_equal hostname
@@ -73,12 +71,12 @@ module Proxy::Dynflow
 
     describe 'POST /tasks/:task_id/cancel' do
       it 'cancels the action' do
-        triggered = WORLD.trigger(StuckAction)
-        wait_until { WORLD.persistence.load_execution_plan(triggered.id).cancellable? }
+        triggered = world.trigger(StuckAction)
+        wait_until { world.persistence.load_execution_plan(triggered.id).cancellable? }
         post "/tasks/#{triggered.id}/cancel"
         triggered.finished.wait(5)
 
-        execution_plan = WORLD.persistence.load_execution_plan(triggered.id)
+        execution_plan = world.persistence.load_execution_plan(triggered.id)
         _(execution_plan.state).must_equal :stopped
         _(execution_plan.result).must_equal :success
       end
@@ -89,7 +87,7 @@ module Proxy::Dynflow
         task_id = '12345'
         step_id = 15
         params = { 'step_id' => step_id }
-        WORLD.expects(:event).with do |task, step, update|
+        world.expects(:event).with do |task, step, update|
           task_id == task &&
             step_id == step &&
             update.data == params
