@@ -5,20 +5,28 @@ require 'smart_proxy_dynflow/task_launcher'
 module Proxy::Dynflow
   module TaskLauncher
     class TaskLauncherTest < MiniTest::Spec
-      class DummyDynflowAction < Dynflow::Action; end
+      include WithPerTestWorld
+
+      class DummyDynflowAction < Dynflow::Action
+        def plan(input)
+          callback input
+        end
+
+        def callback(_input); end
+      end
 
       describe TaskLauncher do
         let(:launcher) { launcher_class.new Proxy::Dynflow::Core.world, {} }
         let(:launcher_input) { { 'action_class' => DummyDynflowAction.to_s, 'action_input' => input } }
-        let(:input) { { :do => :something } }
-        let(:expected_result) { input.merge(:callback_host => {}) }
+        let(:input) { { :do => 'something' } }
+        let(:expected_result) { Dynflow::Utils::IndifferentHash.new(input.merge(:callback_host => {})) }
 
         describe TaskLauncher::Single do
           let(:launcher_class) { Single }
 
           it 'triggers an action' do
-            DummyDynflowAction.any_instance.expects(:plan).with do |arg|
-              _(arg).must_equal(expected_result)
+            DummyDynflowAction.any_instance.expects(:callback).with do |arg|
+              Dynflow::Utils::IndifferentHash.new(arg) == expected_result
             end
             launcher.launch!(launcher_input)
           end
@@ -34,21 +42,24 @@ module Proxy::Dynflow
           let(:launcher_class) { Batch }
 
           it 'triggers the actions' do
-            DummyDynflowAction.any_instance.expects(:plan).with { |arg| arg == expected_result }.twice
+            DummyDynflowAction.any_instance.expects(:callback).with do |arg|
+              arg == expected_result
+            end.twice
+
             parent = launcher.launch!('foo' => launcher_input, 'bar' => launcher_input)
-            plan = parent.finished.value!
+            wait_until(iterations: 15, interval: 1) do
+              load_execution_plan(parent[:task_id]).state == :stopped
+            end
+            plan = load_execution_plan(parent[:task_id])
             _(plan.result).must_equal :success
             _(plan.sub_plans.count).must_equal 2
           end
 
           it 'provides results' do
             launcher.launch!('foo' => launcher_input, 'bar' => launcher_input)
-            _(launcher.results.keys).must_equal %w[foo bar]
-            launcher.results.each_value do |result|
-              plan = Proxy::Dynflow::Core.world.persistence.load_execution_plan(result[:task_id])
-              _(result[:result]).must_equal 'success'
-              _(plan.result).must_equal :success
-            end
+            _(launcher.results.keys).must_equal [:parent]
+            parent = launcher.results[:parent]
+            _(parent[:result]).must_equal 'success'
           end
         end
       end
