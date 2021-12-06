@@ -74,7 +74,7 @@ module Proxy::Dynflow
       end
 
       def output_result
-        stored_output_chunks.map { |c| c[:chunk] }.reduce([], &:concat)
+        (stored_output_chunks + (@pending_output_chunks || [])).map { |c| c[:chunk] }.reduce([], &:concat)
       end
     end
   end
