@@ -36,9 +36,8 @@ module Proxy
       def task_status(task_id)
         ep = world.persistence.load_execution_plan(task_id)
         actions = ep.actions.map do |action|
-          hash = action.to_hash
-          hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
-          hash
+          refresh_output(ep, action)
+          expand_output(action)
         end
         ep.to_hash.merge(:actions => actions)
       rescue KeyError => _e
@@ -57,6 +56,18 @@ module Proxy
         world.event(task_id,
                     params['step_id'].to_i,
                     ::Proxy::Dynflow::Runner::ExternalEvent.new(params))
+      end
+
+      def refresh_output(execution_plan, action)
+        if action.is_a?(Proxy::Dynflow::Action::WithExternalPolling) && [:running, :suspended].include?(action.run_step&.state)
+          world.event(execution_plan.id, action.run_step_id, Proxy::Dynflow::Action::WithExternalPolling::Poll)
+        end
+      end
+
+      def expand_output(action)
+        hash = action.to_hash
+        hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
+        hash
       end
     end
   end
