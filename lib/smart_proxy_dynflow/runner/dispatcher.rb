@@ -43,6 +43,11 @@ module Proxy::Dynflow
           plan_next_refresh
         end
 
+        def refresh_output
+          @logger.debug("refresh output #{@runner.id}")
+          dispatch_updates(@runner.run_refresh_output)
+        end
+
         def dispatch_updates(updates)
           updates.each { |receiver, update| (receiver || @suspended_action) << update }
 
@@ -154,6 +159,12 @@ module Proxy::Dynflow
         synchronize do
           runner_actor = @runner_actors[runner_id]
           runner_actor&.tell([:external_event, external_event])
+        end
+      end
+
+      def refresh_output(runner_id)
+        synchronize do
+          @runner_actors[runner_id]&.tell([:refresh_output])
         end
       end
 

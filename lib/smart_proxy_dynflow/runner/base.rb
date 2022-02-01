@@ -93,6 +93,12 @@ module Proxy::Dynflow
       def initialize_continuous_outputs
         @continuous_output = ::Proxy::Dynflow::ContinuousOutput.new
       end
+
+      def run_refresh_output
+        logger.debug('refreshing runner on demand')
+        refresh
+        generate_updates
+      end
     end
   end
 end
