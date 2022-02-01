@@ -6,9 +6,9 @@ module Proxy::Dynflow
       attr_reader :id
       attr_writer :logger
 
-      def initialize(*_args, suspended_action: nil)
+      def initialize(*_args, suspended_action: nil, id: nil)
         @suspended_action = suspended_action
-        @id = SecureRandom.uuid
+        @id = id || SecureRandom.uuid
         initialize_continuous_outputs
       end
 

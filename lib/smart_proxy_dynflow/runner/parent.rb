@@ -3,10 +3,10 @@ module Proxy::Dynflow
     class Parent < Base
       # targets = { identifier => { :execution_plan_id => "...", :run_step_id => id,
       #                           :input => { ... } }
-      def initialize(targets = {}, suspended_action: nil)
+      def initialize(targets = {}, suspended_action: nil, id: nil)
         @targets = targets
         @exit_statuses = {}
-        super suspended_action: suspended_action
+        super suspended_action: suspended_action, id: id
       end
 
       def generate_updates
