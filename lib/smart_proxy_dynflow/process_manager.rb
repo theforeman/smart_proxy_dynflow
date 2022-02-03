@@ -1,7 +1,6 @@
 module Proxy
   module Dynflow
     class IOBuffer
-
       attr_accessor :io
       attr_reader :buffer
       def initialize(io)
@@ -36,7 +35,7 @@ module Proxy
       def read_available!
         data = ''
         loop { data += @io.read_nonblock(4096) }
-      rescue IO::WaitReadable
+      rescue IO::WaitReadable # rubocop:disable Lint/HandleExceptions
       rescue EOFError
         close
       ensure
@@ -48,7 +47,7 @@ module Proxy
           n = @io.write_nonblock(@buffer)
           @buffer = @buffer[n..-1]
         end
-      rescue IO::WaitWritable
+      rescue IO::WaitWritable # rubocop:disable Lint/HandleExceptions
       rescue EOFError
         close
       end
@@ -69,7 +68,6 @@ module Proxy
     end
 
     class ProcessManager
-
       attr_reader :stdin, :stdout, :stderr, :pid, :status
       def initialize(command)
         @command = command
@@ -102,11 +100,11 @@ module Proxy
       end
 
       def started?
-        !!pid
+        !pid.nil?
       end
 
       def done?
-        started? && !!status
+        started? && !status.nil?
       end
 
       def close

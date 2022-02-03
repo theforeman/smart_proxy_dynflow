@@ -13,8 +13,14 @@ module Proxy::Dynflow
       end
 
       def set_process_manager_callbacks(pm)
-        pm.on_stdout { |data| publish_data(data, 'stdout'); '' }
-        pm.on_stderr { |data| publish_data(data, 'stderr'); '' }
+        pm.on_stdout do |data|
+          publish_data(data, 'stdout')
+          ''
+        end
+        pm.on_stderr do |data|
+          publish_data(data, 'stderr')
+          ''
+        end
       end
 
       def refresh
