@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'smart_proxy_dynflow/process_manager'
+require 'smart_proxy_dynflow/io_buffer'
 require 'ostruct'
 
 module Proxy::Dynflow
