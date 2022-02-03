@@ -94,6 +94,7 @@ module Proxy
         @stdout.io = out_read
         @stderr.io = err_read
       rescue Errno::ENOENT => e
+        [in_read, in_write, out_read, out_write, err_read, err_write].each(&:close)
         @pid = -1
         @status = 255
         @stderr.add_data(e.message)
@@ -112,6 +113,7 @@ module Proxy
       end
 
       def process(timeout: nil)
+        raise 'Cannot process until the manager is started' unless started?
         writers = [@stdin].reject { |buf| buf.empty? || buf.closed? }
         readers = [@stdout, @stderr].reject(&:closed?)
 
@@ -127,8 +129,8 @@ module Proxy
 
       def finish
         close
-        Process.wait(@pid)
-        @status = $CHILD_STATUS.exitstatus
+        _pid, status = Process.wait2(@pid)
+        @status = status.exitstatus
       end
 
       def on_stdout(&block)
