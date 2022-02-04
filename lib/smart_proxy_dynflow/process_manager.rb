@@ -144,14 +144,14 @@ module Proxy
         @stderr.on_data(&block)
       end
 
-      private
-
       # Makes the process manager close all the pipes it may have opened to communicate with the child process
       #
       # @return [void]
       def close
         [@stdin, @stdout, @stderr].each(&:close)
       end
+
+      private
 
       # Makes the process manager finish its run, closing opened FDs and reaping the child process
       #

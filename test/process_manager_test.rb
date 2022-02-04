@@ -123,7 +123,7 @@ module Proxy::Dynflow
           pm.stdout.io = StringIO.new
           pm.stderr.io = StringIO.new
 
-          pm.send(:close)
+          pm.close
 
           assert pm.stdin.closed?
           assert pm.stdout.closed?
