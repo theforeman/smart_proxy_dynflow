@@ -1,0 +1,93 @@
+[[runners]]
+= Running with Runners
+
+Dynflow on the smart proxy is almost exclusively used to keep track of external
+processes. To make life easier for developers, `smart_proxy_dynflow` provides
+several abstractions which implement the common things.
+
+To implement an actual thing which does something useful, the developer needs to
+implement two main things - an action and a runner. The action gets triggered,
+on its first `run`, it spawns a runner, registers the runner with a runner
+dispatcher and suspends itself. The runner may send updates to the action, upon
+receiving an update, the action wakes up, appends the update to its output log
+and suspends itself again. When the runner finishes, it must send an update to
+the action. Again, when the action receives the update, it processes it and
+stops.
+
+To prevent blocking operations or having lots of threads, the runner is managed
+by a runner dispatcher and as such could be though of as a collection of
+callbacks. The dispatcher periodically runs the runner's `refresh` callback in
+which the runner can do virtually anything, but most commonly it does select
+over opened file descriptors with a timeout. If the runner during `refresh`
+indicates that it has finished, the dispatcher stops tracking it.
+
+The action is simpler to implement of the two, because most of its behaviour can
+be just inherited from actions provided in `smart_proxy_dynflow`. If the action
+inherits from `::Proxy::Dynflow::Action::Runner`, then it only needs to
+implement the `initiate_runner` method. This method, as the name implies, should
+return a new instance of a runner.
+
+[source, ruby]
+----
+class CustomRunnerAction < ::Proxy::Dynflow::Action::Runner
+  def initiate_runner
+    CustomRunner.new
+  end
+end
+----
+
+A runner usually inherits from `::Proxy::Dynflow::Runner::Base` or some of its
+subclasses. This allows the developer to specify only the bare minimum and focus
+on the actual functionality of the runner. To implement a simple runner which
+would start counting from 0, emitting and incrementing the number until it
+reached 10, we could do something like this.
+
+[source, ruby]
+----
+class CustomRunner < ::Proxy::Dynflow::Runner::Base
+  def start
+    @counter = 0
+  end
+
+  def refresh
+    publish_exit_status(0) if @counter >= 10
+    publish_data(@counter.to_s, 'stdout')
+    @counter += 1
+  end
+end
+----
+
+The takeaway should be, if inheriting from `::Proxy::Dynflow::Runner::Base`, we
+need to implement only two methods - `start` and `refresh`. In those two
+methods, we can emit updates to the action with `publish_data` and mark the
+runner as finished by calling `publish_exit_status`.
+
+It is quite common to actually run system commands which of course could be done
+by implementing `start` and `refresh` as above, but `smart_proxy_dynflow` goes
+one step further to make it even easier. The same functionality as above could
+be implemented by using `Proxy::Dynflow::Runner::ProcessManagerCommand` module
+and having it run a shell on the system.
+
+[source, ruby]
+----
+class CustomSystemRunner < ::Proxy::Dynflow::Runner::Base
+  include ::Proxy::Dynflow::Runner::ProcessManagerCommand
+
+  def start
+    cmd = <<~CMD
+      for i in `seq 0 10`; do
+        sleep 1
+        echo $i
+      done
+    CMD
+    initialize_command('bash', '-c', cmd)
+  end
+
+  # refresh is provided by ProcessManagerCommand
+end
+----
+
+In this case, the only method which needs to be implemented is `start`. Inside
+it, we can use `initialize_command` to spawn the system command we want to run.
+There is no need to manage the forked off process or update the action by hand,
+all the heavy lifting will be done behind the scenes.
