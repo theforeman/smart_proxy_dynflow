@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
+env:
+  BUNDLE_WITHOUT: development
+
 jobs:
   rubocop:
     name: Rubocop
