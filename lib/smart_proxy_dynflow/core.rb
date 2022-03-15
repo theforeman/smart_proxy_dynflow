@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Proxy::Dynflow
   class Core
     attr_accessor :world, :accepted_cert_serial
@@ -29,6 +31,7 @@ module Proxy::Dynflow
         Log.instance.warn "Could not open DB for dynflow at '#{db_file}', " \
                           "will keep data in memory. Restart will drop all dynflow data."
       else
+        FileUtils.mkdir_p(File.dirname(db_file))
         db_conn_string += "/#{db_file}"
       end
 
