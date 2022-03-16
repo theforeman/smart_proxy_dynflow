@@ -6,5 +6,5 @@
 # :console_auth: true
 
 # Maximum age of execution plans to keep before having them cleaned
-# by the execution plan cleaner (in seconds), defaults to 24 hours
-# :execution_plan_cleaner_age: 86400
+# by the execution plan cleaner (in seconds), defaults to 30 minutes
+# :execution_plan_cleaner_age: 1800
