@@ -1,6 +1,6 @@
 ---
 :enabled: true
-:database: /var/lib/foreman-proxy/dynflow/dynflow.sqlite
+:database:
 
 # Require a valid cert to access Dynflow console
 # :console_auth: true
