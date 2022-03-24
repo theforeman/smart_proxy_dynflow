@@ -1,8 +1,10 @@
 require 'smart_proxy_dynflow/action/shareable'
+require 'smart_proxy_dynflow/action/external_polling'
 module Proxy::Dynflow
   module Action
     class Runner < Shareable
       include ::Dynflow::Action::Cancellable
+      include ::Proxy::Dynflow::Action::WithExternalPolling
 
       def run(event = nil)
         case event
@@ -14,6 +16,9 @@ module Proxy::Dynflow
           process_external_event(event)
         when ::Dynflow::Action::Cancellable::Cancel
           kill_run
+        when ::Proxy::Dynflow::Action::WithExternalPolling::Poll
+          poll
+          suspend
         else
           raise "Unexpected event #{event.inspect}"
         end
@@ -67,6 +72,10 @@ module Proxy::Dynflow
         else
           suspend
         end
+      end
+
+      def poll
+        runner_dispatcher.refresh_output(output[:runner_id])
       end
 
       def failed_run?
