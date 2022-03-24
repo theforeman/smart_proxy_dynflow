@@ -18,6 +18,7 @@ module Proxy::Dynflow
           kill_run
         when ::Proxy::Dynflow::Action::WithExternalPolling::Poll
           poll
+          suspend
         else
           raise "Unexpected event #{event.inspect}"
         end
@@ -75,7 +76,6 @@ module Proxy::Dynflow
 
       def poll
         runner_dispatcher.refresh_output(output[:runner_id])
-        suspend
       end
 
       def failed_run?
