@@ -8,7 +8,9 @@ module Proxy::Dynflow
         set_process_manager_callbacks(@process_manager)
         @process_manager.start!
         if @process_manager.done? && @process_manager.status == 255
-          publish_exception("Error running command '#{command.join(' ')}'", @process_manager.stderr.to_s)
+          exception = RuntimeError.new(@process_manager.stderr.to_s)
+          exception.set_backtrace Thread.current.backtrace
+          publish_exception("Error running command '#{command.join(' ')}'", exception)
         end
       end
 
@@ -24,7 +26,7 @@ module Proxy::Dynflow
       end
 
       def refresh
-        @process_manager.process(timeout: 0.1)
+        @process_manager.process(timeout: 0.1) unless @process_manager.done?
         publish_exit_status(@process_manager.status) if @process_manager.done?
       end
 

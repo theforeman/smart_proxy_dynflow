@@ -76,12 +76,12 @@ module Proxy
         out_read, out_write = IO.pipe
         err_read, err_write = IO.pipe
 
-        @pid = spawn(*@command, :in => in_read, :out => out_write, :err => err_write)
-        [in_read, out_write, err_write].each(&:close)
-
         @stdin.io  = in_write
         @stdout.io = out_read
         @stderr.io = err_read
+
+        @pid = spawn(*@command, :in => in_read, :out => out_write, :err => err_write)
+        [in_read, out_write, err_write].each(&:close)
       rescue Errno::ENOENT => e
         [in_read, in_write, out_read, out_write, err_read, err_write].each(&:close)
         @pid = -1
@@ -158,8 +158,10 @@ module Proxy
       # @return [void]
       def finish
         close
-        _pid, status = Process.wait2(@pid)
-        @status = status.exitstatus
+        unless @pid == -1
+          _pid, status = Process.wait2(@pid)
+          @status = status.exitstatus
+        end
       end
     end
   end

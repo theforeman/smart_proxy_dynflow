@@ -173,6 +173,15 @@ module Proxy::Dynflow
           assert_equal pm.status, 255
           assert_equal pm.stderr.to_s, "No such file or directory - #{command}"
         end
+
+        it 'represents the failure correctly' do
+          pm.start!
+          pm.process(timeout: 0.1)
+
+          assert_equal pm.pid, -1
+          assert_equal pm.status, 255
+          assert_equal pm.stderr.to_s, "No such file or directory - #{command}"
+        end
       end
     end
   end
