@@ -1,5 +1,18 @@
 module Proxy::Dynflow
   module Runner
+    # This module expects to be included into a Runner action, where it can be
+    # used to simplify handling of long-running processes. However it tracks the
+    # running process as a group of instance variables, which has served us
+    # reasonably well in the past, but can be rather error prone.
+    #
+    # A better alternative to this is
+    # {::Proxy::Dynflow::Runner::ProcessManagerCommand}. It tracks the whole
+    # execution of a process under a single instance variable and uses a more
+    # robust {::Proxy::Dynflow::ProcessManager} under the hood. It also
+    # maintains the same interface and can be used as a drop-in replacement.
+    #
+    # This module is now soft-deprecated and
+    # {::Proxy::Dynflow::Runner::ProcessManagerCommand} should be used instead.
     module Command
       def initialize_command(*command)
         @command_out, @command_in, @command_pid = PTY.spawn(*command)

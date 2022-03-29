@@ -2,6 +2,12 @@ require 'smart_proxy_dynflow/process_manager'
 
 module Proxy::Dynflow
   module Runner
+    # A convenience module which should be included into a Runner action. It
+    # leverages {::Proxy::Dynflow::ProcessManager} to reliably keep track of
+    # an external process and collect its output.
+    #
+    # The only expectation from the Runner action is to call
+    # {#initialize_command} somewhere and pass the command to be run to it.
     module ProcessManagerCommand
       def initialize_command(*command)
         @process_manager = ProcessManager.new(command)
