@@ -28,8 +28,8 @@ module Proxy::Dynflow
 
       db_file = Settings.instance.database
       if db_file.nil? || db_file.empty?
-        Log.instance.warn "Could not open DB for dynflow at '#{db_file}', " \
-                          "will keep data in memory. Restart will drop all dynflow data."
+        Log.instance.info "Using in-memory database (default behaviour). Restart will drop all dynflow data. " \
+                          "To change this behaviour configure setting 'database'."
       else
         FileUtils.mkdir_p(File.dirname(db_file))
         db_conn_string += "/#{db_file}"
