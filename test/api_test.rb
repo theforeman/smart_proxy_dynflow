@@ -140,5 +140,28 @@ module Proxy::Dynflow
         _(response).must_equal %w[foo bar baz]
       end
     end
+
+    describe 'POST /tasks/statuses' do
+      it 'requires task_ids to be specified' do
+        post '/tasks/statuses', {}.to_json
+        _(last_response.status).must_equal 422
+      end
+
+      it 'returns statuses for multiple execution plans' do
+        count = 5
+        ids = Array.new(count).map do
+          triggered = WORLD.trigger(DummyAction)
+          wait_until { WORLD.persistence.load_execution_plan(triggered.id).state == :stopped }
+          triggered.id
+        end
+
+        post '/tasks/statuses', { 'task_ids' => ids }.to_json
+        _(last_response.status).must_equal 200
+        body = JSON.parse(last_response.body)
+        ids.each do |id|
+          _(body.keys).must_include id
+        end
+      end
+    end
   end
 end
