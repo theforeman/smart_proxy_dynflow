@@ -59,6 +59,16 @@ module Proxy
         tasks_count(params['state']).to_json
       end
 
+      post "/tasks/statuses" do
+        params = MultiJson.load(request.body.read)
+        ids = params.fetch('task_ids', [])
+        if ids.empty?
+          status 422
+          return { error: "'task_ids' needs to be provided and be a non-empty array of task UUIDs" }
+        end
+        tasks_statuses(params['task_ids']).to_json
+      end
+
       # capturing post "/tasks/:task_id/(update|done)"
       post TASK_UPDATE_REGEXP_PATH do |task_id, _action|
         data = MultiJson.load(request.body.read)

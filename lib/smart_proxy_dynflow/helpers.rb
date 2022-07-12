@@ -1,3 +1,6 @@
+require 'smart_proxy_dynflow/action/external_polling'
+require 'smart_proxy_dynflow/action/runner'
+
 module Proxy
   module Dynflow
     module Helpers
@@ -35,14 +38,17 @@ module Proxy
 
       def task_status(task_id)
         ep = world.persistence.load_execution_plan(task_id)
-        actions = ep.actions.map do |action|
-          refresh_output(ep, action)
-          expand_output(action)
-        end
-        ep.to_hash.merge(:actions => actions)
+        execution_plan_status(ep)
       rescue KeyError => _e
         status 404
         {}
+      end
+
+      def tasks_statuses(task_ids)
+        eps = world.persistence.find_execution_plans(filters: { uuid: task_ids })
+        eps.reduce({}) do |acc, ep|
+          acc.update(ep.id => execution_plan_status(ep))
+        end
       end
 
       def tasks_count(state)
@@ -68,6 +74,14 @@ module Proxy
         hash = action.to_hash
         hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
         hash
+      end
+
+      def execution_plan_status(plan)
+        actions = plan.actions.map do |action|
+          refresh_output(plan, action)
+          expand_output(action)
+        end
+        plan.to_hash.merge(:actions => actions)
       end
     end
   end
