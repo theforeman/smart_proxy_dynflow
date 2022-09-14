@@ -158,7 +158,7 @@ module Proxy
       # @return [void]
       def finish
         close
-        unless @pid == -1
+        if @pid != -1 && !done?
           _pid, status = Process.wait2(@pid)
           @status = status.exitstatus
         end

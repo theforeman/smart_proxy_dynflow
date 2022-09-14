@@ -151,6 +151,14 @@ module Proxy::Dynflow
           assert_equal pm.pid, pid
           assert_equal pm.status, status.exitstatus
         end
+
+        it 'is a noop when called on a stopped process' do
+          pm = ProcessManager.new('true')
+          pm.run!
+          assert pm.started?
+          assert pm.done?
+          pm.send(:finish)
+        end
       end
 
       describe 'Errno::ENOENT handling' do
