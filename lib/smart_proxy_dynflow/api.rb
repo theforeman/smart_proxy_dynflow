@@ -36,7 +36,8 @@ module Proxy
 
       post "/tasks/launch/?" do
         params = MultiJson.load(request.body.read)
-        launcher = launcher_class(params).new(world, callback_host(params, request), params.fetch('options', {}))
+        first_params = params['input']&.values&.first || {}
+        launcher = launcher_class(params).new(world, callback_host(first_params, request), params.fetch('options', {}))
         launcher.launch!(params['input'])
         launcher.results.to_json
       end
@@ -72,8 +73,13 @@ module Proxy
       private
 
       def callback_host(params, request)
-        params.fetch('action_input', {})['proxy_url'] ||
-          request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
+        params.fetch('action_input', {})['proxy_url'] || callback_host_from_env(request)
+      end
+
+      def callback_host_from_env(request)
+        protocol = %w[yes on 1].include?(request.env['HTTPS'].to_s) ? 'https' : 'http'
+        host = request.env.values_at('HTTP_X_FORWARDED_FOR', 'HTTP_HOST').compact.first
+        "#{protocol}://#{host}"
       end
 
       def launcher_class(params)
