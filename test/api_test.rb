@@ -52,7 +52,7 @@ module Proxy::Dynflow
         execution_plan = world.persistence.load_execution_plan(response['task_id'])
         _(execution_plan.state).must_equal :stopped
         _(execution_plan.result).must_equal :success
-        _(execution_plan.entry_action.input[:callback_host]).must_equal forwarded
+        _(execution_plan.entry_action.input[:callback_host]).must_equal "http://#{forwarded}"
       end
 
       it 'fallbacks to HTTP_HOST if X-Forwarded-For is not set as callback host' do
@@ -65,7 +65,7 @@ module Proxy::Dynflow
         execution_plan = world.persistence.load_execution_plan(response['task_id'])
         _(execution_plan.state).must_equal :stopped
         _(execution_plan.result).must_equal :success
-        _(execution_plan.entry_action.input[:callback_host]).must_equal hostname
+        _(execution_plan.entry_action.input[:callback_host]).must_equal "http://#{hostname}"
       end
     end
 
