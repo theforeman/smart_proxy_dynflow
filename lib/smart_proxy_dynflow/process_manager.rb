@@ -125,9 +125,15 @@ module Proxy
           return
         end
 
+        # Even though the FDs are still open, the child might have exited already
+        pid, status = Process.waitpid2(@pid, Process::WNOHANG)
+        timeout = 1 if pid
+
         ready_readers, ready_writers = IO.select(readers, writers, nil, timeout)
         (ready_readers || []).each(&:read_available!)
         (ready_writers || []).each(&:write_available!)
+
+        finish(status) if pid
       end
 
       # Sets block to be executed each time data is read from child process' standard output
@@ -156,10 +162,12 @@ module Proxy
       # Makes the process manager finish its run, closing opened FDs and reaping the child process
       #
       # @return [void]
-      def finish
+      def finish(status = nil)
         close
-        if @pid != -1 && !done?
+        if status.nil? && @pid != -1 && !done?
           _pid, status = Process.wait2(@pid)
+          @status = status.exitstatus
+        elsif status
           @status = status.exitstatus
         end
       end
