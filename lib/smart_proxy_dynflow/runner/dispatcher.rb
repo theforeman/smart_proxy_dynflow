@@ -5,6 +5,7 @@ module Proxy::Dynflow
     class Dispatcher
       def self.instance
         return @instance if @instance
+
         @instance = new(Proxy::Dynflow::Core.world.clock,
                         Proxy::Dynflow::Core.world.logger)
       end
@@ -110,6 +111,7 @@ module Proxy::Dynflow
       end
 
       attr_reader :ticker
+
       def initialize(clock, logger)
         @mutex  = Mutex.new
         @clock  = clock
@@ -126,14 +128,15 @@ module Proxy::Dynflow
       def start(suspended_action, runner)
         synchronize do
           raise "Actor with runner id #{runner.id} already exists" if @runner_actors[runner.id]
+
           runner.logger = @logger
           runner_actor = RunnerActor.spawn("runner-actor-#{runner.id}", self, suspended_action, runner, @clock, @logger)
           @runner_actors[runner.id] = runner_actor
           @runner_suspended_actions[runner.id] = suspended_action
           runner_actor.tell(:start_runner)
           return runner.id
-        rescue => exception
-          _handle_command_exception(runner.id, exception)
+        rescue => e
+          _handle_command_exception(runner.id, e)
           return nil
         end
       end
@@ -142,16 +145,16 @@ module Proxy::Dynflow
         synchronize do
           runner_actor = @runner_actors[runner_id]
           runner_actor&.tell(:kill)
-        rescue => exception
-          _handle_command_exception(runner_id, exception, false)
+        rescue => e
+          _handle_command_exception(runner_id, e, false)
         end
       end
 
       def finish(runner_id)
         synchronize do
           _finish(runner_id)
-        rescue => exception
-          _handle_command_exception(runner_id, exception, false)
+        rescue => e
+          _handle_command_exception(runner_id, e, false)
         end
       end
 
@@ -181,6 +184,7 @@ module Proxy::Dynflow
       def _finish(runner_id)
         runner_actor = @runner_actors.delete(runner_id)
         return unless runner_actor
+
         @logger.debug("closing session for command [#{runner_id}]," \
                       "#{@runner_actors.size} actors left ")
         runner_actor.tell([:start_termination, Concurrent::Promises.resolvable_future])

@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require 'minitest/reporters'
 
 ENV['RACK_ENV'] = 'test'
 
@@ -12,6 +13,7 @@ require 'smart_proxy_dynflow'
 require 'smart_proxy_dynflow/testing'
 
 Proxy::Dynflow::Plugin.load_test_settings({})
+Minitest::Reporters.use!
 
 logdir = File.join(File.dirname(__FILE__), '..', '..', 'logs')
 FileUtils.mkdir_p(logdir) unless File.exist?(logdir)
@@ -22,6 +24,7 @@ Proxy::Dynflow::Core.instance.world = WORLD
 def wait_until(iterations: 10, interval: 0.2, msg: nil)
   iterations.times do
     return if yield
+
     sleep interval
   end
   raise msg || "Failed waiting for something to happen"

@@ -13,7 +13,7 @@ module Proxy::Dynflow
       end
 
       def logger
-        @logger ||= Logger.new(STDERR)
+        @logger ||= Logger.new($stderr)
       end
 
       def run_refresh
@@ -77,6 +77,7 @@ module Proxy::Dynflow
 
       def generate_updates
         return no_update if @continuous_output.empty? && @exit_status.nil?
+
         new_data = @continuous_output
         @continuous_output = Proxy::Dynflow::ContinuousOutput.new
         new_update(new_data, @exit_status)
