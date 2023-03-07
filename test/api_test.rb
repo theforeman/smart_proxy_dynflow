@@ -1,6 +1,6 @@
 require 'test_helper'
 require 'json'
-require 'smart_proxy_dynflow/api.rb'
+require 'smart_proxy_dynflow/api'
 require 'smart_proxy_dynflow/runner/update'
 
 module Proxy::Dynflow
