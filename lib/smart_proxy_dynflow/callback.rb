@@ -26,6 +26,8 @@ module Proxy::Dynflow
 
       def run
         Callback::Request.send_to_foreman_tasks(input[:callback], input[:data])
+      ensure
+        input.delete(:data)
       end
     end
 
