@@ -27,10 +27,7 @@ module Proxy
       post "/tasks/status" do
         params = MultiJson.load(request.body.read)
         ids = params.fetch('task_ids', [])
-        result = world.persistence
-                      .find_execution_plans(:filters => { :uuid => ids }).reduce({}) do |acc, plan|
-          acc.update(plan.id => { 'state' => plan.state, 'result' => plan.result })
-        end
+        result = world.persistence.find_execution_plan_statuses(:filters => { :uuid => ids })
         MultiJson.dump(result)
       end
 
