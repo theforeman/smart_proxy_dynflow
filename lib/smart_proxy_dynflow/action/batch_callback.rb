@@ -12,6 +12,8 @@ module Proxy::Dynflow::Action
     def run
       payload = format_payload(input['targets'], input['results'])
       Proxy::Dynflow::Callback::Request.new.callback({ :callbacks => payload }.to_json)
+    ensure
+      input.delete(:results)
     end
 
     private
