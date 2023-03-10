@@ -58,6 +58,7 @@ module Proxy::Dynflow
       def finish_run(update)
         output[:exit_status] = update.exit_status
         output[:result] = output_result
+        drop_output_chunks!
       end
 
       def process_external_event(event)
