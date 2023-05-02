@@ -22,6 +22,7 @@ Proxy::Dynflow::Core.instance.world = WORLD
 def wait_until(iterations: 10, interval: 0.2, msg: nil)
   iterations.times do
     return if yield
+
     sleep interval
   end
   raise msg || "Failed waiting for something to happen"

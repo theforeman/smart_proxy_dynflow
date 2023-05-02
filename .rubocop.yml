@@ -3,9 +3,6 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.5
 
-Rails:
-  Enabled: false
-
 # Don't enforce documentation
 Style/Documentation:
   Enabled: false
@@ -35,8 +32,8 @@ Naming/FileName:
 Naming/HeredocDelimiterNaming:
   Enabled: false
 
-Style/TrailingCommaInLiteral:
-  Enabled: false
+# Style/TrailingCommaInLiteral:
+#   Enabled: false
 
 Style/TrailingCommaInArguments:
   Enabled: false
@@ -59,8 +56,8 @@ Style/ClassAndModuleChildren:
 Style/GuardClause:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
+# Style/BracesAroundHashParameters:
+#   Enabled: false
 
 Style/SignalException:
   Enabled: false

@@ -1,3 +1,4 @@
+require 'ci/reporter/rake/test_unit'
 require 'rake'
 require 'rake/testtask'
 require 'rubocop/rake_task'
@@ -20,6 +21,11 @@ desc 'Test Dynflow plugin.'
 task :test do
   Rake::Task['rubocop'].invoke if defined? RuboCop
   Rake::Task['test:core'].invoke
+end
+
+namespace :jenkins do
+  desc nil # No description means it's not listed in rake -T
+  task unit: ['ci:setup:testunit', :test]
 end
 
 if defined? RuboCop

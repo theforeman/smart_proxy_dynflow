@@ -11,7 +11,7 @@ module Proxy
 
       include ::Sinatra::Authorization::Helpers
 
-      TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}
+      TASK_UPDATE_REGEXP_PATH = %r{/tasks/(\S+)/(update|done)}.freeze
 
       before do
         if match = request.path_info.match(TASK_UPDATE_REGEXP_PATH)
