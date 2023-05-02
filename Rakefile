@@ -1,4 +1,3 @@
-require 'ci/reporter/rake/test_unit'
 require 'rake'
 require 'rake/testtask'
 require 'rubocop/rake_task'
@@ -23,9 +22,15 @@ task :test do
   Rake::Task['test:core'].invoke
 end
 
-namespace :jenkins do
-  desc nil # No description means it's not listed in rake -T
-  task unit: ['ci:setup:testunit', :test]
+begin
+  require 'ci/reporter/rake/test_unit'
+rescue LoadError
+  # test group not enabled
+else
+  namespace :jenkins do
+    desc nil # No description means it's not listed in rake -T
+    task unit: ['ci:setup:testunit', :test]
+  end
 end
 
 if defined? RuboCop
