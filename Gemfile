@@ -21,6 +21,7 @@ group :test do
   gem 'rack-test'
   gem 'rake'
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
+  gem 'webmock'
 end
 
 gem 'logging-journald', '~> 2.0', :platforms => [:ruby], :require => false

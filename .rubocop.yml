@@ -6,40 +6,26 @@ require:
 AllCops:
   NewCops: enable
   TargetRubyVersion: '2.7'
+  Exclude:
+    - 'test/**/*'
+    - 'vendor/**/*'
 
-# Don't enforce documentation
 Style/Documentation:
   Enabled: false
 
-# Support both ruby19 and hash_rockets
 Style/HashSyntax:
   Enabled: false
   SupportedStyles:
     - ruby19
     - hash_rockets
 
-Bundler/DuplicatedGem:
-  Enabled: false
-
 Lint/ShadowingOuterLocalVariable:
-  Enabled: false
-
-Lint/RescueException:
   Enabled: false
 
 Naming/AccessorMethodName:
   Enabled: false
 
-Naming/FileName:
-  Enabled: false
-
 Naming/HeredocDelimiterNaming:
-  Enabled: false
-
-# Style/TrailingCommaInLiteral:
-#   Enabled: false
-
-Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/FormatStringToken:
@@ -60,22 +46,7 @@ Style/ClassAndModuleChildren:
 Style/GuardClause:
   Enabled: false
 
-# Style/BracesAroundHashParameters:
-#   Enabled: false
-
-Style/SignalException:
-  Enabled: false
-
 Lint/AssignmentInCondition:
-  Enabled: false
-
-Style/RedundantReturn:
-  Enabled: false
-
-Lint/UnusedBlockArgument:
-  Enabled: false
-
-Style/Next:
   Enabled: false
 
 Metrics:
@@ -84,17 +55,44 @@ Metrics:
 Style/FormatString:
   Enabled: false
 
-Style/PreferredHashMethods:
-  Enabled: false
-
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/RescueStandardError:
   Enabled: false
 
-Style/RescueModifier:
+Style/NegatedIfElseCondition:
   Enabled: false
 
-Style/Alias:
+Style/FetchEnvVar:
+  Enabled: false
+
+Style/SlicingWithRange:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Lint/IncompatibleIoSelectWithFiberScheduler:
+  Enabled: false
+
+Style/OpenStructUse:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Lint/SuppressedException:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Performance/RedundantEqualityComparisonBlock:
   Enabled: false
