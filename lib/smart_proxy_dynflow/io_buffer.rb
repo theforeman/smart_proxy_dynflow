@@ -71,7 +71,7 @@ module Proxy
       def read_available!
         data = ''
         loop { data += @io.read_nonblock(4096) }
-      rescue IO::WaitWritable # rubocop:disable Lint/SupressedException
+      rescue IO::WaitReadable # rubocop:disable Lint/SupressedException
       rescue EOFError
         close
       ensure

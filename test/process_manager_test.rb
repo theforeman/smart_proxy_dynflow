@@ -107,7 +107,7 @@ module Proxy::Dynflow
           pm.stdin.to_io.close
           pm.process(timeout: 0.1) # Stdout and stderr get closed
           refute pm.done?
-          pm.process(timeout: 0.1) # It determines there is nothing left to be done and finishes
+          pm.process(timeout: 0.2) # It determines there is nothing left to be done and finishes
           assert pm.done?
         end
 
