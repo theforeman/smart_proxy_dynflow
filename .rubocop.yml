@@ -88,6 +88,9 @@ Naming/MemoizedInstanceVariableName:
 Lint/SuppressedException:
   Enabled: false
 
+Lint/RedundantCopDisableDirective:
+  Enabled: false
+
 Lint/MissingSuper:
   Enabled: false
 
