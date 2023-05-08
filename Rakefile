@@ -27,6 +27,11 @@ begin
 rescue LoadError
   # test group not enabled
 else
+  desc 'Set up minitest for CI'
+  task 'ci:setup:minitest' do
+    Minitest::Reporters.use!
+  end
+
   namespace :jenkins do
     desc nil # No description means it's not listed in rake -T
     task unit: ['ci:setup:minitest', :test]
