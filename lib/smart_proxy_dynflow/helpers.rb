@@ -65,7 +65,8 @@ module Proxy
       end
 
       def refresh_output(execution_plan, action)
-        if action.is_a?(Proxy::Dynflow::Action::WithExternalPolling) && %i[running suspended].include?(action.run_step&.state)
+        if action.is_a?(Proxy::Dynflow::Action::WithExternalPolling) && %i[running
+                                                                           suspended].include?(action.run_step&.state)
           world.event(execution_plan.id, action.run_step_id, Proxy::Dynflow::Action::WithExternalPolling::Poll)
         end
       end

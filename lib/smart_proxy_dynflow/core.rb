@@ -24,6 +24,7 @@ module Proxy::Dynflow
 
     def persistence_conn_string
       return ENV['DYNFLOW_DB_CONN_STRING'] if ENV.key? 'DYNFLOW_DB_CONN_STRING'
+
       db_conn_string = 'sqlite:/'
 
       db_file = Settings.instance.database
@@ -72,6 +73,7 @@ module Proxy::Dynflow
 
       def ensure_initialized
         return @instance if @instance
+
         @instance = Core.new
         after_initialize_blocks.each { |block| block.call(@instance) }
         @instance
@@ -87,7 +89,7 @@ module Proxy::Dynflow
 
       def web_console
         require 'dynflow/web'
-        dynflow_console = ::Dynflow::Web.setup do
+        ::Dynflow::Web.setup do
           # we can't use the proxy's after_activation hook, as
           # it happens before the Daemon forks the process (including
           # closing opened file descriptors)
@@ -103,7 +105,6 @@ module Proxy::Dynflow
           Core.ensure_initialized
           set :world, Core.world
         end
-        dynflow_console
       end
 
       def world
