@@ -98,4 +98,4 @@ Style/OptionalBooleanParameter:
   Enabled: false
 
 Performance/RedundantEqualityComparisonBlock:
-  Enabled: false
+  Enabled: true

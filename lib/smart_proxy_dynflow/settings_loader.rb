@@ -50,7 +50,7 @@ module Proxy::Dynflow
     end
 
     def validate_settings!
-      raise 'Only symbols expected in keys' unless @settings.keys.all? { |key| key.is_a? Symbol }
+      raise 'Only symbols expected in keys' unless @settings.keys.all?(Symbol)
     end
   end
 end
