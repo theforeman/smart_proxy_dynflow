@@ -23,13 +23,13 @@ task :test do
 end
 
 begin
-  require 'ci/reporter/rake/test_unit'
+  require 'minitest/reporters'
 rescue LoadError
   # test group not enabled
 else
   namespace :jenkins do
     desc nil # No description means it's not listed in rake -T
-    task unit: ['ci:setup:testunit', :test]
+    task unit: ['ci:setup:minitest', :test]
   end
 end
 

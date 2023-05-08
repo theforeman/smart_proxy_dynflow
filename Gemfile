@@ -14,8 +14,8 @@ group :development do
 end
 
 group :test do
-  gem 'ci_reporter_test_unit'
   gem 'minitest'
+  gem 'minitest-reporters'
   gem 'mocha'
   gem 'public_suffix'
   gem 'rack-test'
