@@ -76,6 +76,9 @@ Lint/IncompatibleIoSelectWithFiberScheduler:
 Style/OpenStructUse:
   Enabled: false
 
+Minitest/MultipleAssertions:
+  Enabled: false
+
 Naming/MethodParameterName:
   Enabled: false
 
@@ -88,7 +91,13 @@ Lint/SuppressedException:
 Lint/RedundantCopDisableDirective:
   Enabled: true
 
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
 Lint/MissingSuper:
+  Enabled: false
+
+Minitest/UnspecifiedException:
   Enabled: false
 
 Style/OptionalBooleanParameter:
