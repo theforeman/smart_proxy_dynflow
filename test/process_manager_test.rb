@@ -11,13 +11,13 @@ module Proxy::Dynflow
         it 'can be controlled manually' do
           pm = ProcessManager.new('true')
 
-          refute pm.started?
-          refute pm.done?
+          refute_predicate pm, :started?
+          refute_predicate pm, :done?
 
           pm.start!
 
           assert_predicate pm, :started?
-          refute pm.done?
+          refute_predicate pm, :done?
 
           pm.process
           pm.process
@@ -30,8 +30,8 @@ module Proxy::Dynflow
         it 'can be run' do
           pm = ProcessManager.new('true')
 
-          refute pm.started?
-          refute pm.done?
+          refute_predicate pm, :started?
+          refute_predicate pm, :done?
 
           pm.run!
 
@@ -108,7 +108,7 @@ module Proxy::Dynflow
           pm.process(timeout: 0.1) # Nothing happens
 
           assert_predicate pm, :started?
-          refute pm.done?
+          refute_predicate pm, :done?
           assert_equal('', pm.stdout.to_s)
           pm.stdin.add_data("hello\n")
           pm.process(timeout: 0.1) # Stdin gets written
@@ -116,7 +116,7 @@ module Proxy::Dynflow
           pm.stdin.to_io.close
           pm.process(timeout: 0.1) # Stdout and stderr get closed
 
-          refute pm.done?
+          refute_predicate pm, :done?
           pm.process(timeout: 0.2) # It determines there is nothing left to be done and finishes
 
           assert_predicate pm, :done?
