@@ -8,7 +8,7 @@ module Proxy::Dynflow
       let(:buffer) { IOBuffer.new(StringIO.new) }
 
       it 'is empty by default' do
-        assert buffer.empty?
+        assert_predicate buffer, :empty?
         assert_equal('', buffer.buffer)
       end
 
@@ -42,7 +42,7 @@ module Proxy::Dynflow
           buffer.add_data('hello')
           buffer.io.expects(:write_nonblock).with('hello').raises(EOFError)
           buffer.write_available!
-          assert buffer.closed?
+          assert_predicate buffer, :closed?
         end
 
         # IO::WaitWritable is a module so mocha refuses to raise it and we have
@@ -70,7 +70,7 @@ module Proxy::Dynflow
         it 'closes itself on EOF' do
           buffer.io.expects(:read_nonblock).raises(EOFError)
           buffer.read_available!
-          assert buffer.closed?
+          assert_predicate buffer, :closed?
         end
 
         it 'exits on IO::WaitReadable' do

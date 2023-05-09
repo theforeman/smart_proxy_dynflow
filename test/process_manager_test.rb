@@ -14,13 +14,13 @@ module Proxy::Dynflow
           refute pm.done?
 
           pm.start!
-          assert pm.started?
+          assert_predicate pm, :started?
           refute pm.done?
 
           pm.process
           pm.process
-          assert pm.started?
-          assert pm.done?
+          assert_predicate pm, :started?
+          assert_predicate pm, :done?
           assert_equal(0, pm.status)
         end
 
@@ -31,8 +31,8 @@ module Proxy::Dynflow
 
           pm.run!
 
-          assert pm.started?
-          assert pm.done?
+          assert_predicate pm, :started?
+          assert_predicate pm, :done?
           assert_equal(0, pm.status)
         end
 
@@ -98,7 +98,7 @@ module Proxy::Dynflow
           pm = ProcessManager.new('cat')
           pm.start!
           pm.process(timeout: 0.1) # Nothing happens
-          assert pm.started?
+          assert_predicate pm, :started?
           refute pm.done?
           assert_equal('', pm.stdout.to_s)
           pm.stdin.add_data("hello\n")
@@ -108,7 +108,7 @@ module Proxy::Dynflow
           pm.process(timeout: 0.1) # Stdout and stderr get closed
           refute pm.done?
           pm.process(timeout: 0.2) # It determines there is nothing left to be done and finishes
-          assert pm.done?
+          assert_predicate pm, :done?
         end
 
         it 'raises an exception when called before start!' do
@@ -125,9 +125,9 @@ module Proxy::Dynflow
 
           pm.close
 
-          assert pm.stdin.closed?
-          assert pm.stdout.closed?
-          assert pm.stderr.closed?
+          assert_predicate pm.stdin, :closed?
+          assert_predicate pm.stdout, :closed?
+          assert_predicate pm.stderr, :closed?
         end
       end
 
@@ -155,8 +155,8 @@ module Proxy::Dynflow
         it 'is a noop when called on a stopped process' do
           pm = ProcessManager.new('true')
           pm.run!
-          assert pm.started?
-          assert pm.done?
+          assert_predicate pm, :started?
+          assert_predicate pm, :done?
           pm.send(:finish)
         end
       end
