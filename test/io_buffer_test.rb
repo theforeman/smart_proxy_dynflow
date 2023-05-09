@@ -9,17 +9,17 @@ module Proxy::Dynflow
 
       it 'is empty by default' do
         assert buffer.empty?
-        assert_equal buffer.buffer, ''
+        assert_equal('', buffer.buffer)
       end
 
       describe '#on_data' do
         it 'is noop by default' do
-          assert_equal buffer.send(:with_callback, 'hello'), 'hello'
+          assert_equal('hello', buffer.send(:with_callback, 'hello'))
         end
 
         it 'allows setting a callback' do
           buffer.on_data { |data| "|#{data}|" }
-          assert_equal buffer.send(:with_callback, 'hello'), '|hello|'
+          assert_equal('|hello|', buffer.send(:with_callback, 'hello'))
         end
       end
 
@@ -56,7 +56,7 @@ module Proxy::Dynflow
           buffer.io.expects(:write_nonblock).with('hello').returns(1)
           buffer.io.expects(:write_nonblock).with('ello').raises(CustomWaitWritable)
           buffer.write_available!
-          assert_equal buffer.to_s, 'ello'
+          assert_equal('ello', buffer.to_s)
         end
       end
 
@@ -76,7 +76,7 @@ module Proxy::Dynflow
         it 'exits on IO::WaitReadable' do
           buffer.io.expects(:read_nonblock).times(3).returns('hello, ', 'friend').then.raises(CustomWaitReadable)
           buffer.read_available!
-          assert_equal buffer.to_s, 'hello, friend'
+          assert_equal('hello, friend', buffer.to_s)
         end
 
         it 'does not call the callback if there are no data' do
@@ -100,7 +100,7 @@ module Proxy::Dynflow
           buffer.on_data { |data| "|#{data}|" }
           buffer.io.expects(:read_nonblock).times(3).returns('hello, ', 'friend').then.raises(CustomWaitReadable)
           buffer.read_available!
-          assert_equal buffer.to_s, '|hello, friend|'
+          assert_equal('|hello, friend|', buffer.to_s)
         end
       end
     end

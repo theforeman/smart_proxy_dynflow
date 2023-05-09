@@ -21,7 +21,7 @@ module Proxy::Dynflow
           pm.process
           assert pm.started?
           assert pm.done?
-          assert_equal pm.status, 0
+          assert_equal(0, pm.status)
         end
 
         it 'can be run' do
@@ -33,27 +33,27 @@ module Proxy::Dynflow
 
           assert pm.started?
           assert pm.done?
-          assert_equal pm.status, 0
+          assert_equal(0, pm.status)
         end
 
         it 'captures stdout' do
           pm = ProcessManager.new('echo hello')
           pm.run!
-          assert_equal pm.stderr.to_s, ''
-          assert_equal pm.stdout.to_s.chomp, 'hello'
+          assert_equal('', pm.stderr.to_s)
+          assert_equal('hello', pm.stdout.to_s.chomp)
         end
 
         it 'captures stderr' do
           pm = ProcessManager.new('echo hello >&2')
           pm.run!
-          assert_equal pm.stderr.to_s.chomp, 'hello'
-          assert_equal pm.stdout.to_s, ''
+          assert_equal('hello', pm.stderr.to_s.chomp)
+          assert_equal('', pm.stdout.to_s)
         end
 
         it 'captures exit code' do
           pm = ProcessManager.new('exit 5')
           pm.run!
-          assert_equal pm.status, 5
+          assert_equal(5, pm.status)
         end
 
         it 'can be hooked onto stdout' do
@@ -89,7 +89,7 @@ module Proxy::Dynflow
           end
           pm.stdin.add_data("10\n")
           pm.run!
-          assert_equal pm.stdout.to_s.lines.map(&:chomp), %w[10 9 8 7 6 5 4 3 2 1 0]
+          assert_equal(%w[10 9 8 7 6 5 4 3 2 1 0], pm.stdout.to_s.lines.map(&:chomp))
         end
       end
 
@@ -100,7 +100,7 @@ module Proxy::Dynflow
           pm.process(timeout: 0.1) # Nothing happens
           assert pm.started?
           refute pm.done?
-          assert_equal pm.stdout.to_s, ''
+          assert_equal('', pm.stdout.to_s)
           pm.stdin.add_data("hello\n")
           pm.process(timeout: 0.1) # Stdin gets written
           pm.process(timeout: 0.1) # Stdout gets read
@@ -177,8 +177,8 @@ module Proxy::Dynflow
 
         it 'represents the failure correctly' do
           pm.run!
-          assert_equal pm.pid, -1
-          assert_equal pm.status, 255
+          assert_equal(-1, pm.pid)
+          assert_equal(255, pm.status)
           assert_equal pm.stderr.to_s, "No such file or directory - #{command}"
         end
 
@@ -186,8 +186,8 @@ module Proxy::Dynflow
           pm.start!
           pm.process(timeout: 0.1)
 
-          assert_equal pm.pid, -1
-          assert_equal pm.status, 255
+          assert_equal(-1, pm.pid)
+          assert_equal(255, pm.status)
           assert_equal pm.stderr.to_s, "No such file or directory - #{command}"
         end
       end
