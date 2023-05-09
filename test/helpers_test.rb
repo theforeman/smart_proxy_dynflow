@@ -16,18 +16,21 @@ module Proxy::Dynflow
 
     it 'is not authenticated over HTTP' do
       get '/tasks/count', {}, {}
-      assert last_response.status == 200
+
+      assert_equal(200, last_response.status)
     end
 
     it 'requires client SSL certificate when using https' do
       Log.instance.expects(:error)
       # HTTPS without client cert
       get '/tasks/count', {}, { 'HTTPS' => 'yes' }
-      assert last_response.status == 403
+
+      assert_equal(403, last_response.status)
 
       # HTTPS with valid cert
       get '/tasks/count', {}, { 'HTTPS' => 'yes', 'SSL_CLIENT_CERT' => 'valid cert' }
-      assert last_response.status == 200
+
+      assert_equal(200, last_response.status)
     end
 
     it 'performs token-based authentication for task update/done paths' do
@@ -36,30 +39,35 @@ module Proxy::Dynflow
 
       # Happy path for update
       otp = ::Proxy::Dynflow::OtpManager.generate_otp(username)
-      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
+      http_auth = "Basic #{::Proxy::Dynflow::OtpManager.tokenize(username, otp)}"
       Log.instance.stubs(:debug)
       post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
-      assert last_response.status == 200
+
+      assert_equal(200, last_response.status)
 
       # Wrong password
-      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, 'wrong pass')
+      http_auth = "Basic #{::Proxy::Dynflow::OtpManager.tokenize(username, 'wrong pass')}"
       post "/tasks/#{task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
-      assert last_response.status == 403
+
+      assert_equal(403, last_response.status)
 
       # Wrong task id
-      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
+      http_auth = "Basic #{::Proxy::Dynflow::OtpManager.tokenize(username, otp)}"
       post "/tasks/#{other_task_id}/update", '{}', 'HTTP_AUTHORIZATION' => http_auth
-      assert last_response.status == 403
+
+      assert_equal(403, last_response.status)
 
       # Happy path for done
-      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
+      http_auth = "Basic #{::Proxy::Dynflow::OtpManager.tokenize(username, otp)}"
       post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
-      assert last_response.status == 200
+
+      assert_equal(200, last_response.status)
 
       # Call to done should remove the token, so using it the second time should fail
-      http_auth = 'Basic ' + ::Proxy::Dynflow::OtpManager.tokenize(username, otp)
+      http_auth = "Basic #{::Proxy::Dynflow::OtpManager.tokenize(username, otp)}"
       post "/tasks/#{task_id}/done", '{}', 'HTTP_AUTHORIZATION' => http_auth
-      assert last_response.status == 403
+
+      assert_equal(403, last_response.status)
     end
   end
 end

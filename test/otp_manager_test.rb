@@ -33,6 +33,7 @@ module Proxy::Dynflow
 
     it 'provides #drop_otp method that removes OTP only when correct username and password is provided' do
       otp = TestOtpManager.generate_otp(username)
+
       refute TestOtpManager.drop_otp('wrong_username', 'wrong_password')
       refute TestOtpManager.drop_otp(username, 'wrong_password')
       refute TestOtpManager.drop_otp('wrong_username', otp)
@@ -41,6 +42,7 @@ module Proxy::Dynflow
 
     it 'authenticate removes OTP only when correct username and password is provided' do
       otp = TestOtpManager.generate_otp(username)
+
       refute try_to_authenticate('wrong_username', 'wrong_password')
       refute try_to_authenticate(username, 'wrong_password')
       refute try_to_authenticate(username, 'wrong_password')
@@ -70,6 +72,7 @@ module Proxy::Dynflow
     it 'overwrites old OTP when generating a new one for the same username' do
       old = TestOtpManager.generate_otp(username)
       new = TestOtpManager.generate_otp(username)
+
       refute try_to_authenticate(username, old)
       assert try_to_authenticate(username, new)
     end

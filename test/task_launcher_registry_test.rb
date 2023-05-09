@@ -35,6 +35,7 @@ module Proxy::Dynflow
       describe '#key' do
         it 'checks presence of a key' do
           registry.expects(:registry).returns({ 'my_operation' => Integer }).twice
+
           assert registry.key?('my_operation')
           refute registry.key?('missing')
         end
