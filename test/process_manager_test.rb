@@ -10,15 +10,18 @@ module Proxy::Dynflow
       describe 'general behavior' do
         it 'can be controlled manually' do
           pm = ProcessManager.new('true')
+
           refute pm.started?
           refute pm.done?
 
           pm.start!
+
           assert_predicate pm, :started?
           refute pm.done?
 
           pm.process
           pm.process
+
           assert_predicate pm, :started?
           assert_predicate pm, :done?
           assert_equal(0, pm.status)
@@ -26,6 +29,7 @@ module Proxy::Dynflow
 
         it 'can be run' do
           pm = ProcessManager.new('true')
+
           refute pm.started?
           refute pm.done?
 
@@ -39,6 +43,7 @@ module Proxy::Dynflow
         it 'captures stdout' do
           pm = ProcessManager.new('echo hello')
           pm.run!
+
           assert_equal('', pm.stderr.to_s)
           assert_equal('hello', pm.stdout.to_s.chomp)
         end
@@ -46,6 +51,7 @@ module Proxy::Dynflow
         it 'captures stderr' do
           pm = ProcessManager.new('echo hello >&2')
           pm.run!
+
           assert_equal('hello', pm.stderr.to_s.chomp)
           assert_equal('', pm.stdout.to_s)
         end
@@ -53,6 +59,7 @@ module Proxy::Dynflow
         it 'captures exit code' do
           pm = ProcessManager.new('exit 5')
           pm.run!
+
           assert_equal(5, pm.status)
         end
 
@@ -89,6 +96,7 @@ module Proxy::Dynflow
           end
           pm.stdin.add_data("10\n")
           pm.run!
+
           assert_equal(%w[10 9 8 7 6 5 4 3 2 1 0], pm.stdout.to_s.lines.map(&:chomp))
         end
       end
@@ -98,6 +106,7 @@ module Proxy::Dynflow
           pm = ProcessManager.new('cat')
           pm.start!
           pm.process(timeout: 0.1) # Nothing happens
+
           assert_predicate pm, :started?
           refute pm.done?
           assert_equal('', pm.stdout.to_s)
@@ -106,8 +115,10 @@ module Proxy::Dynflow
           pm.process(timeout: 0.1) # Stdout gets read
           pm.stdin.to_io.close
           pm.process(timeout: 0.1) # Stdout and stderr get closed
+
           refute pm.done?
           pm.process(timeout: 0.2) # It determines there is nothing left to be done and finishes
+
           assert_predicate pm, :done?
         end
 
@@ -155,6 +166,7 @@ module Proxy::Dynflow
         it 'is a noop when called on a stopped process' do
           pm = ProcessManager.new('true')
           pm.run!
+
           assert_predicate pm, :started?
           assert_predicate pm, :done?
           pm.send(:finish)
@@ -177,6 +189,7 @@ module Proxy::Dynflow
 
         it 'represents the failure correctly' do
           pm.run!
+
           assert_equal(-1, pm.pid)
           assert_equal(255, pm.status)
           assert_equal pm.stderr.to_s, "No such file or directory - #{command}"

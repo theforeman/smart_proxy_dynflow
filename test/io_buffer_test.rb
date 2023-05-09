@@ -19,6 +19,7 @@ module Proxy::Dynflow
 
         it 'allows setting a callback' do
           buffer.on_data { |data| "|#{data}|" }
+
           assert_equal('|hello|', buffer.send(:with_callback, 'hello'))
         end
       end
@@ -42,6 +43,7 @@ module Proxy::Dynflow
           buffer.add_data('hello')
           buffer.io.expects(:write_nonblock).with('hello').raises(EOFError)
           buffer.write_available!
+
           assert_predicate buffer, :closed?
         end
 
@@ -56,6 +58,7 @@ module Proxy::Dynflow
           buffer.io.expects(:write_nonblock).with('hello').returns(1)
           buffer.io.expects(:write_nonblock).with('ello').raises(CustomWaitWritable)
           buffer.write_available!
+
           assert_equal('ello', buffer.to_s)
         end
       end
@@ -70,12 +73,14 @@ module Proxy::Dynflow
         it 'closes itself on EOF' do
           buffer.io.expects(:read_nonblock).raises(EOFError)
           buffer.read_available!
+
           assert_predicate buffer, :closed?
         end
 
         it 'exits on IO::WaitReadable' do
           buffer.io.expects(:read_nonblock).times(3).returns('hello, ', 'friend').then.raises(CustomWaitReadable)
           buffer.read_available!
+
           assert_equal('hello, friend', buffer.to_s)
         end
 
@@ -100,6 +105,7 @@ module Proxy::Dynflow
           buffer.on_data { |data| "|#{data}|" }
           buffer.io.expects(:read_nonblock).times(3).returns('hello, ', 'friend').then.raises(CustomWaitReadable)
           buffer.read_available!
+
           assert_equal('|hello, friend|', buffer.to_s)
         end
       end
