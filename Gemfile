@@ -16,6 +16,7 @@ end
 
 group :test do
   gem 'minitest'
+  gem 'minitest-reporters'
   gem 'mocha'
   gem 'public_suffix'
   gem 'rack-test'
