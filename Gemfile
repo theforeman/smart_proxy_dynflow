@@ -2,6 +2,13 @@ source 'https://rubygems.org'
 
 gemspec :name => 'smart_proxy_dynflow'
 
+group :rubocop do
+  gem 'rubocop', '~> 1.28.0'
+  gem 'rubocop-minitest'
+  gem 'rubocop-performance'
+  gem 'rubocop-rake'
+end
+
 group :development do
   gem 'pry'
 end
@@ -12,7 +19,6 @@ group :test do
   gem 'public_suffix'
   gem 'rack-test'
   gem 'rake'
-  gem 'rubocop', '~> 0.52.1'
   gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
   gem 'webmock'
 end

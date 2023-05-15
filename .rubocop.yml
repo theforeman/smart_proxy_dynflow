@@ -1,10 +1,12 @@
 inherit_from: .rubocop_todo.yml
 
+require:
+  - rubocop-minitest
+  - rubocop-performance
+  - rubocop-rake
+
 AllCops:
   TargetRubyVersion: 2.5
-
-Rails:
-  Enabled: false
 
 # Don't enforce documentation
 Style/Documentation:
@@ -35,7 +37,7 @@ Naming/FileName:
 Naming/HeredocDelimiterNaming:
   Enabled: false
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   Enabled: false
 
 Style/TrailingCommaInArguments:
@@ -57,9 +59,6 @@ Style/ClassAndModuleChildren:
   Enabled: false
 
 Style/GuardClause:
-  Enabled: false
-
-Style/BracesAroundHashParameters:
   Enabled: false
 
 Style/SignalException:
