@@ -7,14 +7,14 @@ group :development do
 end
 
 group :test do
-  gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
-
   gem 'minitest'
   gem 'mocha'
   gem 'public_suffix'
   gem 'rack-test'
   gem 'rake'
   gem 'rubocop', '~> 0.52.1'
+  gem 'smart_proxy', :git => "https://github.com/theforeman/smart-proxy", :branch => "develop"
+  gem 'webmock'
 end
 
 gem 'logging-journald', '~> 2.0', :platforms => [:ruby], :require => false
