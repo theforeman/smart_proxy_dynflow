@@ -5,14 +5,3 @@
 # one by one as the offenses are removed from the code base.
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
-
-# This cop supports safe auto-correction (--auto-correct).
-Style/GlobalStdStream:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/runner/base.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
-Style/RedundantFreeze:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/log.rb'
-    - 'lib/smart_proxy_dynflow/version.rb'
