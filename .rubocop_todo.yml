@@ -33,11 +33,6 @@ Minitest/AssertEqual:
     - 'test/helpers_test.rb'
 
 # This cop supports safe auto-correction (--auto-correct).
-Style/ExplicitBlockArgument:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/middleware/keep_current_request_id.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
 Style/GlobalStdStream:
   Exclude:
     - 'lib/smart_proxy_dynflow/runner/base.rb'
