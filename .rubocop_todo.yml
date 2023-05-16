@@ -72,9 +72,9 @@ Style/GlobalStdStream:
 # This cop supports safe auto-correction (--auto-correct).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/api.rb'
+# Style/MutableConstant:
+#   Exclude:
+#     - 'lib/smart_proxy_dynflow/api.rb'
 
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: respond_to_missing?
