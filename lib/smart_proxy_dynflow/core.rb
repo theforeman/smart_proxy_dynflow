@@ -104,7 +104,6 @@ module Proxy::Dynflow
           Core.ensure_initialized
           set :world, Core.world
         end
-        
       end
 
       def world
