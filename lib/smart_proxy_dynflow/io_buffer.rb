@@ -87,7 +87,7 @@ module Proxy
       def write_available!
         until @buffer.empty?
           n = @io.write_nonblock(@buffer)
-          @buffer = @buffer[n..-1]
+          @buffer = @buffer[n..]
         end
       rescue IO::WaitWritable # rubocop:disable Lint/SuppressedException
       rescue EOFError

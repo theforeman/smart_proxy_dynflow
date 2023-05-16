@@ -14,7 +14,7 @@ module Proxy::Dynflow
       end
 
       def logger
-        @logger ||= Logger.new(STDERR)
+        @logger ||= Logger.new($stderr)
       end
 
       def run_refresh
