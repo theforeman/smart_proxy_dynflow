@@ -96,3 +96,6 @@ Style/RescueModifier:
 
 Style/Alias:
   Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
