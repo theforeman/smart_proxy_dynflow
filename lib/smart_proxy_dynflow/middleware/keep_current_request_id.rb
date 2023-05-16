@@ -27,11 +27,11 @@ module Actions
 
       private
 
-      def with_current_request_id
+      def with_current_request_id(&block)
         if action.input[:current_request_id].nil?
           yield
         else
-          restore_current_request_id { yield }
+          restore_current_request_id(&block)
         end
       end
 
