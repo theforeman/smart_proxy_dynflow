@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'dynflow'
 
 require 'smart_proxy_dynflow/task_launcher_registry'

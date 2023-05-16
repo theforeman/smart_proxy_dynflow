@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Proxy::Dynflow
   module Runner
     # Runner is an object that is able to initiate some action and

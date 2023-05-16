@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Proxy::Dynflow::Action
   class SingleRunnerBatch < Batch
     include Dynflow::Action::WithPollingSubPlans

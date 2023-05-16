@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Proxy::Dynflow
   class ContinuousOutput
     attr_accessor :raw_outputs

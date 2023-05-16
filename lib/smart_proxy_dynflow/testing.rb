@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'dynflow/testing'
 
 unless defined? DYNFLOW_TESTING_LOG_LEVEL

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Proxy
   module Dynflow
     class ProxyAdapter < ::Dynflow::LoggerAdapters::Simple
