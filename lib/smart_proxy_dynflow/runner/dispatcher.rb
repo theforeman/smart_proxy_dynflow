@@ -132,8 +132,8 @@ module Proxy::Dynflow
           @runner_suspended_actions[runner.id] = suspended_action
           runner_actor.tell(:start_runner)
           return runner.id
-        rescue => exception
-          _handle_command_exception(runner.id, exception)
+        rescue => e
+          _handle_command_exception(runner.id, e)
           return nil
         end
       end
@@ -142,16 +142,16 @@ module Proxy::Dynflow
         synchronize do
           runner_actor = @runner_actors[runner_id]
           runner_actor&.tell(:kill)
-        rescue => exception
-          _handle_command_exception(runner_id, exception, false)
+        rescue => e
+          _handle_command_exception(runner_id, e, false)
         end
       end
 
       def finish(runner_id)
         synchronize do
           _finish(runner_id)
-        rescue => exception
-          _handle_command_exception(runner_id, exception, false)
+        rescue => e
+          _handle_command_exception(runner_id, e, false)
         end
       end
 
