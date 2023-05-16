@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.license = 'GPL-3.0'
 
-  gem.required_ruby_version = '>= 2.5'
+  gem.required_ruby_version = '>= 2.7', '< 4'
 
   gem.add_runtime_dependency('dynflow', "~> 1.6")
   gem.add_runtime_dependency('rest-client')
