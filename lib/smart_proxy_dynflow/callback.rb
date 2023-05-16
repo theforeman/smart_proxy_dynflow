@@ -16,6 +16,7 @@ module Proxy::Dynflow
         if response.code.to_s != "200"
           raise "Failed performing callback to Foreman server: #{response.code} #{response.body}"
         end
+
         response
       end
     end
