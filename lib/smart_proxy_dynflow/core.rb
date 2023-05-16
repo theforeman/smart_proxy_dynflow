@@ -25,6 +25,7 @@ module Proxy::Dynflow
 
     def persistence_conn_string
       return ENV['DYNFLOW_DB_CONN_STRING'] if ENV.key? 'DYNFLOW_DB_CONN_STRING'
+
       db_conn_string = 'sqlite:/'
 
       db_file = Settings.instance.database
@@ -73,6 +74,7 @@ module Proxy::Dynflow
 
       def ensure_initialized
         return @instance if @instance
+
         @instance = Core.new
         after_initialize_blocks.each { |block| block.call(@instance) }
         @instance

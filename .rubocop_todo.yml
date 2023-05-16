@@ -7,19 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # This cop supports safe auto-correction (--auto-correct).
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/callback.rb'
-    - 'lib/smart_proxy_dynflow/continuous_output.rb'
-    - 'lib/smart_proxy_dynflow/core.rb'
-    - 'lib/smart_proxy_dynflow/process_manager.rb'
-    - 'lib/smart_proxy_dynflow/runner/base.rb'
-    - 'lib/smart_proxy_dynflow/runner/command.rb'
-    - 'lib/smart_proxy_dynflow/runner/dispatcher.rb'
-    - 'lib/smart_proxy_dynflow/settings_loader.rb'
-    - 'test/test_helper.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 

@@ -118,6 +118,7 @@ module Proxy
       # @return [void]
       def process(timeout: nil)
         raise 'Cannot process until the manager is started' unless started?
+
         writers = [@stdin].reject { |buf| buf.empty? || buf.closed? }
         readers = [@stdout, @stderr].reject(&:closed?)
 

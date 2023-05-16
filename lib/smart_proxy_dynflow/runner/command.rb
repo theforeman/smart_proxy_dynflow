@@ -23,6 +23,7 @@ module Proxy::Dynflow
 
       def refresh
         return if @command_out.nil?
+
         ready_outputs, * = IO.select([@command_out], nil, nil, 0.1)
         if ready_outputs
           if @command_out.nread.positive?
