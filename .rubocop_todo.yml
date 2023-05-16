@@ -52,12 +52,6 @@ Style/RedundantFreeze:
     - 'lib/smart_proxy_dynflow/log.rb'
     - 'lib/smart_proxy_dynflow/version.rb'
 
-# This cop supports unsafe auto-correction (--auto-correct-all).
-# Configuration parameters: Mode.
-Style/StringConcatenation:
-  Exclude:
-    - 'test/helpers_test.rb'
-
 # This cop supports safe auto-correction (--auto-correct).
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
 # URISchemes: http, https
