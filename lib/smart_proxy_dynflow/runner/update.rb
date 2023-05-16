@@ -7,6 +7,7 @@ module Proxy::Dynflow
     # can be consumed by other components, such as RunnerAction
     class Update
       attr_reader :continuous_output, :exit_status
+
       def initialize(continuous_output, exit_status)
         @continuous_output = continuous_output
         @exit_status = exit_status
@@ -21,6 +22,7 @@ module Proxy::Dynflow
 
     class ExternalEvent
       attr_reader :data
+
       def initialize(data = {})
         @data = data
       end

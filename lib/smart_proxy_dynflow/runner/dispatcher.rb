@@ -112,6 +112,7 @@ module Proxy::Dynflow
       end
 
       attr_reader :ticker
+
       def initialize(clock, logger)
         @mutex  = Mutex.new
         @clock  = clock

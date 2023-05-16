@@ -10,15 +10,6 @@
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: AllowAliasSyntax, AllowedMethods.
-# AllowedMethods: alias_method, public, protected, private
-Layout/EmptyLinesAroundAttributeAccessor:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/runner/dispatcher.rb'
-    - 'lib/smart_proxy_dynflow/runner/update.rb'
-    - 'lib/smart_proxy_dynflow/task_launcher/abstract.rb'
-
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: enums
 Lint/ConstantDefinitionInBlock:
