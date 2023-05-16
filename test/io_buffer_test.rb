@@ -9,7 +9,7 @@ module Proxy::Dynflow
       let(:buffer) { IOBuffer.new(StringIO.new) }
 
       it 'is empty by default' do
-        assert buffer.empty?
+        assert_empty buffer
         assert_equal buffer.buffer, ''
       end
 

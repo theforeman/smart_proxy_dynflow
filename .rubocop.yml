@@ -99,3 +99,19 @@ Style/Alias:
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - 'test/io_buffer_test.rb'
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 197
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false

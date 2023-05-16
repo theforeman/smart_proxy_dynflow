@@ -7,53 +7,12 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # This cop supports safe auto-correction (--auto-correct).
-Layout/EmptyLineAfterMagicComment:
-  Enabled: false
-
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: enums
-Lint/ConstantDefinitionInBlock:
-  Exclude:
-    - 'test/io_buffer_test.rb'
-
-Lint/MissingSuper:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/log.rb'
-    - 'lib/smart_proxy_dynflow/runner/dispatcher.rb'
-    - 'lib/smart_proxy_dynflow/ticker.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
-Minitest/AssertEmpty:
-  Exclude:
-    - 'test/io_buffer_test.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
-Minitest/AssertEqual:
-  Exclude:
-    - 'test/helpers_test.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
 Style/GlobalStdStream:
   Exclude:
     - 'lib/smart_proxy_dynflow/runner/base.rb'
-
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: respond_to_missing?
-Style/OptionalBooleanParameter:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/action/single_runner_batch.rb'
-    - 'lib/smart_proxy_dynflow/runner/base.rb'
-    - 'lib/smart_proxy_dynflow/runner/dispatcher.rb'
-    - 'lib/smart_proxy_dynflow/runner/update.rb'
 
 # This cop supports safe auto-correction (--auto-correct).
 Style/RedundantFreeze:
   Exclude:
     - 'lib/smart_proxy_dynflow/log.rb'
     - 'lib/smart_proxy_dynflow/version.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 197
