@@ -54,13 +54,6 @@ Minitest/AssertEqual:
   Exclude:
     - 'test/helpers_test.rb'
 
-# Configuration parameters: EnforcedStyleForLeadingUnderscores.
-# SupportedStylesForLeadingUnderscores: disallowed, required, optional
-Naming/MemoizedInstanceVariableName:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/core.rb'
-    - 'lib/smart_proxy_dynflow/otp_manager.rb'
-
 # This cop supports safe auto-correction (--auto-correct).
 # Configuration parameters: PreferredName.
 Naming/RescuedExceptionsVariableName:
