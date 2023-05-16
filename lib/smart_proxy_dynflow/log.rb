@@ -3,7 +3,7 @@ require 'logging'
 
 module Proxy::Dynflow
   class Log
-    LOGGER_NAME = 'dynflow-core'.freeze
+    LOGGER_NAME = 'dynflow-core'
 
     begin
       require 'syslog/logger'
