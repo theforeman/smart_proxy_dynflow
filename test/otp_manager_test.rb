@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'smart_proxy_dynflow/otp_manager'
 

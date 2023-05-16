@@ -65,12 +65,6 @@ Style/ExplicitBlockArgument:
     - 'lib/smart_proxy_dynflow/middleware/keep_current_request_id.rb'
 
 # This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: always, always_true, never
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-# This cop supports safe auto-correction (--auto-correct).
 Style/GlobalStdStream:
   Exclude:
     - 'lib/smart_proxy_dynflow/runner/base.rb'

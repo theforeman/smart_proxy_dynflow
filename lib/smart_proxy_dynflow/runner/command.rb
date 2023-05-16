@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Proxy::Dynflow
   module Runner
     # This module expects to be included into a Runner action, where it can be

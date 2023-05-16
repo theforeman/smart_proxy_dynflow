@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'smart_proxy_dynflow/process_manager'
 
 module Proxy::Dynflow
