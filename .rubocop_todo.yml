@@ -69,13 +69,6 @@ Style/GlobalStdStream:
   Exclude:
     - 'lib/smart_proxy_dynflow/runner/base.rb'
 
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: literals, strict
-# Style/MutableConstant:
-#   Exclude:
-#     - 'lib/smart_proxy_dynflow/api.rb'
-
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: respond_to_missing?
 Style/OptionalBooleanParameter:
@@ -84,11 +77,6 @@ Style/OptionalBooleanParameter:
     - 'lib/smart_proxy_dynflow/runner/base.rb'
     - 'lib/smart_proxy_dynflow/runner/dispatcher.rb'
     - 'lib/smart_proxy_dynflow/runner/update.rb'
-
-# This cop supports safe auto-correction (--auto-correct).
-Style/RedundantAssignment:
-  Exclude:
-    - 'lib/smart_proxy_dynflow/core.rb'
 
 # This cop supports safe auto-correction (--auto-correct).
 Style/RedundantFileExtensionInRequire:

@@ -88,7 +88,7 @@ module Proxy::Dynflow
 
       def web_console
         require 'dynflow/web'
-        dynflow_console = ::Dynflow::Web.setup do
+        ::Dynflow::Web.setup do
           # we can't use the proxy's after_activation hook, as
           # it happens before the Daemon forks the process (including
           # closing opened file descriptors)
@@ -104,7 +104,7 @@ module Proxy::Dynflow
           Core.ensure_initialized
           set :world, Core.world
         end
-        dynflow_console
+        
       end
 
       def world
