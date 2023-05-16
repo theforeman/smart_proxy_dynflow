@@ -20,7 +20,7 @@ module Proxy::Dynflow
         end
       end
 
-      def set_process_manager_callbacks(pm)
+      def set_process_manager_callbacks(pm) # rubocop:disable Naming/MethodParameterName
         pm.on_stdout do |data|
           publish_data(data, 'stdout')
           ''
