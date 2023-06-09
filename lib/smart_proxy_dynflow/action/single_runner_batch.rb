@@ -1,5 +1,7 @@
 module Proxy::Dynflow::Action
   class SingleRunnerBatch < Batch
+    include Dynflow::Action::WithPollingSubPlans
+
     def plan(launcher, input_hash)
       results = super
       plan_action BatchCallback, input_hash, results.output[:results]

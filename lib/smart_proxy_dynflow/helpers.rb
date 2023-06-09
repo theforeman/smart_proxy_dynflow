@@ -54,8 +54,8 @@ module Proxy
       def tasks_count(state)
         state ||= 'all'
         filter = state != 'all' ? { :filters => { :state => [state] } } : {}
-        tasks = world.persistence.find_execution_plans(filter)
-        { :count => tasks.count, :state => state }
+        count = world.persistence.find_execution_plan_counts(filter)
+        { :count => count, :state => state }
       end
 
       def dispatch_external_event(task_id, params)

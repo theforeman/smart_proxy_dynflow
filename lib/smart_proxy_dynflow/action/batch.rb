@@ -1,7 +1,6 @@
 module Proxy::Dynflow::Action
   class Batch < ::Dynflow::Action
     include Dynflow::Action::WithSubPlans
-    include Dynflow::Action::WithPollingSubPlans
 
     # { execution_plan_uuid => { :action_class => Klass, :input => input } }
     def plan(launcher, input_hash)
@@ -17,6 +16,10 @@ module Proxy::Dynflow::Action
 
     def rescue_strategy
       Dynflow::Action::Rescue::Fail
+    end
+
+    def notify_on_finish(_plans)
+      # Do nothing
     end
   end
 end
