@@ -6,11 +6,14 @@ ENV['RACK_ENV'] = 'test'
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..', '..', 'lib')
 require 'mocha/minitest'
 require "rack/test"
+require 'minitest/reporters'
 require 'smart_proxy_for_testing'
 
 require 'dynflow'
 require 'smart_proxy_dynflow'
 require 'smart_proxy_dynflow/testing'
+
+Minitest::Reporters.use!
 
 Proxy::Dynflow::Plugin.load_test_settings({})
 

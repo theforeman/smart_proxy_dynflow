@@ -23,25 +23,14 @@ task :test do
   Rake::Task['test:core'].invoke
 end
 
-begin
-  require 'minitest/reporters'
-rescue LoadError # rubocop:disable Lint/HandleExceptions
-  # test group not enabled
-else
-  desc 'Set up minitest for CI'
-  task 'ci:setup:minitest' do
-    Minitest::Reporters.use!
-  end
-
-  namespace :jenkins do
-    desc nil # No description means it's not listed in rake -T
-    task unit: [:test]
-  end
-end
-
 if defined? RuboCop
   desc 'Run RuboCop on the lib directory'
   RuboCop::RakeTask.new(:rubocop) do |task|
     task.fail_on_error = true
   end
+end
+
+namespace :jenkins do
+  desc nil # No description means it's not listed in rake -T
+  task unit: :test
 end
