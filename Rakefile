@@ -29,8 +29,3 @@ if defined? RuboCop
     task.fail_on_error = true
   end
 end
-
-namespace :jenkins do
-  desc nil # No description means it's not listed in rake -T
-  task unit: :test
-end
