@@ -5,7 +5,7 @@ require 'smart_proxy_dynflow/task_launcher'
 
 module Proxy::Dynflow
   module TaskLauncher
-    class TaskLauncherTest < MiniTest::Spec
+    class TaskLauncherTest < Minitest::Spec
       include WithPerTestWorld
 
       class DummyDynflowAction < Dynflow::Action
