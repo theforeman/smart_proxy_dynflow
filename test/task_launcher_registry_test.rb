@@ -2,7 +2,7 @@
 require 'test_helper'
 
 module Proxy::Dynflow
-  class TaskLauncherRegistryTest < MiniTest::Spec
+  class TaskLauncherRegistryTest < Minitest::Spec
     describe TaskLauncherRegistry do
       let(:registry) { TaskLauncherRegistry }
 

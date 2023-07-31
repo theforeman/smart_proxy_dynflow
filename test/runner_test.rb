@@ -5,7 +5,7 @@ require 'ostruct'
 
 module Proxy::Dynflow
   module Runner
-    class RunnerTest < MiniTest::Spec
+    class RunnerTest < Minitest::Spec
       describe Base do
         let(:suspended_action) { Class.new }
         let(:runner) { Base.new suspended_action: suspended_action }
