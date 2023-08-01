@@ -116,22 +116,27 @@ More details can be found in [Task Launching docs](developer_docs/task_launching
 ```shell
 git clone https://github.com/theforeman/smart-proxy
 ```
-Configure smart proxy
 
 **Clone all the repositories**
 ```shell
 git clone https://github.com/theforeman/smart_proxy_dynflow
 ```
 
-
 **In smart-proxy directory**
+
+Add the gem to smart-proxy's `bundler.d` from local checkouts.
 ```shell
-mkdir logs
+cat > bundler.d/dynflow.local.rb <<EOF
+gem 'smart_proxy_dynflow', path: '../smart_proxy_dynflow'
+END
 ```
 
-Then add a line that contains `:log_file: logs/proxy.log` to file `config/settings.yml`
+Install the gems
+```shell
+bundle install
+```
 
-Configure `smart_proxy_dynflow` as usually
+Configure `smart_proxy_dynflow` as usual
 ```bash
 cat > config/settings.d/dynflow.yml <<EOF
 ---
@@ -139,21 +144,9 @@ cat > config/settings.d/dynflow.yml <<EOF
 EOF
 ```
 
+Start the Smart Proxy
 
-### All-in-one solution
-Add all the gems to smart-proxy's `bundler.d` from local checkouts.
-All commands are started from the smart-proxy's directory
 ```shell
-cat <<-END > bundler.d/dynflow.local.rb
-gem 'smart_proxy_dynflow', :path => '../smart_proxy_dynflow'
-gem 'smart_proxy_dynflow_core', :path => '../smart_proxy_dynflow'
-END
-```
-
-
-Install the gems and start smart proxy
-```shell
-bundle install
 bundle exec bin/smart-proxy
 ```
 
