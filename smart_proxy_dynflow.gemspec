@@ -23,8 +23,8 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.7', '< 4'
 
   gem.add_runtime_dependency('dynflow', "~> 1.6")
-  gem.add_runtime_dependency('rest-client')
-  gem.add_runtime_dependency('sqlite3')
+  gem.add_runtime_dependency('rest-client', '~> 2.0')
+  gem.add_runtime_dependency('sqlite3', '~> 1.0')
 
   gem.add_development_dependency "bundler", ">= 1.7"
   gem.metadata['rubygems_mfa_required'] = 'true'
