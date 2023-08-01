@@ -24,7 +24,6 @@ group :test do
   gem 'webmock'
 end
 
-gem 'logging-journald', '~> 2.0', :platforms => [:ruby], :require => false
 gem 'rack', '>= 1.1'
 gem 'sinatra'
 

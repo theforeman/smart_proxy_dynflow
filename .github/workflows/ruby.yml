@@ -8,8 +8,6 @@ jobs:
   rubocop:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get install build-essential libsystemd-dev
       - uses: actions/checkout@v2
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -28,8 +26,6 @@ jobs:
       matrix:
         ruby-version: [2.5, 2.7]
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get install build-essential libsystemd-dev
       - uses: actions/checkout@v2
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
