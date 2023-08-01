@@ -26,6 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency('rest-client', '~> 2.0')
   gem.add_runtime_dependency('sqlite3', '~> 1.0')
 
-  gem.add_development_dependency "bundler", ">= 1.7"
   gem.metadata['rubygems_mfa_required'] = 'true'
 end
