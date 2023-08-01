@@ -1,37 +1,24 @@
+---
 name: CI
+
 on:
   pull_request:
   push:
     branches:
       - master
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   rubocop:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7
-          bundler-cache: true
-      - name: Run rubocop
-        if: github.event_name != 'push'
-        run: bundle exec rubocop
-  test_ruby:
-    runs-on: ubuntu-latest
+    name: Rubocop
+    uses: theforeman/actions/.github/workflows/rubocop.yml@v0
+
+  test:
+    name: Tests
     needs: rubocop
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby-version: ['2.7', '3.0', '3.1']
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true
-      - name: Run tests
-        run: |
-          bundle exec rake test:core
+    uses: theforeman/actions/.github/workflows/test-gem.yml@v0
+    with:
+      command: bundle exec rake test:core
