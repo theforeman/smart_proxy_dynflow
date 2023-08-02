@@ -2,7 +2,17 @@
 
 require 'rake'
 require 'rake/testtask'
-require 'rubocop/rake_task'
+
+begin
+  require 'rubocop/rake_task'
+rescue LoadError
+  # No Rubocop
+else
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.fail_on_error = true
+    task.formatters << 'github' if ENV['GITHUB_ACTIONS'] == 'true'
+  end
+end
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -20,13 +30,6 @@ end
 
 desc 'Test Dynflow plugin.'
 task :test do
-  Rake::Task['rubocop'].invoke if defined? RuboCop
+  Rake::Task['rubocop'].invoke if Rake::Task.task_defined?(:rubocop)
   Rake::Task['test:core'].invoke
-end
-
-if defined? RuboCop
-  desc 'Run RuboCop on the lib directory'
-  RuboCop::RakeTask.new(:rubocop) do |task|
-    task.fail_on_error = true
-  end
 end
