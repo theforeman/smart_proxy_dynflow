@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'smart_proxy_dynflow/action/shareable'
 require 'smart_proxy_dynflow/action/external_polling'
 module Proxy::Dynflow

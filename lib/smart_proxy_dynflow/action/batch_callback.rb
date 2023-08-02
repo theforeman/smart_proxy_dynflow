@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Proxy::Dynflow::Action
   class BatchCallback < ::Dynflow::Action
     def plan(input_hash, results)

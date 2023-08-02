@@ -113,8 +113,5 @@ Lint/MissingSuper:
 Layout/LineLength:
   Max: 197
 
-Layout/EmptyLineAfterMagicComment:
-  Enabled: false
-
 Style/SlicingWithRange:
   Enabled: false

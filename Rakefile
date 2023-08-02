@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rake'
 require 'rake/testtask'
 require 'rubocop/rake_task'
