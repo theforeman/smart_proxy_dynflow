@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Proxy
   module Dynflow
     # A buffer around an IO object providing buffering and convenience methods

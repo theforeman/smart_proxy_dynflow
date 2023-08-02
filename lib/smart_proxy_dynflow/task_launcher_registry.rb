@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Proxy::Dynflow
   class TaskLauncherRegistry
     class << self

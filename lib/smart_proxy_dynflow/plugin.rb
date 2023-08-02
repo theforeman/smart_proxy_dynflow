@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'proxy/log'
 require 'proxy/pluggable'
 require 'proxy/plugin'

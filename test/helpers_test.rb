@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'ostruct'
 require 'test_helper'
 require 'smart_proxy_dynflow/otp_manager'

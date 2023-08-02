@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Proxy::Dynflow::Action
   class OutputCollector < ::Proxy::Dynflow::Action::Runner
     def init_run

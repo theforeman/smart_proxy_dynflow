@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Proxy::Dynflow::Action
   class Batch < ::Dynflow::Action
     include Dynflow::Action::WithSubPlans
