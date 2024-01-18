@@ -60,6 +60,12 @@ module Proxy::Dynflow
           buffer.write_available!
           assert_equal buffer.to_s, 'ello'
         end
+
+        it 'can deal with wide characters' do
+          buffer.add_data('ラジオで勉強しました')
+          buffer.write_available! # This would raise an exception
+          assert_equal buffer.to_s, ''
+        end
       end
 
       describe '#read_available!' do
