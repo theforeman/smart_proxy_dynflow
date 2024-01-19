@@ -11,10 +11,8 @@ module Proxy::Dynflow
 
       class DummyDynflowAction < Dynflow::Action
         def plan(input)
-          callback input
+          plan_self received_input: input
         end
-
-        def callback(_input); end
       end
 
       describe TaskLauncher do
@@ -27,10 +25,8 @@ module Proxy::Dynflow
           let(:launcher_class) { Single }
 
           it 'triggers an action' do
-            DummyDynflowAction.any_instance.expects(:callback).with do |arg|
-              Dynflow::Utils::IndifferentHash.new(arg) == expected_result
-            end
-            launcher.launch!(launcher_input)
+            plan = launcher.launch!(launcher_input).finished.value!
+            _(plan.entry_action.input[:received_input]).must_equal expected_result
           end
 
           it 'provides results' do
@@ -44,10 +40,6 @@ module Proxy::Dynflow
           let(:launcher_class) { Batch }
 
           it 'triggers the actions' do
-            DummyDynflowAction.any_instance.expects(:callback).with do |arg|
-              arg == expected_result
-            end.twice
-
             parent = launcher.launch!('foo' => launcher_input, 'bar' => launcher_input)
             wait_until(iterations: 15, interval: 1) do
               load_execution_plan(parent[:task_id]).state == :stopped
@@ -55,6 +47,9 @@ module Proxy::Dynflow
             plan = load_execution_plan(parent[:task_id])
             _(plan.result).must_equal :success
             _(plan.sub_plans.count).must_equal 2
+            plan.sub_plans.each do |plan|
+              _(plan.entry_action.input[:received_input]).must_equal expected_result
+            end
           end
 
           it 'provides results' do

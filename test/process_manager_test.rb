@@ -91,6 +91,7 @@ module Proxy::Dynflow
           end
           pm.stdin.add_data("10\n")
           pm.run!
+          assert_equal '', pm.stderr.to_s
           assert_equal pm.stdout.to_s.lines.map(&:chomp), %w[10 9 8 7 6 5 4 3 2 1 0]
         end
       end
