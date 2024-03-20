@@ -2,11 +2,15 @@
 
 require 'smart_proxy_dynflow/action/shareable'
 require 'smart_proxy_dynflow/action/external_polling'
+require 'smart_proxy_dynflow/action/middleware/assemble_results'
+
 module Proxy::Dynflow
   module Action
     class Runner < Shareable
       include ::Dynflow::Action::Cancellable
       include ::Proxy::Dynflow::Action::WithExternalPolling
+
+      middleware.use ::Proxy::Dynflow::Action::Middleware::AssembleResults
 
       def run(event = nil)
         case event
