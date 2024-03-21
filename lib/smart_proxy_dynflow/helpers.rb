@@ -72,10 +72,10 @@ module Proxy
         end
       end
 
-      def expand_output(plan, action)
+      def expand_output(action)
         hash = action.to_hash
-        if %i[running suspended].include?(action.run_step&.state)
-          hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
+        if Action.is_a?(Proxy::Dynflow::Action::Runner) && %i[running suspended].include?(action.run_step&.state)
+          hash[:output][:result] = action.output_result
         end
         hash
       end
@@ -83,7 +83,7 @@ module Proxy
       def execution_plan_status(plan)
         actions = plan.actions.map do |action|
           refresh_output(plan, action)
-          expand_output(plan, action)
+          expand_output(action)
         end
         plan.to_hash.merge(:actions => actions)
       end
