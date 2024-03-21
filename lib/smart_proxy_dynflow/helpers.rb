@@ -74,7 +74,9 @@ module Proxy
 
       def expand_output(action)
         hash = action.to_hash
-        hash[:output][:result] = action.output_result if action.is_a?(Proxy::Dynflow::Action::Runner)
+        if Action.is_a?(Proxy::Dynflow::Action::Runner) && %i[running suspended].include?(action.run_step&.state)
+          hash[:output][:result] = action.output_result
+        end
         hash
       end
 
