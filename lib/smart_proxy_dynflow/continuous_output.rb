@@ -37,18 +37,20 @@ module Proxy::Dynflow
       raw_outputs.map { |output| output['output'] }.join("\n")
     end
 
-    def add_exception(context, exception, timestamp = Time.now.getlocal)
-      add_output(context + ": #{exception.class} - #{exception.message}", 'debug', timestamp)
+    def add_exception(context, exception, timestamp: Time.now.getlocal, id: nil)
+      add_output(context + ": #{exception.class} - #{exception.message}", 'debug', timestamp: timestamp, id: id)
     end
 
-    def add_output(*args)
-      add_raw_output(self.class.format_output(*args))
+    def add_output(...)
+      add_raw_output(self.class.format_output(...))
     end
 
-    def self.format_output(message, type = 'debug', timestamp = Time.now.getlocal)
-      { 'output_type' => type,
-        'output' => message,
-        'timestamp' => timestamp.to_f }
+    def self.format_output(message, type = 'debug', timestamp: Time.now.getlocal, id: nil)
+      base = { 'output_type' => type,
+               'output' => message,
+               'timestamp' => timestamp.to_f }
+      base['id'] = id if id
+      base
     end
   end
 end
