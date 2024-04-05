@@ -58,8 +58,8 @@ module Proxy::Dynflow
         #   or nil for no timeout
       end
 
-      def publish_data(data, type)
-        @continuous_output.add_output(data, type)
+      def publish_data(...)
+        @continuous_output.add_output(...)
       end
 
       def publish_exception(context, exception, fatal = true)

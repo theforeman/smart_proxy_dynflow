@@ -35,16 +35,16 @@ module Proxy::Dynflow
         Dynflow::Action::Suspended.new OpenStruct.new(options)
       end
 
-      def broadcast_data(data, type)
-        @outputs.each_value { |output| output.add_output(data, type) }
+      def broadcast_data(...)
+        @outputs.each_value { |output| output.add_output(...) }
       end
 
       def publish_data(_data, _type)
         true
       end
 
-      def publish_data_for(identifier, data, type)
-        @outputs[identifier].add_output(data, type)
+      def publish_data_for(identifier, data, type, **kwargs)
+        @outputs[identifier].add_output(data, type, **kwargs)
       end
 
       def dispatch_exception(context, exception)

@@ -19,12 +19,37 @@ module Proxy::Dynflow
           it 'returns a hash with outputs' do
             message = 'a message'
             type = 'stdout'
-            runner.publish_data(message, type)
+            now = Time.now
+            runner.publish_data(message, type, timestamp: now)
             updates = runner.generate_updates
             _(updates.keys).must_equal [suspended_action]
             update = updates.values.first
             _(update.exit_status).must_be :nil?
             _(update.continuous_output.raw_outputs.count).must_equal 1
+          end
+
+          it 'accepts timestamp' do
+            now = Time.now
+            runner.publish_data('message', 'stdout')
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+            _(update.continuous_output.raw_outputs.first['timestamp']).wont_equal now.to_f
+
+            runner.publish_data('message', 'stdout', timestamp: now)
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_equal now.to_f
+          end
+
+          it 'accepts id' do
+            runner.publish_data('message', 'stdout')
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first.key?('id')).must_equal false
+
+            id = 5
+            runner.publish_data('message', 'stdout', id: id)
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['id']).must_equal id
           end
 
           it 'works in compatibility mode' do
@@ -80,12 +105,72 @@ module Proxy::Dynflow
             runner.publish_data_for('foo', 'message', 'stdout')
             _(runner.generate_updates.keys.count).must_equal 1
           end
+
+          it 'accepts timestamp' do
+            now = Time.now
+            runner.publish_data_for('foo', 'message', 'stdout')
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+            _(update.continuous_output.raw_outputs.first['timestamp']).wont_equal now.to_f
+
+            runner.publish_data_for('foo', 'message', 'stdout', timestamp: now)
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+            _(update.continuous_output.raw_outputs.first['timestamp']).must_equal now.to_f
+          end
+
+          it 'accepts id' do
+            runner.publish_data_for('foo', 'message', 'stdout')
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first.key?('id')).must_equal false
+
+            id = 5
+            runner.publish_data_for('foo', 'message', 'stdout', id: id)
+            update = runner.generate_updates.values.first
+            _(update.continuous_output.raw_outputs.first['id']).must_equal id
+          end
         end
 
         describe '#broadcast_data' do
           it 'publishes data for all hosts' do
             runner.broadcast_data('message', 'stdout')
             _(runner.generate_updates.keys.count).must_equal 2
+          end
+
+          it 'accepts timestamp' do
+            now = Time.now
+            runner.broadcast_data('message', 'stdout')
+            updates = runner.generate_updates.values
+            _(updates.count).must_equal 2
+            updates.each do |update|
+              _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+              _(update.continuous_output.raw_outputs.first['timestamp']).wont_equal now.to_f
+            end
+
+            runner.broadcast_data('message', 'stdout', timestamp: now)
+            updates = runner.generate_updates.values
+            _(updates.count).must_equal 2
+            updates.each do |update|
+              _(update.continuous_output.raw_outputs.first['timestamp']).must_be_instance_of Float
+              _(update.continuous_output.raw_outputs.first['timestamp']).must_equal now.to_f
+            end
+          end
+
+          it 'accepts id' do
+            runner.broadcast_data('message', 'stdout')
+            updates = runner.generate_updates.values
+            _(updates.count).must_equal 2
+            updates.each do |update|
+              _(update.continuous_output.raw_outputs.first.key?('id')).must_equal false
+            end
+
+            id = 5
+            runner.broadcast_data('message', 'stdout', id: id)
+            updates = runner.generate_updates.values
+            _(updates.count).must_equal 2
+            updates.each do |update|
+              _(update.continuous_output.raw_outputs.first['id']).must_equal id
+            end
           end
         end
 
