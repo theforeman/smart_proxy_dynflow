@@ -63,6 +63,7 @@ module Proxy::Dynflow
 
       def finish_run(update)
         output[:exit_status] = update.exit_status
+        output[:exit_status_timestamp] = update.exit_status_timestamp.to_f
         output[:result] = output_result
         drop_output_chunks!
       end

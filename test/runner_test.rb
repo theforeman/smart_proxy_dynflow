@@ -64,6 +64,15 @@ module Proxy::Dynflow
             _(update.continuous_output.raw_outputs.count).must_equal 1
           end
         end
+
+        describe '#publish_exit_status' do
+          it 'sets exit status and timestamp' do
+            runner.publish_exit_status(0)
+            updates = runner.generate_updates
+            assert_equal 0, updates[suspended_action].exit_status
+            assert_instance_of Time, updates[suspended_action].exit_status_timestamp
+          end
+        end
       end
 
       describe Parent do
@@ -192,6 +201,36 @@ module Proxy::Dynflow
           it 'publishes exit status if fatal' do
             runner.expects(:publish_exit_status)
             runner.publish_exception('general failure', exception, true)
+          end
+        end
+
+        describe '#publish_exit_status' do
+          it 'sets exit status and timestamp' do
+            runner.publish_exit_status(0)
+            updates = runner.generate_updates
+
+            # There are updates for all targets
+            assert_equal 3, updates.keys.count
+
+            # They all share the same exit status and timestamp
+            assert_equal 1, updates.values.map(&:exit_status).uniq.count
+            assert_equal 1, updates.values.map(&:exit_status_timestamp).uniq.count
+
+            assert_equal 0, updates[suspended_action].exit_status
+            assert_instance_of Time, updates[suspended_action].exit_status_timestamp
+          end
+
+          it 'allows settings exit status per-host' do
+            runner.publish_exit_status_for('foo', 1)
+            runner.publish_exit_status(0)
+            updates = runner.generate_updates
+            assert_equal 3, updates.keys.count
+
+            assert_equal(1, updates.values.count { |update| update.exit_status == 1 })
+            assert_equal(2, updates.values.count { |update| update.exit_status.zero? })
+
+            # They all share the same timestamp
+            assert_equal 1, updates.values.map(&:exit_status_timestamp).uniq.count
           end
         end
       end

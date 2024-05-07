@@ -71,6 +71,7 @@ module Proxy::Dynflow
 
       def publish_exit_status(status)
         @exit_status = status
+        @exit_status_timestamp = Time.now.utc
       end
 
       def dispatch_exception(context, exception)
@@ -90,7 +91,7 @@ module Proxy::Dynflow
       end
 
       def new_update(data, exit_status)
-        { @suspended_action => Runner::Update.new(data, exit_status) }
+        { @suspended_action => Runner::Update.new(data, exit_status, exit_status_timestamp: @exit_status_timestamp) }
       end
 
       def initialize_continuous_outputs
