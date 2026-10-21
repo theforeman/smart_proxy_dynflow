@@ -101,7 +101,7 @@ module Proxy::Dynflow
           include ::Sinatra::Authorization::Helpers
 
           before do
-            do_authorize_with_ssl_client if Settings.instance.console_auth
+            do_authorize_any if Settings.instance.console_auth
           end
 
           Core.ensure_initialized
