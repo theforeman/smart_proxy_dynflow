@@ -2,7 +2,8 @@
 :enabled: true
 :database:
 
-# Require a valid cert to access Dynflow console
+# Require a client certificate trusted by the proxy and listed in the
+# proxy's :trusted_hosts setting to access the Dynflow console
 # :console_auth: true
 
 # Maximum age of execution plans to keep before having them cleaned
