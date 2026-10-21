@@ -4,17 +4,10 @@ require 'fileutils'
 
 module Proxy::Dynflow
   class Core
-    attr_accessor :world, :accepted_cert_serial
+    attr_accessor :world
 
     def initialize
       @world = create_world
-      cert_file = Proxy::SETTINGS.foreman_ssl_cert || Proxy::SETTINGS.ssl_certificate
-      if cert_file
-        client_cert = File.read(cert_file)
-        # we trust only requests using the same certificate as we are
-        # (in other words the local proxy only)
-        @accepted_cert_serial = OpenSSL::X509::Certificate.new(client_cert).serial
-      end
     end
 
     def create_world(&block)
