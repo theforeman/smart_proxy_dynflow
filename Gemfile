@@ -16,8 +16,6 @@ group :development do
 end
 
 group :test do
-  # multi_json passes positional parser options, which JSON 3 no longer accepts.
-  gem 'json', '< 3'
   gem 'minitest'
   gem 'mocha'
   gem 'public_suffix'
