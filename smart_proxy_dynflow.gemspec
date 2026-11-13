@@ -24,6 +24,9 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 3.0'
 
   gem.add_runtime_dependency('dynflow', '>= 1.6', '< 3.0')
+
+  # MultiJson 1.19 passes JSON parser options positionally; JSON 3.x requires keywords.
+  gem.add_runtime_dependency('json', '>= 2.0', '< 3.0')
   gem.add_runtime_dependency('rest-client', '~> 2.0')
   gem.add_runtime_dependency('sqlite3', '~> 1.0')
 
